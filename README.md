@@ -11,16 +11,17 @@ stack will be
   redis. Cluster for later?
   Kafka and apache spark
   Mongodb for logs?
-  elasticsearch for PG
+  elasticsearch or graphql
   
 # Frontend
 reactjs or vuewjs - probably reactjs. need to learn it
 sass
 typescript
-nodejs server
+nodejs server with express
+leaflet for interactive maps
 
-#utils
-jira, kibana? onelogin?, twilio
+# utils
+jira, kibana? onelogin?, twilio, archimate, stripe, paypal
 
-#devops
-docker, sentry, Prometheus, terraform?, aws?
+# devops
+docker, sentry, Prometheus, terraform?, aws?, airflow?
