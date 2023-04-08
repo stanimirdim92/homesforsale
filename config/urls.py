@@ -13,10 +13,28 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
+from django.conf.urls.i18n import i18n_patterns
 from django.contrib import admin
 from django.urls import include, path
+from rest_framework import routers
+from homesforsale import views
 
-urlpatterns = [
+from django.conf import settings
+
+router = routers.DefaultRouter()
+router.register(r'users', views.UserViewSet)
+router.register(r'groups', views.GroupViewSet)
+
+
+urlpatterns = i18n_patterns(
+    path('', include(router.urls)),
+    path('api-auth/', include('rest_framework.urls', namespace='rest_framework')),
     path('admin/', admin.site.urls),
-    path('debug/', include('debug_toolbar.urls')),
-]
+    path('accounts/', include('allauth.urls')),
+    prefix_default_language=False
+)
+
+if settings.DEBUG:
+    urlpatterns += [
+        path('debug/', include('debug_toolbar.urls'))
+    ]
