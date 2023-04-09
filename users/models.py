@@ -1,4 +1,4 @@
-from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin
+from django.contrib.auth.models import AbstractUser, PermissionsMixin
 from django.db import models
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
@@ -6,7 +6,12 @@ from django.utils.translation import gettext_lazy as _
 from .managers import UserManager
 
 
-class User(AbstractBaseUser, PermissionsMixin):
+class User(AbstractUser, PermissionsMixin):
+    username = None
+    date_joined = None
+    first_name = None
+    last_name = None
+
     email = models.EmailField(
         _("email"),
         max_length=150,
@@ -20,22 +25,10 @@ class User(AbstractBaseUser, PermissionsMixin):
         },
     )
 
-    name_first = models.CharField(_("first name"), max_length=150, blank=True)
-    name_last = models.CharField(_("last name"), max_length=150, blank=True)
-    is_staff = models.BooleanField(
-        _("staff status"),
-        default=False,
-        help_text=_("Designates whether the user can log into this admin site."),
-    )
-    is_active = models.BooleanField(
-        _("active"),
-        default=True,
-        help_text=_(
-            "Designates whether this user should be treated as active. "
-            "Unselect this instead of deleting accounts."
-        ),
-    )
-
+    name_first = models.CharField(_("first name"), max_length=128, blank=False)
+    name_last = models.CharField(_("last name"), max_length=128, blank=True,null=True)
+    company_name = models.CharField(_("company name"), max_length=128, blank=True,null=True)
+    uuid = models.UUIDField(_("uuid"), max_length=36, unique=True)
     time_created = models.DateTimeField(default=timezone.now)
 
     USERNAME_FIELD = "email"

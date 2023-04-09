@@ -95,15 +95,15 @@ THIRD_PARTY_APPS = [
     # "crispy_forms",
     "allauth",
     "allauth.account",
-    "allauth.socialaccount",
+    # "allauth.socialaccount",
     # 'allauth.socialaccount.providers.facebook',
     # 'allauth.socialaccount.providers.google',
     # 'allauth.socialaccount.providers.apple',
 
     "rest_framework",
-    "rest_framework.authtoken",
-    "corsheaders",
-    "drf_spectacular",
+    # "rest_framework.authtoken",
+    # "corsheaders",
+    # "drf_spectacular",
 
 ]
 
@@ -114,8 +114,8 @@ LOCAL_APPS = [
 # https://docs.djangoproject.com/en/dev/ref/settings/#installed-apps
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
 
-if DEBUG:
-    INSTALLED_APPS.append('debug_toolbar')
+# if DEBUG:
+  #  INSTALLED_APPS.append('debug_toolbar')
 
 # AUTHENTICATION
 # ------------------------------------------------------------------------------
@@ -235,7 +235,7 @@ MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     "corsheaders.middleware.CorsMiddleware",
     'django.contrib.sessions.middleware.SessionMiddleware',
-    'django.middleware.locale.LocaleMiddleware',
+    # 'django.middleware.locale.LocaleMiddleware',
     'django.middleware.cache.UpdateCacheMiddleware',  # redis
     'django.middleware.common.CommonMiddleware',
     'django.middleware.cache.FetchFromCacheMiddleware',  # redis
@@ -246,8 +246,8 @@ MIDDLEWARE = [
 ]
 
 
-if DEBUG:
-    MIDDLEWARE.append("debug_toolbar.middleware.DebugToolbarMiddleware")
+# if DEBUG:
+    # MIDDLEWARE.append("debug_toolbar.middleware.DebugToolbarMiddleware")
 
 
 # STATIC
