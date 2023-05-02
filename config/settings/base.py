@@ -114,8 +114,8 @@ LOCAL_APPS = [
 # https://docs.djangoproject.com/en/dev/ref/settings/#installed-apps
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
 
-# if DEBUG:
-  #  INSTALLED_APPS.append('debug_toolbar')
+if DEBUG:
+   INSTALLED_APPS.append('debug_toolbar')
 
 # AUTHENTICATION
 # ------------------------------------------------------------------------------
@@ -246,8 +246,8 @@ MIDDLEWARE = [
 ]
 
 
-# if DEBUG:
-    # MIDDLEWARE.append("debug_toolbar.middleware.DebugToolbarMiddleware")
+if DEBUG:
+    MIDDLEWARE.append("debug_toolbar.middleware.DebugToolbarMiddleware")
 
 
 # STATIC
