@@ -9,8 +9,8 @@ stack will be
   nginx - must research load balancers, ASGI connector and static file serve.
   Postgresql 15+
   redis. Cluster for later?
-  Kafka and apache spark
-  Mongodb for logs?
+  Kafka and/or apache spark
+  logbook for logs?
   elasticsearch or graphql
   
 # Frontend
@@ -27,8 +27,9 @@ jira, kibana? onelogin?, twilio, archimate, stripe, paypal
 docker, sentry, Prometheus, terraform?, aws?, airflow?
 
 # todo
-https://werkzeug.palletsprojects.com/en/2.3.x/
-https://www.uvicorn.org/
-finish configs
-finish testing setup
-finish docker
+- https://werkzeug.palletsprojects.com/en/2.3.x/
+- https://www.uvicorn.org/
+- finish configs
+- finish testing setup - pytest
+- finish docker
+- finish black and flake8
