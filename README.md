@@ -25,3 +25,10 @@ jira, kibana? onelogin?, twilio, archimate, stripe, paypal
 
 # devops
 docker, sentry, Prometheus, terraform?, aws?, airflow?
+
+# todo
+https://werkzeug.palletsprojects.com/en/2.3.x/
+https://www.uvicorn.org/
+finish configs
+finish testing setup
+finish docker

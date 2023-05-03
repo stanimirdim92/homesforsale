@@ -1,2 +1,0 @@
-https://werkzeug.palletsprojects.com/en/2.3.x/
-https://www.uvicorn.org/
