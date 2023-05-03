@@ -332,6 +332,7 @@ MailHog
 .pytest_cache/
 
 .ipython/
+.idea/
 
 
 project.css
