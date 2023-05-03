@@ -103,7 +103,7 @@ THIRD_PARTY_APPS = [
     "rest_framework",
     # "rest_framework.authtoken",
     # "corsheaders",
-    # "drf_spectacular",
+    "drf_spectacular",
 
 ]
 
@@ -358,9 +358,9 @@ REST_FRAMEWORK = {
 CORS_URLS_REGEX = r"^/api/.*$"
 
 SPECTACULAR_SETTINGS = {
-    'TITLE': 'Your Project API',
-    'DESCRIPTION': 'Your project description',
-    'VERSION': '1.0.0',
+    'TITLE': os.getenv('APP_NAME'),
+    'DESCRIPTION': '',
+    'VERSION': os.getenv('APP_VERSION'),
     'SERVE_INCLUDE_SCHEMA': False,
     "SERVE_PERMISSIONS": ["rest_framework.permissions.IsAdminUser"],
     # OTHER SETTINGS
