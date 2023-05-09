@@ -18,6 +18,5 @@ BASE_DIR = Path(__file__).resolve(strict=True).parent.parent
 sys.path.append(str(BASE_DIR / os.getenv('APP_PATH')))
 
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'config.settings.production')
+
 application = get_wsgi_application()
-
-

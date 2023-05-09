@@ -34,7 +34,3 @@ SECURE_CONTENT_TYPE_NOSNIFF = os.getenv(
     "SECURE_CONTENT_TYPE_NOSNIFF", default=True
 )
 
-
-# TODO add anymail
-# TODO add compressor
-

@@ -28,8 +28,11 @@ docker, sentry, Prometheus, terraform?, aws?, airflow?
 
 # todo
 - https://werkzeug.palletsprojects.com/en/2.3.x/
-- https://www.uvicorn.org/
+- https://docs.djangoproject.com/en/dev/howto/deployment/asgi/uvicorn/
+- https://docs.djangoproject.com/en/dev/howto/deployment/asgi/hypercorn/
 - finish configs
 - finish testing setup - pytest
 - finish docker
 - finish black and flake8
+- add anymail
+- add compressor

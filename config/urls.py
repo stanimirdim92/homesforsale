@@ -27,13 +27,20 @@ router.register(r'groups', views.GroupViewSet)
 
 
 urlpatterns = i18n_patterns(
-    path('', include(router.urls)),
+    # DJANGO URLS
     path('api-auth/', include('rest_framework.urls', namespace='rest_framework')),
     path('admin/', admin.site.urls),
+
+    # 3rd PARTY URLS
     path('accounts/', include('allauth.urls')),
+
+    # APP URLS
+    path('', include(router.urls)),
+
     prefix_default_language=False
 )
 
+# DEBUG URLS
 if settings.DEBUG:
     urlpatterns += [
         path('debug/', include('debug_toolbar.urls'))
