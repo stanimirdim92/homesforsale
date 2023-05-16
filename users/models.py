@@ -1,5 +1,6 @@
 from django.contrib.auth.models import AbstractUser, PermissionsMixin
 from django.db import models
+from django.urls import reverse
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 
@@ -7,10 +8,10 @@ from .managers import UserManager
 
 
 class User(AbstractUser, PermissionsMixin):
-    username = None
-    date_joined = None
-    first_name = None
-    last_name = None
+    username = None # type: ignore
+    date_joined = None # type: ignore
+    first_name = None # type: ignore
+    last_name = None # type: ignore
 
     email = models.EmailField(
         _("email"),
@@ -38,3 +39,12 @@ class User(AbstractUser, PermissionsMixin):
 
     def __str__(self):
         return self.email
+
+    # def get_absolute_url(self) -> str:
+    #     """Get URL for user's detail view.
+    #
+    #     Returns:
+    #         str: URL for user detail.
+    #
+    #     """
+    #     return reverse("users:detail", kwargs={"pk": self.id})

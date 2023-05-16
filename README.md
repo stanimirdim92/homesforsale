@@ -36,3 +36,7 @@ docker, sentry, Prometheus, terraform?, aws?, airflow?
 - finish black and flake8
 - add anymail
 - add compressor
+- change to drf.authtoken to oauth2
+- setup cors
+- setup https://whitenoise.readthedocs.io/
+- https://django-storages.readthedocs.io/en/latest/

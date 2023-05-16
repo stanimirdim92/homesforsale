@@ -21,7 +21,7 @@ from django.db.backends.postgresql.psycopg_any import IsolationLevel
 
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
-BASE_DIR = Path(__file__).resolve().parent.parent.parent
+BASE_DIR = Path(__file__).resolve(strict=True).parent.parent.parent
 
 
 load_dotenv(join(BASE_DIR, '.env'))
@@ -34,13 +34,13 @@ DEBUG = os.getenv('APP_DEBUG', False)
 # http://en.wikipedia.org/wiki/List_of_tz_zones_by_name
 # though not all of them may be available with every OS.
 # In Windows, this must be set to your system time zone.
-TIME_ZONE = os.getenv('TIME_ZONE')
+TIME_ZONE = os.getenv('TIME_ZONE', 'UTC')
 
 # https://docs.djangoproject.com/en/dev/ref/settings/#language-code
-LANGUAGE_CODE = os.getenv("LANGUAGE_CODE")
+LANGUAGE_CODE = os.getenv("LANGUAGE_CODE", 'en-us')
 
 # https://docs.djangoproject.com/en/dev/ref/settings/#site-id
-SITE_ID = 1
+SITE_ID = int(os.getenv('SITE_ID'))
 
 # https://docs.djangoproject.com/en/dev/ref/settings/#use-i18n
 USE_I18N = True
@@ -63,9 +63,11 @@ DATABASES = {
         'HOST': os.getenv('DB_HOST'),
         'PORT': os.getenv('DB_PORT'),
         'ATOMIC_REQUESTS': True,
+        'CONN_HEALTH_CHECKS': True,
 
         'OPTIONS': {
             'client_encoding': 'UTF8',
+            "server_side_binding": True,
             "isolation_level": IsolationLevel.SERIALIZABLE,
         },
     }
@@ -94,6 +96,7 @@ DJANGO_APPS = [
     "django.forms",
 ]
 THIRD_PARTY_APPS = [
+    "django_extensions",
     "django_filters",
     # "django_celery_beat",
 
@@ -106,8 +109,8 @@ THIRD_PARTY_APPS = [
     # 'allauth.socialaccount.providers.apple',
 
     "rest_framework",
-    # "rest_framework.authtoken",
-    # "corsheaders",
+    "rest_framework.authtoken",
+    "corsheaders",
     "drf_spectacular",
 
 ]
@@ -137,10 +140,16 @@ AUTH_USER_MODEL =  "users.User"
 # LOGIN_REDIRECT_URL =  str(APP_PATH/':redirect'),
 # https://docs.djangoproject.com/en/dev/ref/settings/#login-url
 LOGIN_URL = "account_login"
+# https://django-allauth.readthedocs.io/en/latest/configuration.html
 ACCOUNT_EMAIL_REQUIRED = True
+# https://django-allauth.readthedocs.io/en/latest/configuration.html
 ACCOUNT_USERNAME_REQUIRED = False
+# https://django-allauth.readthedocs.io/en/latest/configuration.html
 ACCOUNT_AUTHENTICATION_METHOD = 'email'
+# https://django-allauth.readthedocs.io/en/latest/configuration.html
 ACCOUNT_USER_MODEL_USERNAME_FIELD = None
+# https://django-allauth.readthedocs.io/en/latest/configuration.html
+ACCOUNT_EMAIL_VERIFICATION = "mandatory"
 
 # Provider specific settings
 SOCIALACCOUNT_PROVIDERS = {
@@ -303,6 +312,14 @@ TEMPLATES = [
     },
 ]
 
+# https://docs.djangoproject.com/en/dev/ref/settings/#form-renderer
+FORM_RENDERER = "django.forms.renderers.TemplatesSetting"
+
+# FIXTURES
+# ------------------------------------------------------------------------------
+# https://docs.djangoproject.com/en/dev/ref/settings/#fixture-dirs
+FIXTURE_DIRS = (str(BASE_DIR / "fixtures"),)
+
 # SECURITY
 # ------------------------------------------------------------------------------
 # https://docs.djangoproject.com/en/dev/ref/settings/#session-cookie-httponly
@@ -322,6 +339,15 @@ EMAIL_BACKEND = os.getenv(
 # https://docs.djangoproject.com/en/dev/ref/settings/#email-timeout
 EMAIL_TIMEOUT = 5
 
+# ADMIN
+# ------------------------------------------------------------------------------
+# Django Admin URL.
+ADMIN_URL = "admin/"
+# https://docs.djangoproject.com/en/dev/ref/settings/#admins
+# ADMINS = [()]
+# # https://docs.djangoproject.com/en/dev/ref/settings/#managers
+# MANAGERS = ADMINS
+
 # LOGGING
 # ------------------------------------------------------------------------------
 # https://docs.djangoproject.com/en/dev/ref/settings/#logging
@@ -330,20 +356,37 @@ EMAIL_TIMEOUT = 5
 LOGGING = {
     "version": 1,
     "disable_existing_loggers": False,
+    "filters": {"require_debug_false": {"()": "django.utils.log.RequireDebugFalse"}},
     "formatters": {
         "verbose": {
-            "format": "%(levelname)s %(asctime)s %(module)s "
-                      "%(process)d %(thread)d %(message)s"
+            "format": "%(levelname)s %(asctime)s %(module)s %(process)d %(thread)d %(message)s",
         }
     },
     "handlers": {
+        "mail_admins": {
+            "level": "ERROR",
+            "filters": ["require_debug_false"],
+            "class": "django.utils.log.AdminEmailHandler",
+        },
         "console": {
             "level": "DEBUG",
             "class": "logging.StreamHandler",
             "formatter": "verbose",
-        }
+        },
     },
     "root": {"level": "INFO", "handlers": ["console"]},
+    "loggers": {
+        "django.request": {
+            "handlers": ["mail_admins"],
+            "level": "ERROR",
+            "propagate": True,
+        },
+        "django.security.DisallowedHost": {
+            "level": "ERROR",
+            "handlers": ["console", "mail_admins"],
+            "propagate": True,
+        },
+    },
 }
 
 REST_FRAMEWORK = {
