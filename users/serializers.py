@@ -5,9 +5,9 @@ from django.contrib.auth import get_user_model
 class UserSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = get_user_model()
-        fields = ['url','name_first', 'email', 'groups']
+        fields = ['url','name_last', 'email', 'groups', 'name_last', 'reference', 'uuid']
         extra_kwargs = {
-            "url": {"view_name": "api:user-detail", "lookup_field": "pk"},
+            "url": {"lookup_field": "pk"},
         }
 
 

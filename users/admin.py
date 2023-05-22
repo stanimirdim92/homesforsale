@@ -31,7 +31,7 @@ class UserAdmin(DjangoUserAdmin):
                 ),
             },
         ),
-        (_("Important dates"), {"fields": ("last_login", "time_created")}),
+        (_("Important dates"), {"fields": ("time_created",)}),
     )
     search_fields = ["email"]
     ordering = ["id"]
