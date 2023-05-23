@@ -13,13 +13,14 @@ class UserViewSet(viewsets.ModelViewSet):
     """
     queryset = get_user_model().objects.all().order_by('-time_created')
     serializer_class = UserSerializer
-    lookup_field = "pk"
+    lookup_field = "uuid"
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
 
     @action(detail=False)
     def me(self, request):
         serializer = UserSerializer(request.user, context={"request": request})
         return Response(status=status.HTTP_200_OK, data=serializer.data)
+
 
 class GroupViewSet(viewsets.ModelViewSet):
     """

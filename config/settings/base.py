@@ -247,16 +247,17 @@ AUTH_PASSWORD_VALIDATORS = [
 # ------------------------------------------------------------------------------
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    # 'django.middleware.cache.UpdateCacheMiddleware',  # redis
     "corsheaders.middleware.CorsMiddleware",
+    'django.middleware.http.ConditionalGetMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware', # Manages sessions across requests
     # 'django.middleware.locale.LocaleMiddleware',
-    'django.middleware.cache.UpdateCacheMiddleware',  # redis
     'django.middleware.common.CommonMiddleware',
-    'django.middleware.cache.FetchFromCacheMiddleware',  # redis
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',  # Associates users with requests using sessions.
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    # 'django.middleware.cache.FetchFromCacheMiddleware',  # redis
 ]
 
 

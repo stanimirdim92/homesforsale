@@ -11,8 +11,7 @@ from .managers import UserManager
 
 
 def generate_reference():
-
-    prefix = User.Types.CLIENT+timezone.now().strftime('%y')
+    prefix = User.Types.CLIENT + timezone.now().strftime('%y')
 
     counter = User.objects.filter(reference__startswith=prefix).count()
 
@@ -31,7 +30,6 @@ class User(AbstractUser, PermissionsMixin):
     class Types(models.TextChoices):
         CLIENT = 'C'
         AGENCY = 'A'
-
 
     username = None  # type: ignore
     date_joined = None  # type: ignore
@@ -72,6 +70,7 @@ class User(AbstractUser, PermissionsMixin):
     """
         Main method to save and create users, even with manage.py
     """
+
     def save(self, *args, **kwargs):
         return super().save(args, kwargs)
 
