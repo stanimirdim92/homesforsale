@@ -14,7 +14,6 @@ class UserViewSet(viewsets.ModelViewSet):
     queryset = get_user_model().objects.all().order_by('-time_created')
     serializer_class = UserSerializer
     lookup_field = "uuid"
-    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
 
     @action(detail=False)
     def me(self, request):
@@ -28,4 +27,3 @@ class GroupViewSet(viewsets.ModelViewSet):
     """
     queryset = Group.objects.all()
     serializer_class = GroupSerializer
-    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
