@@ -5,6 +5,7 @@ from rest_framework.response import Response
 
 from users.serializers import UserSerializer, GroupSerializer
 from rest_framework.decorators import action
+from rest_framework.views import APIView
 
 
 class UserViewSet(viewsets.ModelViewSet):
