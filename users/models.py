@@ -1,18 +1,17 @@
 import uuid as uuid
 
-from django.contrib.auth.models import AbstractUser, PermissionsMixin
+from django.contrib.auth.models import AbstractUser
 from django.core.validators import validate_email
 from django.db import models
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
-# from rest_framework.reverse import reverse
-from django.urls import reverse
+from rest_framework.reverse import reverse
 
 from .managers import UserManager
 
 
-def generate_reference():
-    prefix = User.Types.CLIENT + timezone.now().strftime('%y')
+def generate_reference(entity_type: str | None = None) -> str:
+    prefix = (entity_type or User.Types.CLIENT)[0] + timezone.now().strftime('%y')
 
     counter = User.objects.filter(reference__startswith=prefix).count()
 
@@ -86,6 +85,7 @@ class User(AbstractUser):
     """
 
     def save(self, *args, **kwargs):
+        self.reference = generate_reference(getattr(self, 'entity_type'))
         return super().save(args, kwargs)
 
     def __str__(self):
@@ -95,10 +95,4 @@ class User(AbstractUser):
         ordering = ['-id']
 
     def get_absolute_url(self) -> str:
-        """Get URL for user's detail view.
-
-        Returns:
-            str: URL for user detail.
-
-        """
-        return reverse("user-detail",args=[str(self.uuid)])
+        return reverse("user-detail", args=[str(self.uuid)])

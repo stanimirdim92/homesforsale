@@ -16,11 +16,11 @@ class UserAdmin(DjangoUserAdmin):
 
     list_display = ("email", "name_first", "is_staff", "is_active",)
     list_filter = ("email", "is_staff", "is_active",)
-    readonly_fields = ("time_created", 'time_modified',)
+    readonly_fields = ("time_created", 'time_modified','uuid')
 
     fieldsets = (
         (_('Personal info'), {"fields": ("title","name_first","name_middle","name_last",)}),
-        (None, {"fields": ("email", "password")}),
+        (None, {"fields": ("reference","reference_external","company_vat_number","entity_type","email", "password")}),
         (
             _("Permissions"),
             {

@@ -6,8 +6,8 @@ from .views import UserViewSet, GroupViewSet
 
 
 router = routers.ExtendedDefaultRouter()
-router.register(r'users', UserViewSet, basename='user')
-router.register(r'groups', GroupViewSet, basename='group')
+router.register(r'api/v1/users', UserViewSet, basename='user')
+router.register(r'api/v1/groups', GroupViewSet, basename='group')
 
 urlpatterns = [
     path('', include(router.urls)),

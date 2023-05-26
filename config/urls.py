@@ -30,7 +30,7 @@ from django.conf import settings
 
 urlpatterns = i18n_patterns(
     # DJANGO URLS
-    # path('api-auth/', include('rest_framework.urls', namespace='rest_framework')),
+    path('api-auth/', include('rest_framework.urls', namespace='rest_framework')),
     path('admin/', admin.site.urls),
 
     # 3rd PARTY URLS
@@ -42,7 +42,7 @@ urlpatterns = i18n_patterns(
     path('api/schema/redoc/', SpectacularRedocView.as_view(url_name='schema'), name='redoc'),
 
     # APP URLS
-    path('api/v1/', include('users.urls')),
+    path('', include('users.urls')),
     prefix_default_language=False
 )
 
