@@ -4,7 +4,7 @@ from django.contrib.auth import get_user_model
 
 User = get_user_model()
 
-class UserSerializer(serializers.ModelSerializer):
+class UserSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = User
         lookup_field = "uuid"
@@ -14,10 +14,10 @@ class UserSerializer(serializers.ModelSerializer):
             },
             'password': {'write_only': True, 'min_length': 4}
         }
-        exclude = ["password", 'id']
+        exclude = ["password",  'user_permissions']
 
 
-class GroupSerializer(serializers.ModelSerializer):
+class GroupSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Group
-        fields = '__all__'
+        exclude = ['permissions']

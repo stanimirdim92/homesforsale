@@ -5,14 +5,13 @@ from rest_framework.response import Response
 
 from users.serializers import UserSerializer, GroupSerializer
 from rest_framework.decorators import action
-from rest_framework.views import APIView
 
 
 class UserViewSet(viewsets.ModelViewSet):
     """
     API endpoint that allows users to be viewed or edited.
     """
-    queryset = get_user_model().objects.all().order_by('-time_created')
+    queryset = get_user_model().objects.all()
     serializer_class = UserSerializer
     lookup_field = "uuid"
 

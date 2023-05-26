@@ -13,12 +13,14 @@ class UserAdmin(DjangoUserAdmin):
     add_form = UserAdminCreationForm
     form = UserAdminChangeForm
     model = User
-    list_display = ("email", "is_staff", "is_active",)
+
+    list_display = ("email", "name_first", "is_staff", "is_active",)
     list_filter = ("email", "is_staff", "is_active",)
+    readonly_fields = ("time_created", 'time_modified',)
 
     fieldsets = (
+        (_('Personal info'), {"fields": ("title","name_first","name_middle","name_last",)}),
         (None, {"fields": ("email", "password")}),
-        (_("Personal info"), {"fields": ("name_first","name_last",)}),
         (
             _("Permissions"),
             {
@@ -31,7 +33,7 @@ class UserAdmin(DjangoUserAdmin):
                 ),
             },
         ),
-        (_("Important dates"), {"fields": ("time_created",)}),
+        (_("Important dates"), {"fields": ("time_modified","time_created","time_deleted",)}),
     )
     search_fields = ["email"]
     ordering = ["id"]
@@ -39,7 +41,7 @@ class UserAdmin(DjangoUserAdmin):
         (None, {
             "classes": ("wide",),
             "fields": (
-                "email", "password1", "password2", "is_staff",
+                "email", "password", "password1", "password2", "is_staff",
                 "is_active", "groups", "user_permissions"
             )}
         ),
