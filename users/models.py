@@ -85,7 +85,7 @@ class User(AbstractUser):
     """
 
     def save(self, *args, **kwargs):
-        self.reference = generate_reference(getattr(self, 'entity_type'))
+        # self.reference = generate_reference(getattr(self, 'entity_type'))
         return super().save(args, kwargs)
 
     def __str__(self):
