@@ -48,7 +48,7 @@ urlpatterns = i18n_patterns(
     path('api/schema/redoc/', SpectacularRedocView.as_view(url_name='schema'), name='redoc'),
 
     # APP URLS
-    path('', include('users.urls', namespace='users')),
+    path('users', include('users.urls')),
 
     # Media files
     *static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT),

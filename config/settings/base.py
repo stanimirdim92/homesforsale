@@ -73,7 +73,7 @@ DATABASES = {
         'PORT': os.getenv('DB_PORT'),
         'ATOMIC_REQUESTS': True,
         'CONN_HEALTH_CHECKS': True,
-        'CONN_MAX_AGE':  os.getenv('CONN_MAX_AGE', default=60),
+        'CONN_MAX_AGE':  int(os.getenv('CONN_MAX_AGE', default=60)),
 
         'OPTIONS': {
             'client_encoding': 'UTF8',
@@ -175,7 +175,7 @@ ACCOUNT_AUTHENTICATION_METHOD = 'email'
 ACCOUNT_USER_MODEL_USERNAME_FIELD = None
 # https://django-allauth.readthedocs.io/en/latest/configuration.html
 ACCOUNT_EMAIL_VERIFICATION = "mandatory"
-
+ACCOUNT_ALLOW_REGISTRATION = os.getenv('ACCOUNT_ALLOW_REGISTRATION', True)
 ACCOUNT_ADAPTER = "users.adapters.AccountAdapter"
 # https://docs.allauth.org/en/latest/account/forms.html
 ACCOUNT_FORMS = {"signup": "users.forms.UserSignupForm"}
@@ -282,6 +282,7 @@ AUTH_PASSWORD_VALIDATORS = [
 # https://docs.djangoproject.com/en/dev/ref/settings/#middleware
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'allauth.account.middleware.AccountMiddleware',
     # 'django.middleware.cache.UpdateCacheMiddleware',  # redis
     "corsheaders.middleware.CorsMiddleware",
     #"whitenoise.middleware.WhiteNoiseMiddleware",
@@ -400,7 +401,7 @@ ADMIN_URL = "admin/"
 # MANAGERS = ADMINS
 # https://cookiecutter-django.readthedocs.io/en/latest/settings.html#other-environment-settings
 # Force the `admin` sign in process to go through the `django-allauth` workflow
-DJANGO_ADMIN_FORCE_ALLAUTH = env.bool("DJANGO_ADMIN_FORCE_ALLAUTH", default=False)
+DJANGO_ADMIN_FORCE_ALLAUTH = os.getenv("DJANGO_ADMIN_FORCE_ALLAUTH", default=False)
 
 # LOGGING
 # ------------------------------------------------------------------------------

@@ -1,6 +1,5 @@
 from django.contrib import admin
-from django.contrib.auth.admin import UserAdmin as DjangoUserAdmin
-from django.contrib.auth import get_user_model
+from django.contrib.auth import admin as auth_admin, get_user_model
 from django.utils.translation import gettext_lazy as _
 
 from .forms import UserAdminCreationForm, UserAdminChangeForm
@@ -9,7 +8,7 @@ User = get_user_model()
 
 
 @admin.register(User)
-class UserAdmin(DjangoUserAdmin):
+class UserAdmin(auth_admin.UserAdmin):
     add_form = UserAdminCreationForm
     form = UserAdminChangeForm
     model = User
@@ -35,7 +34,7 @@ class UserAdmin(DjangoUserAdmin):
         ),
         (_("Important dates"), {"fields": ("time_modified","time_created","time_deleted",)}),
     )
-    search_fields = ["email"]
+    search_fields = ["email", "name_first", "name_middle", "name_last"]
     ordering = ["id"]
     add_fieldsets = (
         (None, {
