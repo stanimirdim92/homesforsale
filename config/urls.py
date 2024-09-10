@@ -1,7 +1,9 @@
+# ruff: noqa
+
 """hfs URL Configuration
 
 The `urlpatterns` list routes URLs to views. For more information please see:
-    https://docs.djangoproject.com/en/4.1/topics/http/urls/
+    https://docs.djangoproject.com/en/5.1/topics/http/urls/
 Examples:
 Function views
     1. Add an import:  from my_app import views
@@ -13,41 +15,75 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
-from django.conf.urls.i18n import i18n_patterns
-from django.contrib import admin
-from django.template.defaulttags import url
-from django.urls import include, path
-from drf_spectacular.views import SpectacularAPIView, SpectacularRedocView, SpectacularSwaggerView
-from rest_framework import routers
-from users import views
-
 from django.conf import settings
-#
-# router = routers.DefaultRouter()
-# router.register(r'users', views.UserViewSet)
-# router.register(r'groups', views.GroupViewSet)
+from django.conf.urls.i18n import i18n_patterns
+from django.conf.urls.static import static
+from django.contrib import admin
+from django.contrib.staticfiles.urls import staticfiles_urlpatterns
+from django.urls import include, path
+from django.views import defaults as default_views
+from drf_spectacular.views import SpectacularAPIView, SpectacularRedocView, SpectacularSwaggerView
+from rest_framework.authtoken.views import obtain_auth_token
+from rest_framework.routers import DefaultRouter, SimpleRouter
 
+from users.views import UserViewSet
+
+router = DefaultRouter() if settings.DEBUG else SimpleRouter()
+
+router.register("users", UserViewSet)
 
 urlpatterns = i18n_patterns(
     # DJANGO URLS
     path('api-auth/', include('rest_framework.urls', namespace='rest_framework')),
-    path('admin/', admin.site.urls),
+    # DRF auth token
+    path("api/auth-token/", obtain_auth_token),
+    path(settings.ADMIN_URL, admin.site.urls),
 
     # 3rd PARTY URLS
     path('accounts/', include('allauth.urls')),
-    # YOUR PATTERNS
+
     path('api/schema/', SpectacularAPIView.as_view(), name='schema'),
     # Optional UI:
     path('api/schema/swagger-ui/', SpectacularSwaggerView.as_view(url_name='schema'), name='swagger-ui'),
     path('api/schema/redoc/', SpectacularRedocView.as_view(url_name='schema'), name='redoc'),
 
     # APP URLS
-    path('', include('users.urls')),
+    path('', include('users.urls', namespace='users')),
+
+    # Media files
+    *static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT),
+
     prefix_default_language=False
 )
 
 # DEBUG URLS
 if settings.DEBUG:
+    # Static file serving when using Gunicorn + Uvicorn for local web socket development
+    urlpatterns += staticfiles_urlpatterns()
+
+    # This allows the error pages to be debugged during development, just visit
+    # these url in browser to see how these error pages look like.
     urlpatterns += [
-        path('debug/', include('debug_toolbar.urls'))
+        path(
+            "400/",
+            default_views.bad_request,
+            kwargs={"exception": Exception("Bad Request!")},
+        ),
+        path(
+            "403/",
+            default_views.permission_denied,
+            kwargs={"exception": Exception("Permission Denied")},
+        ),
+        path(
+            "404/",
+            default_views.page_not_found,
+            kwargs={"exception": Exception("Page not Found")},
+        ),
+        path("500/", default_views.server_error),
     ]
+    if "debug_toolbar" in settings.INSTALLED_APPS:
+        import debug_toolbar
+
+        urlpatterns += [
+            path('debug/', include(debug_toolbar.urls))
+        ]

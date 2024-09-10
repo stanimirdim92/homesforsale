@@ -4,7 +4,9 @@ import socket
 from .base import *  # noqa
 
 hostname, _, ips = socket.gethostbyname_ex(socket.gethostname())
-INTERNAL_IPS = [ip[: ip.rfind(".")] + ".1" for ip in ips] + ["127.0.0.1", "10.0.2.2"]
+# https://django-debug-toolbar.readthedocs.io/en/latest/installation.html#internal-ips
+INTERNAL_IPS = ["127.0.0.1", "10.0.2.2"]
+INTERNAL_IPS += [".".join(ip.split(".")[:-1] + ["1"]) for ip in ips]
 
 # https://docs.djangoproject.com/en/dev/ref/settings/#allowed-hosts
 ALLOWED_HOSTS = ["localhost", "0.0.0.0", "127.0.0.1"]
@@ -20,9 +22,11 @@ SECRET_KEY = os.getenv('APP_KEY')
 # SECURE_SSL_REDIRECT = os.getenv("SECURE_SSL_REDIRECT", default=True)
 # https://docs.djangoproject.com/en/dev/ref/settings/#csrf-cookie-secure
 # CSRF_COOKIE_SECURE = os.getenv('CSRF_COOKIE_SECURE')
+# https://docs.djangoproject.com/en/dev/ref/settings/#session-cookie-name
+SESSION_COOKIE_NAME = os.getenv("SESSION_COOKIE_NAME")
 # https://docs.djangoproject.com/en/dev/topics/security/#ssl-https
 # https://docs.djangoproject.com/en/dev/ref/settings/#secure-hsts-seconds
-# SECURE_HSTS_SECONDS = os.getenv('SECURE_HSTS_SECONDS')
+# SECURE_HSTS_SECONDS = os.getenv('SECURE_HSTS_SECONDS', default=60)
 # # https://docs.djangoproject.com/en/dev/ref/settings/#secure-hsts-include-subdomains
 # SECURE_HSTS_INCLUDE_SUBDOMAINS = os.getenv(
 #     "SECURE_HSTS_INCLUDE_SUBDOMAINS", default=True
