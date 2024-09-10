@@ -387,6 +387,8 @@ EMAIL_BACKEND = os.getenv(
 )
 # https://docs.djangoproject.com/en/dev/ref/settings/#email-timeout
 EMAIL_TIMEOUT = 5
+DEFAULT_FROM_EMAIL = os.getenv("EMAIL_FROM_ADDRESS", default="webmaster@localhost")
+SERVER_EMAIL = os.getenv("EMAIL_FROM_ADDRESS", default="webmaster@localhost")
 
 # ADMIN
 # ------------------------------------------------------------------------------
@@ -500,3 +502,17 @@ SESSION_ENGINE = os.getenv('SESSION_ENGINE', default='django.contrib.sessions.ba
 SESSION_CACHE_ALIAS = os.getenv('SESSION_CACHE_ALIAS', default='default')
 # https://docs.djangoproject.com/en/dev/ref/settings/#session-cookie-secure
 # SESSION_COOKIE_SECURE = os.getenv('SESSION_COOKIE_SECURE')
+
+
+COMPRESS_ENABLED = os.getenv("COMPRESS_ENABLED", default=True)
+COMPRESS_STORAGE = "compressor.storage.GzipCompressorFileStorage"
+# COMPRESS_STORAGE = STORAGES["staticfiles"]["BACKEND"]
+COMPRESS_URL = STATIC_URL
+COMPRESS_OFFLINE = True  # Offline compression is required when using Whitenoise
+COMPRESS_FILTERS = {
+    "css": [
+        "compressor.filters.css_default.CssAbsoluteFilter",
+        "compressor.filters.cssmin.rCSSMinFilter",
+    ],
+    "js": ["compressor.filters.jsmin.JSMinFilter"],
+}
