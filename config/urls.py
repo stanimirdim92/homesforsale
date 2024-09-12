@@ -22,7 +22,7 @@ from django.contrib import admin
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 from django.urls import include, path
 from django.views import defaults as default_views
-from drf_spectacular.views import SpectacularAPIView, SpectacularRedocView, SpectacularSwaggerView
+from drf_spectacular.views import SpectacularAPIView, SpectacularRedocView, SpectacularSwaggerView, SpectacularSwaggerSplitView
 from rest_framework.authtoken.views import obtain_auth_token
 from rest_framework.routers import DefaultRouter, SimpleRouter
 
@@ -43,12 +43,10 @@ urlpatterns = i18n_patterns(
     path('accounts/', include('allauth.urls')),
 
     path('api/schema/', SpectacularAPIView.as_view(), name='schema'),
-    # Optional UI:
-    path('api/schema/swagger/', SpectacularSwaggerView.as_view(url_name='schema'), name='swagger'),
-    path('api/schema/redoc/', SpectacularRedocView.as_view(url_name='schema'), name='redoc'),
+    path('api/schema/swagger/', SpectacularSwaggerSplitView.as_view(url_name='schema'), name='swagger'),
 
     # APP URLS
-    path('/', include('users.urls')),
+    path('', include('users.urls')),
 
     # Media files
     *static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT),
