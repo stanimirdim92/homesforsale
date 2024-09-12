@@ -3,20 +3,24 @@ import enum
 
 @enum.unique
 class Language(str, enum.Enum):
-    bg = 'bg'
-    en = 'en'
+    BG = 'BG'
+    EN = 'EN'
 
     def to_language(self) -> str:
         return {
-            'bg': 'Bulgarian',
-            'en': 'English',
+            'BG': 'Bulgarian',
+            'EN': 'English',
         }[self.value]
 
     def to_locale(self) -> str:
         return {
-            'bg': 'bg_BG',
-            'en': 'en_US',
+            'BG': 'bg_BG',
+            'EN': 'en_US',
         }[self.value]
+
+    @classmethod
+    def choices(cls):
+        return [(item.value, item.name) for item in cls]
 
 
 @enum.unique

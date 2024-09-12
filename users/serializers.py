@@ -1,6 +1,5 @@
-from django.contrib.auth.models import Group
-from rest_framework import serializers
 from django.contrib.auth import get_user_model
+from rest_framework import serializers
 
 
 class UserSerializer(serializers.HyperlinkedModelSerializer):
@@ -11,12 +10,6 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
             "url": {
                 "lookup_field": "uuid",
             },
-            'password': {'write_only': True, 'min_length': 4}
+            'password': {'write_only': True, 'min_length': 9}
         }
-        exclude = ["password",  'user_permissions']
-
-
-class GroupSerializer(serializers.HyperlinkedModelSerializer):
-    class Meta:
-        model = Group
-        exclude = ['permissions']
+        exclude = ["password", 'user_permissions']

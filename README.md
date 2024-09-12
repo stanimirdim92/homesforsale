@@ -138,3 +138,19 @@ Here's a list of additional tools, technologies, and services you can include fo
 - pytest - for testing
 - celery - for asynchronous tasks
 - asyncio - for asynchronous tasks
+
+
+### Features
+- Login / Registration for user/ agent
+- Notifications
+- Notes
+- Favorites
+- PM
+- Saved Searches
+- Find an agent with search
+- my listings
+- blacklist?
+- wallet?
+- invoices?
+- account close/delete?
+- push notifications?

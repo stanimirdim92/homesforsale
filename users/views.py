@@ -3,7 +3,7 @@ from django.contrib.auth import get_user_model
 from rest_framework import viewsets, status, permissions
 from rest_framework.response import Response
 
-from users.serializers import UserSerializer, GroupSerializer
+from users.serializers import UserSerializer
 from rest_framework.decorators import action
 
 
@@ -20,10 +20,3 @@ class UserViewSet(viewsets.ModelViewSet):
         serializer = UserSerializer(request.user, context={"request": request})
         return Response(status=status.HTTP_200_OK, data=serializer.data)
 
-
-class GroupViewSet(viewsets.ModelViewSet):
-    """
-    API endpoint that allows groups to be viewed or edited.
-    """
-    queryset = Group.objects.all()
-    serializer_class = GroupSerializer

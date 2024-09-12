@@ -71,6 +71,7 @@ DATABASES = {
         'PASSWORD': os.getenv('DB_PASSWORD'),
         'HOST': os.getenv('DB_HOST'),
         'PORT': os.getenv('DB_PORT'),
+
         'ATOMIC_REQUESTS': True,
         'CONN_HEALTH_CHECKS': True,
         'CONN_MAX_AGE':  int(os.getenv('CONN_MAX_AGE', default=60)),
@@ -79,6 +80,8 @@ DATABASES = {
             'client_encoding': 'UTF8',
             "server_side_binding": True,
             "isolation_level": IsolationLevel.SERIALIZABLE,
+            # "pool": True,
+            # 'options': '-c search_path='+os.getenv('DB_SCHEMA')
         },
     }
 }
@@ -124,8 +127,10 @@ THIRD_PARTY_APPS = [
     "rest_framework.authtoken",
     "corsheaders",
     "drf_spectacular",
+    "drf_spectacular_sidecar",
 
     "compressor",
+    "phonenumber_field",
 ]
 
 LOCAL_APPS = [
@@ -466,8 +471,7 @@ SPECTACULAR_SETTINGS = {
     'DESCRIPTION': '',
     'VERSION': os.getenv('APP_VERSION'),
     'SERVE_INCLUDE_SCHEMA': False,
-    "SERVE_PERMISSIONS": ["rest_framework.permissions.IsAdminUser"],
-    # OTHER SETTINGS
+    "SERVE_PERMISSIONS": ["rest_framework.permissions.AllowAny"],
 }
 
 # Cache

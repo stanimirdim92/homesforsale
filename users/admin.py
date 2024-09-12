@@ -27,7 +27,6 @@ class UserAdmin(auth_admin.UserAdmin):
                     "is_active",
                     "is_staff",
                     "is_superuser",
-                    "groups",
                     "user_permissions",
                 ),
             },
@@ -41,7 +40,7 @@ class UserAdmin(auth_admin.UserAdmin):
             "classes": ("wide",),
             "fields": (
                 "email", "password", "password1", "password2", "is_staff",
-                "is_active", "groups", "user_permissions"
+                "is_active","user_permissions"
             )}
         ),
     )
