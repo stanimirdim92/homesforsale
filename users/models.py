@@ -4,6 +4,7 @@ from django.conf import settings
 from django.contrib.auth.models import AbstractUser
 from django.core.validators import validate_email
 from django.db import models
+from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 from phonenumber_field.modelfields import PhoneNumberField
 from rest_framework.reverse import reverse
@@ -48,13 +49,14 @@ class User(AbstractUser):
     time_modified = models.DateTimeField(_("modified at"), auto_now=True)
     time_deleted = models.DateTimeField(_("deleted at"), blank=True, null=True)
 
-    reference = models.CharField(_("reference"), max_length=128, blank=False, unique=True, default=None)
-    reference_external = models.CharField(_("reference external"), max_length=128, blank=True, unique=False, null=True)
+    # reference = models.CharField(_("reference"), max_length=128, blank=False, unique=True, default=None)
+    # reference_external = models.CharField(_("reference external"), max_length=128, blank=True, unique=False, null=True)
     entity_type = models.CharField(_("type"), max_length=128, blank=True, unique=False, null=True, default=Types.CLIENT, choices=Types.choices())
 
     language = models.CharField(_("language"), max_length=2, blank=True, null=True, choices=Language.choices(), default=Language.EN)
-    currency = models.CharField(_("currency"), max_length=3, blank=True, null=True)
-    timezone = models.CharField(_("timezone"), max_length=128, blank=True, null=True)
+    currency = models.CharField(_("currency"), max_length=3, blank=True, null=True, default='EUR')
+
+    timezone = models.CharField(_("timezone"), max_length=128, blank=True, null=True, choices=settings.TIME_ZONE_CHOICES)
 
     USERNAME_FIELD = "email"
     REQUIRED_FIELDS = ['name_first', 'name_last']
@@ -71,7 +73,7 @@ class User(AbstractUser):
     def __str__(self):
         return f'{self.email}'
 
-    class Meta:
+    class Meta(AbstractUser.Meta):
         ordering = ['-id']
 
     def get_absolute_url(self) -> str:

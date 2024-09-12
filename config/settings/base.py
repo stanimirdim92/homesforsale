@@ -15,6 +15,8 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 import os
 from pathlib import Path
 from os.path import join, dirname
+
+from django.utils import timezone
 from dotenv import load_dotenv, find_dotenv
 
 from django.db.backends.postgresql.psycopg_any import IsolationLevel
@@ -36,10 +38,10 @@ DEBUG = os.getenv('APP_DEBUG', False)
 # though not all of them may be available with every OS.
 # In Windows, this must be set to your system time zone.
 TIME_ZONE = os.getenv('TIME_ZONE', 'UTC')
-
 # https://docs.djangoproject.com/en/dev/ref/settings/#language-code
 LANGUAGE_CODE = os.getenv("LANGUAGE_CODE", 'en-us')
 
+TIME_ZONE_CHOICES = [(tz, tz) for tz in timezone.zoneinfo.available_timezones()]
 # https://docs.djangoproject.com/en/dev/ref/settings/#languages
 # from django.utils.translation import gettext_lazy as _
 # LANGUAGES = [
@@ -504,10 +506,10 @@ STORAGES = {
     "default": {
         "BACKEND": "django.core.files.storage.FileSystemStorage",
     },
-    # "staticfiles": {
+    "staticfiles": {
     #     "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
           "BACKEND": "django.contrib.staticfiles.storage.ManifestStaticFilesStorage",
-    # },
+    },
 }
 
 # SESSION

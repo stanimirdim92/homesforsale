@@ -14,7 +14,7 @@ Designing a user account system involves creating a structure that handles user 
 #### 1. **Extended User Model**
    - **Custom User Model**: In Django, create a custom `User` model extending `AbstractUser` to manage users' unique needs for the platform (property buyers, sellers, real estate agents).
    - **Fields**:
-     - Email
+     - [x] Email 
      - Password (with hashing via Django's built-in utilities)
        - **Password Recovery**: Implement a "Forgot Password" feature that allows users to reset their password through a password reset link sent to their email.
        - **Password Change**: Allow users to change their password within the account settings after logging in.
@@ -25,7 +25,7 @@ Designing a user account system involves creating a structure that handles user 
        - Preferred Language: French, German, Spanish, etc. - Default English or based on country
        - **GDPR Consent**: Boolean field to track if users have consented to the platform’s data policies.
        - Profile picture and bio
-       - Full name, short name
+       - [x] Full name, short name
        - **Validation**: Validate email format, password strength, and unique email. Phone must be unique?
        - **Email Verification**: Send a verification email with a unique link/token to confirm the user's email address.
 

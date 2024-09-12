@@ -14,16 +14,11 @@ class UserManager(DjangoUserManager):
         """
         if not email:
             raise ValueError(_("The given email must be set"))
-        # Lookup the real model class from the global app registry so this
-        # manager method can be used in migrations. This is fine because
-        # managers are by definition working on the real model.
-        GlobalUserModel = apps.get_model(
-            self.model._meta.app_label, self.model._meta.object_name
-        )
-        email = GlobalUserModel.normalize_email(email)
+
+        email = self.normalize_email(email)
         user = self.model(email=email, **extra_fields)
         user.set_password(password)
-        user.save(using=self._db)
+        user.save()
 
         return user
 

@@ -1,8 +1,13 @@
 # https://django-debug-toolbar.readthedocs.io/en/latest/installation.html#internal-ips
+import os
 import socket
+
+from attr.converters import to_bool
 
 from .base import *  # noqa
 
+find_dotenv()
+load_dotenv(join(BASE_DIR, '.env'))
 hostname, _, ips = socket.gethostbyname_ex(socket.gethostname())
 # https://django-debug-toolbar.readthedocs.io/en/latest/installation.html#internal-ips
 INTERNAL_IPS = ["127.0.0.1", "10.0.2.2"]
@@ -14,27 +19,39 @@ ALLOWED_HOSTS = ["localhost", "0.0.0.0", "127.0.0.1"]
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = os.getenv('APP_KEY')
 
-# SECURITY
+
+# SECURITY MIDDLEWARE
 # ------------------------------------------------------------------------------
 # https://docs.djangoproject.com/en/dev/ref/settings/#secure-proxy-ssl-header
 # SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
+
 # https://docs.djangoproject.com/en/dev/ref/settings/#secure-ssl-redirect
-# SECURE_SSL_REDIRECT = os.getenv("SECURE_SSL_REDIRECT", default=True)
+SECURE_SSL_REDIRECT = to_bool(os.getenv("SECURE_SSL_REDIRECT", default=False))
+
 # https://docs.djangoproject.com/en/dev/ref/settings/#csrf-cookie-secure
-# CSRF_COOKIE_SECURE = os.getenv('CSRF_COOKIE_SECURE')
+CSRF_COOKIE_SECURE = to_bool(os.getenv('CSRF_COOKIE_SECURE', default=False))
+
 # https://docs.djangoproject.com/en/dev/ref/settings/#session-cookie-name
 SESSION_COOKIE_NAME = os.getenv("SESSION_COOKIE_NAME")
+
 # https://docs.djangoproject.com/en/dev/topics/security/#ssl-https
 # https://docs.djangoproject.com/en/dev/ref/settings/#secure-hsts-seconds
-# SECURE_HSTS_SECONDS = os.getenv('SECURE_HSTS_SECONDS', default=60)
-# # https://docs.djangoproject.com/en/dev/ref/settings/#secure-hsts-include-subdomains
-# SECURE_HSTS_INCLUDE_SUBDOMAINS = os.getenv(
-#     "SECURE_HSTS_INCLUDE_SUBDOMAINS", default=True
-# )
-# # https://docs.djangoproject.com/en/dev/ref/settings/#secure-hsts-preload
-# SECURE_HSTS_PRELOAD = os.getenv("SECURE_HSTS_PRELOAD", default=True)
-# # https://docs.djangoproject.com/en/dev/ref/middleware/#x-content-type-options-nosniff
-SECURE_CONTENT_TYPE_NOSNIFF = os.getenv(
-    "SECURE_CONTENT_TYPE_NOSNIFF", default=True
-)
+SECURE_HSTS_SECONDS = int(os.getenv('SECURE_HSTS_SECONDS', default=60))
 
+# # https://docs.djangoproject.com/en/dev/ref/settings/#secure-hsts-include-subdomains
+SECURE_HSTS_INCLUDE_SUBDOMAINS = to_bool(os.getenv(
+    "SECURE_HSTS_INCLUDE_SUBDOMAINS", default=False
+))
+
+# # https://docs.djangoproject.com/en/dev/ref/settings/#secure-hsts-preload
+SECURE_HSTS_PRELOAD = to_bool(os.getenv("SECURE_HSTS_PRELOAD", default=False))
+
+# # https://docs.djangoproject.com/en/dev/ref/middleware/#x-content-type-options-nosniff
+SECURE_CONTENT_TYPE_NOSNIFF = to_bool(os.getenv(
+    "SECURE_CONTENT_TYPE_NOSNIFF", default=True
+))
+
+SECURE_CROSS_ORIGIN_OPENER_POLICY = "same-origin"
+SECURE_REDIRECT_EXEMPT = []
+SECURE_REFERRER_POLICY = "same-origin"
+SECURE_SSL_HOST = None
