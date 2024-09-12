@@ -13,14 +13,13 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.1/ref/settings/
 """
 import os
+from os.path import join
 from pathlib import Path
-from os.path import join, dirname
-
-from django.utils import timezone
-from dotenv import load_dotenv, find_dotenv
 
 from django.db.backends.postgresql.psycopg_any import IsolationLevel
-
+from django.utils import timezone
+from django.utils.translation import gettext_lazy as _
+from dotenv import load_dotenv, find_dotenv
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve(strict=True).parent.parent.parent
@@ -43,12 +42,34 @@ LANGUAGE_CODE = os.getenv("LANGUAGE_CODE", 'en-us')
 
 TIME_ZONE_CHOICES = [(tz, tz) for tz in timezone.zoneinfo.available_timezones()]
 # https://docs.djangoproject.com/en/dev/ref/settings/#languages
-# from django.utils.translation import gettext_lazy as _
-# LANGUAGES = [
-#     ('en', _('English')),
-#     ('fr-fr', _('French')),
-#     ('pt-br', _('Portuguese')),
-# ]
+LANGUAGES = [
+    ("ast", _("Asturian")),
+    ("bg", _("Bulgarian")),
+    ("cs", _("Czech")),
+    ("da", _("Danish")),
+    ("nl", _("Dutch")),
+    ("de", _("German")),
+    ("el", _("Greek")),
+    ("en", _("English")),
+    ("es", _("Spanish")),
+    ("et", _("Estonian")),
+    ("fi", _("Finnish")),
+    ("fr", _("French")),
+    ("ga", _("Irish")),
+    ("hr", _("Croatian")),
+    ("hu", _("Hungarian")),
+    ("it", _("Italian")),
+    ("lt", _("Lithuanian")),
+    ("lv", _("Latvian")),
+    ("pl", _("Polish")),
+    ("pt", _("Portuguese")),
+    ("ro", _("Romanian")),
+    ("ru", _("Russian")),
+    ("sk", _("Slovak")),
+    ("sl", _("Slovenian")),
+    ("sv", _("Swedish")),
+]
+
 
 # https://docs.djangoproject.com/en/dev/ref/settings/#site-id
 SITE_ID = int(os.getenv('SITE_ID'))
@@ -76,7 +97,7 @@ DATABASES = {
 
         'ATOMIC_REQUESTS': True,
         'CONN_HEALTH_CHECKS': True,
-        'CONN_MAX_AGE':  int(os.getenv('CONN_MAX_AGE', default=60)),
+        'CONN_MAX_AGE': int(os.getenv('CONN_MAX_AGE', default=60)),
 
         'OPTIONS': {
             'client_encoding': 'UTF8',
@@ -127,9 +148,10 @@ THIRD_PARTY_APPS = [
 
     "rest_framework",
     "rest_framework.authtoken",
-    "corsheaders",
     "drf_spectacular",
     "drf_spectacular_sidecar",
+    "corsheaders",
+    "rosetta",
 
     "compressor",
     "phonenumber_field",
@@ -142,20 +164,18 @@ LOCAL_APPS = [
 # https://docs.djangoproject.com/en/dev/ref/settings/#installed-apps
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
 
-
 # WhiteNoise
 # ------------------------------------------------------------------------------
 # http://whitenoise.evans.io/en/latest/django.html#using-whitenoise-in-development
 # INSTALLED_APPS = ["whitenoise.runserver_nostatic", *INSTALLED_APPS]
 
 if DEBUG:
-   INSTALLED_APPS.append('debug_toolbar')
+    INSTALLED_APPS.append('debug_toolbar')
 
 # MIGRATIONS
 # ------------------------------------------------------------------------------
 # https://docs.djangoproject.com/en/dev/ref/settings/#migration-modules
 MIGRATION_MODULES = {"users": "users.migrations"}
-
 
 # AUTHENTICATION
 # ------------------------------------------------------------------------------
@@ -167,7 +187,7 @@ AUTHENTICATION_BACKENDS = [
     "allauth.account.auth_backends.AuthenticationBackend",
 ]
 # https://docs.djangoproject.com/en/dev/ref/settings/#auth-user-model
-AUTH_USER_MODEL =  "users.User"
+AUTH_USER_MODEL = "users.User"
 # # https://docs.djangoproject.com/en/dev/ref/settings/#login-redirect-url
 # LOGIN_REDIRECT_URL =  str(APP_PATH/':redirect'),
 # https://docs.djangoproject.com/en/dev/ref/settings/#login-url
@@ -263,7 +283,7 @@ SOCIALACCOUNT_PROVIDERS = {
 # ------------------------------------------------------------------------------
 # https://docs.djangoproject.com/en/dev/ref/settings/#password-hashers
 PASSWORD_HASHERS = [
-     # https://docs.djangoproject.com/en/dev/topics/auth/passwords/#using-argon2-with-django
+    # https://docs.djangoproject.com/en/dev/topics/auth/passwords/#using-argon2-with-django
     "django.contrib.auth.hashers.Argon2PasswordHasher",
     "django.contrib.auth.hashers.BCryptSHA256PasswordHasher",
     "django.contrib.auth.hashers.PBKDF2PasswordHasher",
@@ -292,9 +312,9 @@ MIDDLEWARE = [
     'allauth.account.middleware.AccountMiddleware',
     # 'django.middleware.cache.UpdateCacheMiddleware',  # redis
     "corsheaders.middleware.CorsMiddleware",
-    #"whitenoise.middleware.WhiteNoiseMiddleware",
+    # "whitenoise.middleware.WhiteNoiseMiddleware",
     'django.middleware.http.ConditionalGetMiddleware',
-    'django.contrib.sessions.middleware.SessionMiddleware', # Manages sessions across requests
+    'django.contrib.sessions.middleware.SessionMiddleware',  # Manages sessions across requests
     'django.middleware.locale.LocaleMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -303,7 +323,6 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     # 'django.middleware.cache.FetchFromCacheMiddleware',  # redis
 ]
-
 
 if DEBUG:
     MIDDLEWARE.append("debug_toolbar.middleware.DebugToolbarMiddleware")
@@ -363,8 +382,8 @@ TEMPLATES = [
                 "django.template.context_processors.static",
                 "django.template.context_processors.tz",
                 "django.contrib.messages.context_processors.messages",
-               "users.context_processors.allauth_settings",
-             ],
+                "users.context_processors.allauth_settings",
+            ],
         },
     },
 ]
@@ -404,8 +423,6 @@ EMAIL_HOST_USER = os.getenv("EMAIL_USER", default="")
 EMAIL_HOST_PASSWORD = os.getenv("EMAIL_PASSWORD", default="")
 EMAIL_USE_TLS = bool(os.getenv("EMAIL_USE_TLS", default=False))
 EMAIL_USE_SSL = bool(os.getenv("EMAIL_USE_SSL", default=False))
-
-
 
 # ADMIN
 # ------------------------------------------------------------------------------
@@ -507,8 +524,8 @@ STORAGES = {
         "BACKEND": "django.core.files.storage.FileSystemStorage",
     },
     "staticfiles": {
-    #     "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
-          "BACKEND": "django.contrib.staticfiles.storage.ManifestStaticFilesStorage",
+        #     "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
+        "BACKEND": "django.contrib.staticfiles.storage.ManifestStaticFilesStorage",
     },
 }
 

@@ -20,7 +20,7 @@ from django.conf.urls.i18n import i18n_patterns
 from django.conf.urls.static import static
 from django.contrib import admin
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
-from django.urls import include, path
+from django.urls import include, path, re_path
 from django.views import defaults as default_views
 from drf_spectacular.views import SpectacularAPIView, SpectacularRedocView, SpectacularSwaggerView, SpectacularSwaggerSplitView
 from rest_framework.authtoken.views import obtain_auth_token
@@ -50,6 +50,9 @@ urlpatterns = i18n_patterns(
 
     # Media files
     *static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT),
+
+    path('i18n/', include('django.conf.urls.i18n')),
+    re_path('r^rosetta/', include('rosetta.urls')),
 
     prefix_default_language=False
 )
