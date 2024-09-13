@@ -11,9 +11,10 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
             "url": {
                 "lookup_field": "uuid",
             },
-            'password': {'write_only': True, 'min_length': 9}
+            'password': {'write_only': True},
+            'id': {'read_only': True}
         }
-        exclude = ["password", 'user_permissions']
+        exclude = ['password','user_permissions']
 
 
 class GroupSerializer(serializers.HyperlinkedModelSerializer):

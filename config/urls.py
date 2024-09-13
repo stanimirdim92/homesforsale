@@ -25,22 +25,29 @@ from django.views import defaults as default_views
 from drf_spectacular.views import SpectacularAPIView, SpectacularSwaggerSplitView
 from rest_framework.authtoken.views import obtain_auth_token
 
-urlpatterns = i18n_patterns(
+
+
+urlpatterns = [
     # DRF URLS
     # path('api-auth/', include('rest_framework.urls', namespace='rest_framework')),
     path("api/auth-token/", obtain_auth_token),
 
-    path(settings.ADMIN_URL, admin.site.urls),
-
-    # 3rd PARTY URLS
-    path('accounts/', include('allauth.urls')),
-    path('i18n/', include('django.conf.urls.i18n')),
+    re_path(r'^rosetta/', include('rosetta.urls')),
 
     path('api/schema/', SpectacularAPIView.as_view(), name='schema'),
     path('api/schema/swagger/', SpectacularSwaggerSplitView.as_view(url_name='schema'), name='swagger'),
 
+    path(settings.ADMIN_URL, admin.site.urls),
+]
+
+
+urlpatterns += i18n_patterns(
     # APP URLS
     path('', include('users.urls')),
+
+    # 3rd PARTY URLS
+    path('accounts/', include('allauth.urls')),
+    path('i18n/', include('django.conf.urls.i18n')),
 
     # Media files
     *static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT),
@@ -76,11 +83,8 @@ if settings.DEBUG:
     if "debug_toolbar" in settings.INSTALLED_APPS:
         import debug_toolbar
 
-        urlpatterns += [
-            path('debug/', include(debug_toolbar.urls))
-        ]
+        urlpatterns += i18n_patterns(
+            path('debug/', include(debug_toolbar.urls)),
+            prefix_default_language=True
+        )
 
-if 'rosetta' in settings.INSTALLED_APPS:
-    urlpatterns += [
-        re_path(r'^rosetta/', include('rosetta.urls'))
-    ]
