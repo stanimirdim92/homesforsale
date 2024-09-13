@@ -26,17 +26,15 @@ from drf_spectacular.views import SpectacularAPIView, SpectacularSwaggerSplitVie
 from rest_framework.authtoken.views import obtain_auth_token
 
 urlpatterns = i18n_patterns(
-    # DJANGO URLS
-    path('api-auth/', include('rest_framework.urls', namespace='rest_framework')),
-
-    # DRF auth token
+    # DRF URLS
+    # path('api-auth/', include('rest_framework.urls', namespace='rest_framework')),
     path("api/auth-token/", obtain_auth_token),
+
     path(settings.ADMIN_URL, admin.site.urls),
 
     # 3rd PARTY URLS
     path('accounts/', include('allauth.urls')),
     path('i18n/', include('django.conf.urls.i18n')),
-    re_path('r^rosetta/', include('rosetta.urls')),
 
     path('api/schema/', SpectacularAPIView.as_view(), name='schema'),
     path('api/schema/swagger/', SpectacularSwaggerSplitView.as_view(url_name='schema'), name='swagger'),
@@ -81,3 +79,8 @@ if settings.DEBUG:
         urlpatterns += [
             path('debug/', include(debug_toolbar.urls))
         ]
+
+if 'rosetta' in settings.INSTALLED_APPS:
+    urlpatterns += [
+        re_path(r'^rosetta/', include('rosetta.urls'))
+    ]
