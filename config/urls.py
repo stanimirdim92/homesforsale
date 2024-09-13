@@ -22,25 +22,21 @@ from django.contrib import admin
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 from django.urls import include, path, re_path
 from django.views import defaults as default_views
-from drf_spectacular.views import SpectacularAPIView, SpectacularRedocView, SpectacularSwaggerView, SpectacularSwaggerSplitView
+from drf_spectacular.views import SpectacularAPIView, SpectacularSwaggerSplitView
 from rest_framework.authtoken.views import obtain_auth_token
-from rest_framework.routers import DefaultRouter, SimpleRouter
-
-from users.views import UserViewSet
-
-router = DefaultRouter() if settings.DEBUG else SimpleRouter()
-
-router.register("users", UserViewSet)
 
 urlpatterns = i18n_patterns(
     # DJANGO URLS
     path('api-auth/', include('rest_framework.urls', namespace='rest_framework')),
+
     # DRF auth token
     path("api/auth-token/", obtain_auth_token),
     path(settings.ADMIN_URL, admin.site.urls),
 
     # 3rd PARTY URLS
     path('accounts/', include('allauth.urls')),
+    path('i18n/', include('django.conf.urls.i18n')),
+    re_path('r^rosetta/', include('rosetta.urls')),
 
     path('api/schema/', SpectacularAPIView.as_view(), name='schema'),
     path('api/schema/swagger/', SpectacularSwaggerSplitView.as_view(url_name='schema'), name='swagger'),
@@ -51,10 +47,7 @@ urlpatterns = i18n_patterns(
     # Media files
     *static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT),
 
-    path('i18n/', include('django.conf.urls.i18n')),
-    re_path('r^rosetta/', include('rosetta.urls')),
-
-    prefix_default_language=False
+    prefix_default_language=True
 )
 
 # DEBUG URLS

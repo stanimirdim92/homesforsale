@@ -4,7 +4,6 @@ from django.conf import settings
 from django.contrib.auth.models import AbstractUser
 from django.core.validators import validate_email
 from django.db import models
-from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 from phonenumber_field.modelfields import PhoneNumberField
 from rest_framework.reverse import reverse
@@ -34,6 +33,7 @@ class User(AbstractUser):
         },
     )
 
+    id = models.BigAutoField(primary_key=True, editable=False, auto_created=True)
     title = models.CharField(_("title"), max_length=10, blank=True, null=True, choices=Titles.choices(), default=Titles.MR)
     name_first = models.CharField(_("first name"), max_length=128, blank=False, null=True)
     name_middle = models.CharField(_("middle name"), max_length=128, blank=True, null=True)
@@ -67,9 +67,6 @@ class User(AbstractUser):
         Main method to save and create users, even with manage.py
     """
 
-    def save(self, *args, **kwargs):
-        return super().save(args, kwargs)
-
     def __str__(self):
         return f'{self.email}'
 
@@ -91,6 +88,8 @@ class User(AbstractUser):
         return self.name_first
 
 
+#
+#
 class Address(models.Model):
     user_id = models.ForeignKey(settings.AUTH_USER_MODEL, db_index=True, on_delete=models.CASCADE, related_name='addresses')
 

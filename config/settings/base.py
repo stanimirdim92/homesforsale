@@ -16,6 +16,8 @@ import os
 from os.path import join
 from pathlib import Path
 
+from attr.converters import to_bool
+from django.conf.global_settings import ADMINS
 from django.db.backends.postgresql.psycopg_any import IsolationLevel
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
@@ -30,7 +32,7 @@ load_dotenv(join(BASE_DIR, '.env'))
 # GENERAL
 # ------------------------------------------------------------------------------
 # https://docs.djangoproject.com/en/dev/ref/settings/#debug
-DEBUG = os.getenv('APP_DEBUG', False)
+DEBUG = to_bool(os.getenv('APP_DEBUG', False))
 
 # Local time zone. Choices are
 # http://en.wikipedia.org/wiki/List_of_tz_zones_by_name
@@ -122,14 +124,15 @@ WSGI_APPLICATION = "config.wsgi.application"
 # APPS
 # ------------------------------------------------------------------------------
 DJANGO_APPS = [
-    "django.contrib.auth",
-    "django.contrib.contenttypes",
-    "django.contrib.sessions",
+
+    'django.contrib.admin',
+    'django.contrib.auth',
+    'django.contrib.contenttypes',
+    'django.contrib.sessions',
     "django.contrib.sites",
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "django.contrib.humanize",
-    "django.contrib.admin",
     "django.forms",
 ]
 THIRD_PARTY_APPS = [
@@ -141,10 +144,11 @@ THIRD_PARTY_APPS = [
     "allauth",
     "allauth.account",
     "allauth.mfa",
+    "allauth.usersessions",
     "allauth.socialaccount",
     # 'allauth.socialaccount.providers.facebook',
     # 'allauth.socialaccount.providers.google',
-    # 'allauth.socialaccount.providers.apple',
+    # 'allauth.socialaccount.providers.linkedin',
 
     "rest_framework",
     "rest_framework.authtoken",
@@ -186,10 +190,11 @@ AUTHENTICATION_BACKENDS = [
     # `allauth` specific authentication methods, such as login by e-mail
     "allauth.account.auth_backends.AuthenticationBackend",
 ]
+USERSESSIONS_TRACK_ACTIVITY = True
 # https://docs.djangoproject.com/en/dev/ref/settings/#auth-user-model
 AUTH_USER_MODEL = "users.User"
 # # https://docs.djangoproject.com/en/dev/ref/settings/#login-redirect-url
-# LOGIN_REDIRECT_URL =  str(APP_PATH/':redirect'),
+# LOGIN_REDIRECT_URL =  str(BASE_DIR/':redirect'),
 # https://docs.djangoproject.com/en/dev/ref/settings/#login-url
 LOGIN_URL = "account_login"
 # https://django-allauth.readthedocs.io/en/latest/configuration.html
@@ -201,11 +206,25 @@ ACCOUNT_AUTHENTICATION_METHOD = 'email'
 # https://django-allauth.readthedocs.io/en/latest/configuration.html
 ACCOUNT_USER_MODEL_USERNAME_FIELD = None
 # https://django-allauth.readthedocs.io/en/latest/configuration.html
-ACCOUNT_EMAIL_VERIFICATION = "mandatory"
-ACCOUNT_ALLOW_REGISTRATION = os.getenv('ACCOUNT_ALLOW_REGISTRATION', True)
+ACCOUNT_EMAIL_VERIFICATION = "optional"
+ACCOUNT_ALLOW_REGISTRATION = to_bool(os.getenv('ACCOUNT_ALLOW_REGISTRATION', True))
 ACCOUNT_ADAPTER = "users.adapters.AccountAdapter"
 # https://docs.allauth.org/en/latest/account/forms.html
-ACCOUNT_FORMS = {"signup": "users.forms.UserSignupForm"}
+
+ACCOUNT_FORMS = {
+    'add_email': 'allauth.account.forms.AddEmailForm',
+    'change_password': 'allauth.account.forms.ChangePasswordForm',
+    'confirm_login_code': 'allauth.account.forms.ConfirmLoginCodeForm',
+    'login': 'allauth.account.forms.LoginForm',
+    'request_login_code': 'allauth.account.forms.RequestLoginCodeForm',
+    'reset_password': 'allauth.account.forms.ResetPasswordForm',
+    'reset_password_from_key': 'allauth.account.forms.ResetPasswordKeyForm',
+    'set_password': 'allauth.account.forms.SetPasswordForm',
+    'signup': 'allauth.account.forms.SignupForm',
+    'user_token': 'allauth.account.forms.UserTokenForm',
+}
+
+
 # https://docs.allauth.org/en/latest/socialaccount/configuration.html
 SOCIALACCOUNT_ADAPTER = "users.adapters.SocialAccountAdapter"
 # https://docs.allauth.org/en/latest/socialaccount/configuration.html
@@ -255,28 +274,6 @@ SOCIALACCOUNT_PROVIDERS = {
         'VERSION': 'v13.0',
         'GRAPH_API_URL': 'https://graph.facebook.com/v13.0',
     },
-    "apple": {
-        "APP": {
-            # Your service identifier.
-            "client_id": "your.service.id",
-
-            # The Key ID (visible in the "View Key Details" page).
-            "secret": "KEYID",
-
-            # Member ID/App ID Prefix -- you can find it below your name
-            # at the top right corner of the page, or it’s your App ID
-            # Prefix in your App ID.
-            "key": "MEMAPPIDPREFIX",
-
-            # The certificate you downloaded when generating the key.
-            "certificate_key": """-----BEGIN PRIVATE KEY-----
-            s3cr3ts3cr3ts3cr3ts3cr3ts3cr3ts3cr3ts3cr3ts3cr3ts3cr3ts3cr3ts3cr
-            3ts3cr3ts3cr3ts3cr3ts3cr3ts3cr3ts3cr3ts3cr3ts3cr3ts3cr3ts3cr3ts3
-            c3ts3cr3t
-            -----END PRIVATE KEY-----
-            """
-        }
-    }
 }
 
 # PASSWORDS
@@ -309,18 +306,19 @@ AUTH_PASSWORD_VALIDATORS = [
 # https://docs.djangoproject.com/en/dev/ref/settings/#middleware
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
-    'allauth.account.middleware.AccountMiddleware',
     # 'django.middleware.cache.UpdateCacheMiddleware',  # redis
     "corsheaders.middleware.CorsMiddleware",
+    'django.middleware.clickjacking.XFrameOptionsMiddleware',
     # "whitenoise.middleware.WhiteNoiseMiddleware",
     'django.middleware.http.ConditionalGetMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',  # Manages sessions across requests
     'django.middleware.locale.LocaleMiddleware',
-    'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
+    'django.middleware.common.CommonMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',  # Associates users with requests using sessions.
     'django.contrib.messages.middleware.MessageMiddleware',
-    'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'allauth.account.middleware.AccountMiddleware',
+    'allauth.usersessions.middleware.UserSessionsMiddleware',
     # 'django.middleware.cache.FetchFromCacheMiddleware',  # redis
 ]
 
@@ -377,11 +375,11 @@ TEMPLATES = [
                 "django.template.context_processors.debug",
                 "django.template.context_processors.request",
                 "django.contrib.auth.context_processors.auth",
+                "django.contrib.messages.context_processors.messages",
                 "django.template.context_processors.i18n",
                 "django.template.context_processors.media",
                 "django.template.context_processors.static",
                 "django.template.context_processors.tz",
-                "django.contrib.messages.context_processors.messages",
                 "users.context_processors.allauth_settings",
             ],
         },
@@ -421,8 +419,8 @@ EMAIL_HOST = os.getenv("EMAIL_HOST", default="localhost")
 EMAIL_PORT = os.getenv("EMAIL_PORT", default=25)
 EMAIL_HOST_USER = os.getenv("EMAIL_USER", default="")
 EMAIL_HOST_PASSWORD = os.getenv("EMAIL_PASSWORD", default="")
-EMAIL_USE_TLS = bool(os.getenv("EMAIL_USE_TLS", default=False))
-EMAIL_USE_SSL = bool(os.getenv("EMAIL_USE_SSL", default=False))
+EMAIL_USE_TLS = to_bool(os.getenv("EMAIL_USE_TLS", default=False))
+EMAIL_USE_SSL = to_bool(os.getenv("EMAIL_USE_SSL", default=False))
 
 # ADMIN
 # ------------------------------------------------------------------------------
@@ -430,11 +428,11 @@ EMAIL_USE_SSL = bool(os.getenv("EMAIL_USE_SSL", default=False))
 ADMIN_URL = "admin/"
 # https://docs.djangoproject.com/en/dev/ref/settings/#admins
 # ADMINS = [()]
-# # https://docs.djangoproject.com/en/dev/ref/settings/#managers
-# MANAGERS = ADMINS
+# https://docs.djangoproject.com/en/dev/ref/settings/#managers
+MANAGERS = ADMINS
 # https://cookiecutter-django.readthedocs.io/en/latest/settings.html#other-environment-settings
 # Force the `admin` sign in process to go through the `django-allauth` workflow
-DJANGO_ADMIN_FORCE_ALLAUTH = os.getenv("DJANGO_ADMIN_FORCE_ALLAUTH", default=False)
+DJANGO_ADMIN_FORCE_ALLAUTH = to_bool(os.getenv("DJANGO_ADMIN_FORCE_ALLAUTH", default=False))
 
 # LOGGING
 # ------------------------------------------------------------------------------
@@ -481,8 +479,9 @@ REST_FRAMEWORK = {
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
     'PAGE_SIZE': 50,
     'DEFAULT_AUTHENTICATION_CLASSES': (
-        'rest_framework.authentication.TokenAuthentication',
         'rest_framework.authentication.SessionAuthentication',
+        'rest_framework.authentication.TokenAuthentication',
+        'rest_framework.authentication.BasicAuthentication',
     ),
     'DEFAULT_PERMISSION_CLASSES': (
         'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly',
@@ -514,7 +513,7 @@ CACHES = {
             'db': os.getenv('REDIS_DB'),
             'parser_class': 'redis.connection.PythonParser',
             'pool_class': 'redis.BlockingConnectionPool',
-            "IGNORE_EXCEPTIONS": True,
+            "IGNORE_EXCEPTIONS": False,
         }
     }
 }
@@ -535,7 +534,7 @@ STORAGES = {
 SESSION_ENGINE = os.getenv('SESSION_ENGINE', default='django.contrib.sessions.backends.db')
 SESSION_CACHE_ALIAS = os.getenv('SESSION_CACHE_ALIAS', default='default')
 # https://docs.djangoproject.com/en/dev/ref/settings/#session-cookie-secure
-# SESSION_COOKIE_SECURE = os.getenv('SESSION_COOKIE_SECURE')
+SESSION_COOKIE_SECURE = to_bool(os.getenv('SESSION_COOKIE_SECURE', default=False))
 
 
 COMPRESS_ENABLED = os.getenv("COMPRESS_ENABLED", default=True)

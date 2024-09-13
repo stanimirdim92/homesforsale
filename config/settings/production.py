@@ -1,8 +1,4 @@
-# https://django-debug-toolbar.readthedocs.io/en/latest/installation.html#internal-ips
-import os
 import socket
-
-from attr.converters import to_bool
 
 from .base import *  # noqa
 
@@ -10,7 +6,7 @@ find_dotenv()
 load_dotenv(join(BASE_DIR, '.env'))
 hostname, _, ips = socket.gethostbyname_ex(socket.gethostname())
 # https://django-debug-toolbar.readthedocs.io/en/latest/installation.html#internal-ips
-INTERNAL_IPS = ["127.0.0.1", "10.0.2.2"]
+INTERNAL_IPS = ["127.0.0.1", "10.0.2.2", "::1"]
 INTERNAL_IPS += [".".join(ip.split(".")[:-1] + ["1"]) for ip in ips]
 
 # https://docs.djangoproject.com/en/dev/ref/settings/#allowed-hosts
@@ -31,22 +27,22 @@ SECURE_SSL_REDIRECT = to_bool(os.getenv("SECURE_SSL_REDIRECT", default=False))
 # https://docs.djangoproject.com/en/dev/ref/settings/#csrf-cookie-secure
 CSRF_COOKIE_SECURE = to_bool(os.getenv('CSRF_COOKIE_SECURE', default=False))
 
-# https://docs.djangoproject.com/en/dev/ref/settings/#session-cookie-name
-SESSION_COOKIE_NAME = os.getenv("SESSION_COOKIE_NAME")
-
-# https://docs.djangoproject.com/en/dev/topics/security/#ssl-https
-# https://docs.djangoproject.com/en/dev/ref/settings/#secure-hsts-seconds
+# # https://docs.djangoproject.com/en/dev/ref/settings/#session-cookie-name
+# SESSION_COOKIE_NAME = os.getenv("SESSION_COOKIE_NAME")
+#
+# # https://docs.djangoproject.com/en/dev/topics/security/#ssl-https
+# # https://docs.djangoproject.com/en/dev/ref/settings/#secure-hsts-seconds
 SECURE_HSTS_SECONDS = int(os.getenv('SECURE_HSTS_SECONDS', default=60))
-
-# # https://docs.djangoproject.com/en/dev/ref/settings/#secure-hsts-include-subdomains
+#
+# # # https://docs.djangoproject.com/en/dev/ref/settings/#secure-hsts-include-subdomains
 SECURE_HSTS_INCLUDE_SUBDOMAINS = to_bool(os.getenv(
     "SECURE_HSTS_INCLUDE_SUBDOMAINS", default=False
 ))
 
-# # https://docs.djangoproject.com/en/dev/ref/settings/#secure-hsts-preload
+# https://docs.djangoproject.com/en/dev/ref/settings/#secure-hsts-preload
 SECURE_HSTS_PRELOAD = to_bool(os.getenv("SECURE_HSTS_PRELOAD", default=False))
 
-# # https://docs.djangoproject.com/en/dev/ref/middleware/#x-content-type-options-nosniff
+# https://docs.djangoproject.com/en/dev/ref/middleware/#x-content-type-options-nosniff
 SECURE_CONTENT_TYPE_NOSNIFF = to_bool(os.getenv(
     "SECURE_CONTENT_TYPE_NOSNIFF", default=True
 ))
