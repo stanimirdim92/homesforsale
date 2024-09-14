@@ -16,18 +16,18 @@ Designing a user account system involves creating a structure that handles user 
    - **Fields**:
      - [x] Email 
      - Password (with hashing via Django's built-in utilities)
-       - **Password Recovery**: Implement a "Forgot Password" feature that allows users to reset their password through a password reset link sent to their email.
-       - **Password Change**: Allow users to change their password within the account settings after logging in.
-       - Phone Number (optional but useful for real estate inquiries)
-       - Address: Useful for agents or property owners.
-       - Currency Preferences: EUR, GBP, etc. - Default English or based on country
-         - Currency Settings: Add support for currency conversion to display prices in users' local currencies using an API (e.g., fixer.io for real-time conversion rates).
-       - Preferred Language: French, German, Spanish, etc. - Default English or based on country
-       - **GDPR Consent**: Boolean field to track if users have consented to the platform’s data policies.
-       - Profile picture and bio
-       - [x] Full name, short name
-       - **Validation**: Validate email format, password strength, and unique email. Phone must be unique?
-       - **Email Verification**: Send a verification email with a unique link/token to confirm the user's email address.
+     - **Password Recovery**: Implement a "Forgot Password" feature that allows users to reset their password through a password reset link sent to their email.
+     - **Password Change**: Allow users to change their password within the account settings after logging in.
+     - Phone Number (optional but useful for real estate inquiries)
+     - Address: Useful for agents or property owners.
+     - Currency Preferences: EUR, GBP, etc. - Default English or based on country
+       - Currency Settings: Add support for currency conversion to display prices in users' local currencies using an API (e.g., fixer.io for real-time conversion rates).
+     - Preferred Language: French, German, Spanish, etc. - Default English or based on country
+     - **GDPR Consent**: Boolean field to track if users have consented to the platform’s data policies.
+     - Profile picture and bio
+     - [x] Full name, short name
+     - **Validation**: Validate email format, password strength, and unique email. Phone must be unique?
+     - **Email Verification**: Send a verification email with a unique link/token to confirm the user's email address.
 
 #### 2. **User Types & Roles**
    - **User Roles**: Define roles such as:

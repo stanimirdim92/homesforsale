@@ -138,7 +138,8 @@ Here's a list of additional tools, technologies, and services you can include fo
 - pytest - for testing
 - celery - for asynchronous tasks
 - asyncio - for asynchronous tasks
-
+- django-oauth-toolkit - for OAuth
+- rosseta for languages
 
 ### Features
 - Login / Registration for user/ agent

@@ -23,31 +23,31 @@ from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 from django.urls import include, path, re_path
 from django.views import defaults as default_views
 from drf_spectacular.views import SpectacularAPIView, SpectacularSwaggerSplitView
-from rest_framework.authtoken.views import obtain_auth_token
-
-
 
 urlpatterns = [
     # DRF URLS
-    # path('api-auth/', include('rest_framework.urls', namespace='rest_framework')),
-    path("api/auth-token/", obtain_auth_token),
+    # path('api/auth/', include('rest_framework.urls', namespace='rest_framework')),
+    # path("api/auth/token/", obtain_auth_token),
 
+    # UI Language translation
     re_path(r'^rosetta/', include('rosetta.urls')),
 
     path('api/schema/', SpectacularAPIView.as_view(), name='schema'),
     path('api/schema/swagger/', SpectacularSwaggerSplitView.as_view(url_name='schema'), name='swagger'),
 
     path(settings.ADMIN_URL, admin.site.urls),
-]
-
-
-urlpatterns += i18n_patterns(
-    # APP URLS
-    path('', include('users.urls')),
+    path('i18n/', include('django.conf.urls.i18n')),
 
     # 3rd PARTY URLS
+    path('o/', include('oauth2_provider.urls')),
+
+    # APP URLS
+    path('', include('users.urls')),
+]
+
+urlpatterns += i18n_patterns(
+    # 3rd PARTY URLS
     path('accounts/', include('allauth.urls')),
-    path('i18n/', include('django.conf.urls.i18n')),
 
     # Media files
     *static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT),
@@ -55,7 +55,7 @@ urlpatterns += i18n_patterns(
     prefix_default_language=True
 )
 
-# DEBUG URLS
+
 if settings.DEBUG:
     # Static file serving when using Gunicorn + Uvicorn for local web socket development
     urlpatterns += staticfiles_urlpatterns()
@@ -81,10 +81,7 @@ if settings.DEBUG:
         path("500/", default_views.server_error),
     ]
     if "debug_toolbar" in settings.INSTALLED_APPS:
-        import debug_toolbar
-
         urlpatterns += i18n_patterns(
-            path('debug/', include(debug_toolbar.urls)),
+            path('debug/', include('debug_toolbar.urls')),
             prefix_default_language=True
         )
-

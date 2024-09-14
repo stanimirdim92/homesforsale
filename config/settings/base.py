@@ -22,6 +22,7 @@ from django.db.backends.postgresql.psycopg_any import IsolationLevel
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 from dotenv import load_dotenv, find_dotenv
+from rest_framework import ISO_8601
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve(strict=True).parent.parent.parent
@@ -150,6 +151,7 @@ THIRD_PARTY_APPS = [
     # 'allauth.socialaccount.providers.google',
     # 'allauth.socialaccount.providers.linkedin',
 
+    "oauth2_provider",
     "rest_framework",
     "rest_framework.authtoken",
     "drf_spectacular",
@@ -476,18 +478,90 @@ LOGGING = {
 }
 
 REST_FRAMEWORK = {
-    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
-    'PAGE_SIZE': 50,
-    'DEFAULT_AUTHENTICATION_CLASSES': (
+    # Base API policies
+    'DEFAULT_RENDERER_CLASSES': [
+        'rest_framework.renderers.JSONRenderer',
+        'rest_framework.renderers.TemplateHTMLRenderer',
+        # 'rest_framework.renderers.BrowsableAPIRenderer',
+    ],
+    'DEFAULT_PARSER_CLASSES': [
+        'rest_framework.parsers.JSONParser',
+        'rest_framework.parsers.FormParser',
+        'rest_framework.parsers.MultiPartParser'
+    ],
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        # 'rest_framework.authentication.TokenAuthentication',
+        'oauth2_provider.contrib.rest_framework.OAuth2Authentication',
         'rest_framework.authentication.SessionAuthentication',
-        'rest_framework.authentication.TokenAuthentication',
-        'rest_framework.authentication.BasicAuthentication',
-    ),
-    'DEFAULT_PERMISSION_CLASSES': (
-        'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly',
+    ],
+    'DEFAULT_PERMISSION_CLASSES': [
+        # 'rest_framework.permissions.AllowAny',
+        # 'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly',
         # 'rest_framework.permissions.IsAuthenticatedOrReadOnly',
-    ),
-    "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
+        'rest_framework.permissions.IsAuthenticated',
+    ],
+    'DEFAULT_VERSIONING_CLASS': 'rest_framework.versioning.URLPathVersioning',
+
+    # Generic view behavior
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
+    'DEFAULT_FILTER_BACKENDS': [
+        'django_filters.rest_framework.DjangoFilterBackend',
+    ],
+    # Schema
+    'DEFAULT_SCHEMA_CLASS': 'rest_framework.schemas.openapi.AutoSchema',
+
+    # Throttling
+    'DEFAULT_THROTTLE_RATES': {
+        'user': None,
+        'anon': None,
+    },
+    'NUM_PROXIES': None,
+
+    # Pagination
+    'PAGE_SIZE': 50,
+
+    # Filtering
+    'SEARCH_PARAM': 'search',
+    'ORDERING_PARAM': 'ordering',
+
+    # Input and output formats
+    'DATE_FORMAT': ISO_8601,
+    'DATE_INPUT_FORMATS': [ISO_8601],
+
+    'DATETIME_FORMAT': ISO_8601,
+    'DATETIME_INPUT_FORMATS': [ISO_8601],
+
+    'TIME_FORMAT': ISO_8601,
+    'TIME_INPUT_FORMATS': [ISO_8601],
+
+    # Encoding
+    'UNICODE_JSON': True,
+    'COMPACT_JSON': True,
+    'STRICT_JSON': True,
+    'COERCE_DECIMAL_TO_STRING': True,
+    'UPLOADED_FILES_USE_URL': True,
+
+    # Browsable API
+    'HTML_SELECT_CUTOFF': 1000,
+    'HTML_SELECT_CUTOFF_TEXT': "More than {count} items...",
+
+    # Schemas
+    'SCHEMA_COERCE_PATH_PK': True,
+    'SCHEMA_COERCE_METHOD_NAMES': {
+        'retrieve': 'read',
+        'destroy': 'delete'
+    },
+}
+
+
+
+OAUTH2_PROVIDER = {
+    # this is the list of available scopes
+    'SCOPES': {
+        'read': _('Read scope'),
+        'write': _('Write scope'),
+        'groups': _('Access to your groups')
+    }
 }
 
 # django-cors-headers - https://github.com/adamchainz/django-cors-headers#setup
