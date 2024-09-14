@@ -131,12 +131,12 @@ Here's a list of additional tools, technologies, and services you can include fo
 - django-debug-toolbar 5.0+ - for debug test
 - django-allauth - Login, 2FA etc.
 - redis[hiredis] - caching is important
-- psycopg3[pool, binary] - for PostgreSQL
-- Click - for command line tools
+- psycopg3[pool, binary] - for PostgreSQL v16
+- Click - for command line tools - no commands yet, but planned
 - lxml - for XML parsing and security
 - requests - for HTTP requests
-- pytest - for testing
-- celery - for asynchronous tasks
+- pytest - for testing - no test yet
+- celery - for asynchronous tasks - not installed yet
 - asyncio - for asynchronous tasks
 - django-oauth-toolkit - for OAuth
 - rosseta for languages

@@ -477,12 +477,13 @@ LOGGING = {
     },
 }
 
+
+# DRF
 REST_FRAMEWORK = {
     # Base API policies
     'DEFAULT_RENDERER_CLASSES': [
         'rest_framework.renderers.JSONRenderer',
-        'rest_framework.renderers.TemplateHTMLRenderer',
-        # 'rest_framework.renderers.BrowsableAPIRenderer',
+        # 'rest_framework.renderers.TemplateHTMLRenderer',
     ],
     'DEFAULT_PARSER_CLASSES': [
         'rest_framework.parsers.JSONParser',
@@ -492,10 +493,8 @@ REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
         # 'rest_framework.authentication.TokenAuthentication',
         'oauth2_provider.contrib.rest_framework.OAuth2Authentication',
-        'rest_framework.authentication.SessionAuthentication',
     ],
     'DEFAULT_PERMISSION_CLASSES': [
-        # 'rest_framework.permissions.AllowAny',
         # 'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly',
         # 'rest_framework.permissions.IsAuthenticatedOrReadOnly',
         'rest_framework.permissions.IsAuthenticated',
@@ -554,14 +553,16 @@ REST_FRAMEWORK = {
 }
 
 
-
+# OAUTH
 OAUTH2_PROVIDER = {
     # this is the list of available scopes
     'SCOPES': {
         'read': _('Read scope'),
         'write': _('Write scope'),
         'groups': _('Access to your groups')
-    }
+    },
+    "CLEAR_EXPIRED_TOKENS_BATCH_INTERVAL": 5,
+    "ALLOWED_REDIRECT_URI_SCHEMES": ["https"],
 }
 
 # django-cors-headers - https://github.com/adamchainz/django-cors-headers#setup
@@ -583,11 +584,14 @@ CACHES = {
         'KEY_PREFIX': os.getenv('REDIS_PREFIX'),
         'LOCATION': os.getenv('REDIS_URL'),
         'OPTIONS': {
-            "CLIENT_CLASS": "django_redis.client.DefaultClient",
+            #WARNING: Shard client is still experimental, so be careful when using it in production environments.
+            "CLIENT_CLASS": "django_redis.client.ShardClient",
             'db': os.getenv('REDIS_DB'),
             'parser_class': 'redis.connection.PythonParser',
             'pool_class': 'redis.BlockingConnectionPool',
             "IGNORE_EXCEPTIONS": False,
+            "COMPRESSOR": "django_redis.compressors.lz4.Lz4Compressor",
+            "PARSER_CLASS": "redis.connection._HiredisParser",
         }
     }
 }
@@ -623,3 +627,13 @@ COMPRESS_FILTERS = {
     ],
     "js": ["compressor.filters.jsmin.JSMinFilter"],
 }
+
+
+if DEBUG:
+    REST_FRAMEWORK['DEFAULT_RENDERER_CLASSES'] += [
+        'rest_framework.renderers.BrowsableAPIRenderer',
+    ]
+    REST_FRAMEWORK['DEFAULT_AUTHENTICATION_CLASSES'] += [
+            'rest_framework.authentication.SessionAuthentication',
+    ]
+    OAUTH2_PROVIDER['ALLOWED_REDIRECT_URI_SCHEMES'] += ['http']
