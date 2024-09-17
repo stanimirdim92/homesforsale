@@ -23,7 +23,7 @@ class UserAdmin(auth_admin.UserAdmin):
     fieldsets = (
         (_('Personal info'), {
                 "fields": (
-                    ("title"),
+                    "title",
                     "name_first",
                     "name_middle",
                     "name_last",
@@ -62,15 +62,7 @@ class UserAdmin(auth_admin.UserAdmin):
         }),
     )
 
-    add_fieldsets = (
-        (None, {
-            "classes": ("wide",),
-            "fields": (
-                "email", "password", "password1", "password2", "is_staff",
-                "is_active", "groups", "user_permissions"
-            )}
-         ),
-    )
+    add_fieldsets = fieldsets
 
 
 @admin.register(Address)
