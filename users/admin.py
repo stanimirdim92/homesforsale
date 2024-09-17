@@ -23,7 +23,7 @@ class UserAdmin(auth_admin.UserAdmin):
     fieldsets = (
         (_('Personal info'), {
                 "fields": (
-                    "title",
+                    ("title"),
                     "name_first",
                     "name_middle",
                     "name_last",
@@ -50,7 +50,6 @@ class UserAdmin(auth_admin.UserAdmin):
                     "is_superuser",
                     "groups",
                     "user_permissions",
-                    "password",
                 ),
             },
         ),
