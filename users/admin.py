@@ -3,6 +3,7 @@ from django.contrib.auth import admin as auth_admin, get_user_model
 from django.utils.translation import gettext_lazy as _
 
 from .forms import UserAdminCreationForm, UserAdminChangeForm
+from .models import Address
 
 User = get_user_model()
 
@@ -45,3 +46,7 @@ class UserAdmin(auth_admin.UserAdmin):
 #             )}
 #         ),
 #     )
+
+@admin.register(Address)
+class AddressAdmin(admin.ModelAdmin):
+    list_display = ('user_id', 'address_line_1', 'city', 'state', 'postal_code', 'country')

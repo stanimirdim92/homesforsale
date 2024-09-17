@@ -1,4 +1,19 @@
 
+### Location Guide
+- description of the area/city
+- images
+- view on map
+- list some trends/info like price per sqm, average selling days/prices
+
+
+### Schools
+- create a database/table with all schools per city
+- images
+- map 
+- description
+
+
+
 #### 9. **API Design (DRF Integration)**
    - **Endpoints**: 
      - `/register/`: For user registration.
