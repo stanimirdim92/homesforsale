@@ -165,7 +165,7 @@ class Migration(migrations.Migration):
                             ("AGENT", "AGENT"),
                             ("ORGANIZATION", "ORGANIZATION"),
                         ],
-                        default=users.enums.Types["CLIENT"],
+                        default=users.enums.UserTypes["CLIENT"],
                         max_length=128,
                         null=True,
                         verbose_name="type",

@@ -8,7 +8,7 @@ from django.utils.translation import gettext_lazy as _
 from phonenumber_field.modelfields import PhoneNumberField
 from rest_framework.reverse import reverse
 
-from users.enums import Titles, Types, Language
+from users.enums import Titles, UserTypes, Language, Currency
 from users.managers import UserManager
 
 
@@ -34,29 +34,23 @@ class User(AbstractUser):
     )
 
     id = models.BigAutoField(primary_key=True, editable=False, auto_created=True)
+    uuid = models.UUIDField(_("uuid"), max_length=36, unique=True, default=uuid.uuid4, editable=False, null=True)
+
     title = models.CharField(_("title"), max_length=10, blank=True, null=True, choices=Titles.choices(), default=Titles.MR)
     name_first = models.CharField(_("first name"), max_length=128, blank=False, null=True)
     name_middle = models.CharField(_("middle name"), max_length=128, blank=True, null=True)
     name_last = models.CharField(_("last name"), max_length=128, blank=True, null=True)
-
     company_name = models.CharField(_("company name"), max_length=128, blank=True, null=True)
-    company_vat_number = models.CharField(_("vat number"), max_length=128, blank=True, unique=False, null=True)
 
+    entity_type = models.CharField(_("type"), max_length=128, blank=True, unique=False, null=True, default=UserTypes.CLIENT, choices=UserTypes.choices())
     phone_number = PhoneNumberField(null=True, blank=True, unique=False, default=None)
-    uuid = models.UUIDField(_("uuid"), max_length=36, unique=True, default=uuid.uuid4, editable=False, null=True)
+    timezone = models.CharField(_("timezone"), max_length=128, blank=True, null=True, choices=settings.TIME_ZONE_CHOICES)
+    language = models.CharField(_("language"), max_length=2, blank=True, null=True, choices=Language.choices(), default=Language.EN)
+    currency = models.CharField(_("currency"), max_length=3, blank=True, null=True, choices=Currency.choices(), default='EUR')
 
     time_created = models.DateTimeField(_("created at"), auto_now_add=True)
     time_modified = models.DateTimeField(_("modified at"), auto_now=True)
     time_deleted = models.DateTimeField(_("deleted at"), blank=True, null=True)
-
-    # reference = models.CharField(_("reference"), max_length=128, blank=False, unique=True, default=None)
-    # reference_external = models.CharField(_("reference external"), max_length=128, blank=True, unique=False, null=True)
-    entity_type = models.CharField(_("type"), max_length=128, blank=True, unique=False, null=True, default=Types.CLIENT, choices=Types.choices())
-
-    language = models.CharField(_("language"), max_length=2, blank=True, null=True, choices=Language.choices(), default=Language.EN)
-    currency = models.CharField(_("currency"), max_length=3, blank=True, null=True, default='EUR')
-
-    timezone = models.CharField(_("timezone"), max_length=128, blank=True, null=True, choices=settings.TIME_ZONE_CHOICES)
 
     USERNAME_FIELD = "email"
     REQUIRED_FIELDS = ['name_first', 'name_last']
@@ -108,3 +102,27 @@ class Address(models.Model):
 
     def __str__(self):
         return f"{self.address_line_1}, {self.city}, {self.country}"
+
+    def get_absolute_url(self) -> str:
+        return reverse("address-detail", args=[str(self.id)])
+
+    class Meta:
+        ordering = ['-id']
+
+    def get_full_address(self):
+        addr = []
+
+        if self.address_line_1:
+            addr.append(self.address_line_1)
+        if self.address_line_2:
+            addr.append(self.address_line_2)
+        if self.city:
+            addr.append(self.city)
+        if self.state:
+            addr.append(self.state)
+        if self.postal_code:
+            addr.append(self.postal_code)
+        if self.country:
+            addr.append(self.country)
+
+        return ", ".join(addr)
