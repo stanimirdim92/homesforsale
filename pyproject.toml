@@ -15,6 +15,7 @@ include = ["^venv/", "^.venv/"]
 
 # minimal strictness settings
 check_untyped_defs = true
+disallow_untyped_defs = true
 no_implicit_reexport = true
 warn_unreachable = true
 warn_unused_configs = true
@@ -117,6 +118,7 @@ vine = "^5.1.0"
 wcwidth = "^0.2.13"
 zipp = "^3.20.1"
 djangorestframework-stubs = {extras = ["compatible-mypy"], version = "^3.15.1"}
+faker = "^28.4.1"
 
 [tool.poetry.group.dev.dependencies]
 black = "^24.8.0"

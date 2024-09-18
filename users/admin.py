@@ -14,7 +14,7 @@ class UserAdmin(auth_admin.UserAdmin):
     form = UserAdminChangeForm
     model = User
 
-    list_display = ("id", "email", "title", "name_first", "name_last", "entity_type", "company_name", "is_staff", "is_active", "is_superuser")
+    list_display = ("id", "email", "title","full_name", "entity_type", "company_name", "is_staff", "is_active", "is_superuser")
     list_filter = ("is_staff", "is_active", "is_superuser", "groups", "entity_type")
     readonly_fields = ("time_created", 'time_modified', 'uuid', "id")
     search_fields = ["email", "name_first", "name_last", "uuid", "id", "entity_type", "company_name"]
@@ -67,4 +67,8 @@ class UserAdmin(auth_admin.UserAdmin):
 
 @admin.register(Address)
 class AddressAdmin(admin.ModelAdmin):
-    list_display = ('user_id', 'address_line_1', 'city', 'state', 'postal_code', 'country')
+    readonly_fields = ("time_created", 'time_modified', 'id')
+    list_filter = [ 'address_line_1','address_line_2' , 'city', 'state', 'postal_code', 'country']
+    search_fields = [ 'address_line_1','address_line_2' , 'city', 'state', 'postal_code', 'country']
+    list_display = ('user_id', 'address_line_1','address_line_2' , 'city', 'state', 'postal_code', 'country')
+    ordering = ('user_id', 'address_line_1','address_line_2' , 'city', 'state', 'postal_code', 'country')

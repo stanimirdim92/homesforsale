@@ -67,17 +67,17 @@ class User(AbstractUser):
     class Meta(AbstractUser.Meta):
         ordering = ['-id']
 
-    def get_absolute_url(self) -> str:
+    def absolute_url(self) -> str:
         return reverse("user-detail", args=[str(self.uuid)])
 
-    def get_full_name(self):
+    def full_name(self):
         """
         Return the first_name plus the last_name, with a space in between.
         """
-        full_name = "%s %s %s" % (self.name_first, self.name_middle, self.name_last)
+        full_name = "%s %s" % (self.name_first, self.name_last)
         return full_name.strip()
 
-    def get_short_name(self):
+    def short_name(self):
         """Return the short name for the user."""
         return self.name_first
 
@@ -85,7 +85,7 @@ class User(AbstractUser):
 #
 #
 class Address(models.Model):
-    user_id = models.ForeignKey(settings.AUTH_USER_MODEL, db_index=True, on_delete=models.CASCADE, related_name='addresses')
+    user = models.ForeignKey(settings.AUTH_USER_MODEL,default=None,db_index=True, on_delete=models.CASCADE, related_name='addresses')
 
     address_line_1 = models.CharField(max_length=255)
     address_line_2 = models.CharField(max_length=255, blank=True, null=True)
@@ -103,13 +103,13 @@ class Address(models.Model):
     def __str__(self):
         return f"{self.address_line_1}, {self.city}, {self.country}"
 
-    def get_absolute_url(self) -> str:
+    def absolute_url(self) -> str:
         return reverse("address-detail", args=[str(self.id)])
 
     class Meta:
         ordering = ['-id']
 
-    def get_full_address(self):
+    def full_address(self):
         addr = []
 
         if self.address_line_1:
