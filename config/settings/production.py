@@ -14,7 +14,7 @@ ALLOWED_HOSTS = os.getenv("ALLOWED_HOSTS", default="127.0.0.1").split(",")
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = os.getenv('APP_KEY')
-assert SECRET_KEY
+assert SECRET_KEY and len(SECRET_KEY) >= 32
 
 
 # SECURITY MIDDLEWARE

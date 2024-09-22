@@ -112,6 +112,10 @@ Here’s your formatted content in Markdown:
 - Finish Docker
 - Finish Black and Flake8
 - Add Anymail
+- setup mypy
+- black
+- flake
+- isort
 
 
 
@@ -126,13 +130,14 @@ Here’s your formatted content in Markdown:
 - psycopg3[pool, binary] - for PostgreSQL v16
 - Click - for command line tools - no commands yet, but planned
 - lxml - for XML parsing and security
-- requests - for HTTP requests
+- requests - for HTTP requests # change to httpx
 - pytest - for testing - no test yet
 - celery - for asynchronous tasks - not installed yet
 - asyncio - for asynchronous tasks
 - django-oauth-toolkit - for OAuth
 - rosseta for languages
 - django-storages for S3  - not installed yet
+- 
 ### Features
 - Login / Registration for user/ agent
 - Notifications

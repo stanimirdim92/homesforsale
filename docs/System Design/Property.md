@@ -27,7 +27,7 @@
 - home design
 - outdoor feaures
 - lot details
-- schools near by
+- schools nearby
 - Utilities
 - Accessible Home Design
 - parking

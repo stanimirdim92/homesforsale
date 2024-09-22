@@ -1,9 +1,3 @@
-TODO
-
-setup mypy
-black
-flake
-isort
 
 
 

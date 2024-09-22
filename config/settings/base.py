@@ -159,11 +159,11 @@ THIRD_PARTY_APPS = [
     # 'allauth.socialaccount.providers.linkedin',
 
     "oauth2_provider",
+    "corsheaders",
     "rest_framework",
     "rest_framework.authtoken",
     "drf_spectacular",
     "drf_spectacular_sidecar",
-    "corsheaders",
     "rosetta",
 
     "phonenumber_field",
@@ -178,7 +178,7 @@ INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
 
 if DEBUG:
     # http://whitenoise.evans.io/en/latest/django.html#using-whitenoise-in-development
-    INSTALLED_APPS = ["whitenoise.runserver_nostatic", *INSTALLED_APPS, 'debug_toolbar']
+    INSTALLED_APPS = [*INSTALLED_APPS,"whitenoise.runserver_nostatic", 'debug_toolbar']
 
 # MIGRATIONS
 
@@ -313,7 +313,7 @@ MIDDLEWARE = [
     'django.middleware.http.ConditionalGetMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',  # Manages sessions across requests
     'django.middleware.locale.LocaleMiddleware',
-    'django.middleware.gzip.GZipMiddleware',
+    # 'django.middleware.gzip.GZipMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',  # Associates users with requests using sessions.
@@ -338,7 +338,6 @@ if DEBUG:
 
 # STATIC
 
-STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 # https://docs.djangoproject.com/en/dev/ref/settings/#static-root
 STATIC_ROOT = str(BASE_DIR / "staticfiles")
 # https://docs.djangoproject.com/en/dev/ref/settings/#static-url
@@ -578,7 +577,7 @@ SPECTACULAR_SETTINGS = {
     'TITLE': os.getenv('APP_NAME'),
     'DESCRIPTION': '',
     'VERSION': os.getenv('APP_VERSION'),
-    'SERVE_INCLUDE_SCHEMA': False,
+    'SERVE_INCLUDE_SCHEMA': True,
     "SERVE_PERMISSIONS": ["rest_framework.permissions.IsAuthenticated"], #TODO add permissions?
 }
 
@@ -610,7 +609,8 @@ STORAGES = {
         "BACKEND": "django.core.files.storage.FileSystemStorage",
     },
     "staticfiles": {
-        "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
+        # "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
+        "BACKEND": "whitenoise.storage.CompressedStaticFilesStorage",
         # "BACKEND": "django.contrib.staticfiles.storage.ManifestStaticFilesStorage",
     },
 }
