@@ -15,6 +15,8 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
+import os
+
 from django.conf import settings
 from django.conf.urls.i18n import i18n_patterns
 from django.conf.urls.static import static
@@ -22,7 +24,9 @@ from django.contrib import admin
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 from django.urls import include, path, re_path
 from django.views import defaults as default_views
-from drf_spectacular.views import SpectacularAPIView, SpectacularSwaggerSplitView
+from drf_spectacular.views import SpectacularAPIView, SpectacularSwaggerSplitView, SpectacularSwaggerView
+
+version = os.getenv('APP_VERSION', '1.0.1')
 
 urlpatterns = [
     # DRF URLS
@@ -32,7 +36,7 @@ urlpatterns = [
     # UI Language translation
     re_path(r'^rosetta/', include('rosetta.urls')),
 
-    path('api/schema/', SpectacularAPIView.as_view(), name='schema'),
+    path('api/schema/', SpectacularAPIView.as_view(api_version=version), name='schema'),
     path('api/schema/swagger/', SpectacularSwaggerSplitView.as_view(url_name='schema'), name='swagger'),
 
     path(settings.ADMIN_URL, admin.site.urls),
