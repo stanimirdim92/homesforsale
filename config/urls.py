@@ -24,9 +24,13 @@ from django.contrib import admin
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 from django.urls import include, path, re_path
 from django.views import defaults as default_views
-from drf_spectacular.views import SpectacularAPIView, SpectacularSwaggerSplitView, SpectacularSwaggerView
+from drf_spectacular.views import SpectacularAPIView, SpectacularSwaggerSplitView
+from allauth.account.decorators import secure_admin_login
 
-version = os.getenv('APP_VERSION', '1.0.1')
+admin.autodiscover()
+admin.site.login = secure_admin_login(admin.site.login)
+
+version = os.getenv('APP_VERSION', '1.0.0')
 
 urlpatterns = [
     # DRF URLS
@@ -47,17 +51,16 @@ urlpatterns = [
 
     # APP URLS
     path('', include('users.urls')),
-]
 
-urlpatterns += i18n_patterns(
     # 3rd PARTY URLS
     path('accounts/', include('allauth.urls')),
+    path("_allauth/", include("allauth.headless.urls")),
 
     # Media files
     *static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT),
+]
 
-    prefix_default_language=True
-)
+# urlpatterns += i18n_patterns()
 
 
 if settings.DEBUG:

@@ -30,7 +30,6 @@ BASE_DIR = Path(__file__).resolve(strict=True).parent.parent.parent
 find_dotenv()
 load_dotenv(join(BASE_DIR, '.env'))
 
-
 # GENERAL
 
 # https://docs.djangoproject.com/en/dev/ref/settings/#site-id
@@ -50,14 +49,13 @@ WSGI_APPLICATION = "config.wsgi.application"
 # https://docs.djangoproject.com/en/dev/ref/settings/#debug
 DEBUG = to_bool(os.getenv('APP_DEBUG', False))
 
-
 # TIMEZONE
 
 # Local time zone. Choices are
 # http://en.wikipedia.org/wiki/List_of_tz_zones_by_name
 # though not all of them may be available with every OS.
 # In Windows, this must be set to your system time zone.
-#https://docs.djangoproject.com/en/dev/ref/settings/#std-setting-TIME_ZONE
+# https://docs.djangoproject.com/en/dev/ref/settings/#std-setting-TIME_ZONE
 TIME_ZONE = os.getenv('TIME_ZONE', 'UTC')
 TIME_ZONE_CHOICES = [(tz, tz) for tz in timezone.zoneinfo.available_timezones()]
 
@@ -101,7 +99,6 @@ LANGUAGES = [
     ("sv", _("Swedish")),
 ]
 
-
 # https://docs.djangoproject.com/en/dev/ref/settings/#locale-paths
 LOCALE_PATHS = [str(BASE_DIR / "locale")]
 
@@ -125,7 +122,7 @@ DATABASES = {
             'client_encoding': 'UTF8',
             "server_side_binding": True,
             "isolation_level": IsolationLevel.SERIALIZABLE,
-            'options': '-c search_path='+os.getenv('DB_SCHEMA')
+            'options': '-c search_path=' + os.getenv('DB_SCHEMA')
         },
     }
 }
@@ -151,12 +148,13 @@ THIRD_PARTY_APPS = [
     # "crispy_forms",
     "allauth",
     "allauth.account",
+    "allauth.headless",
     "allauth.mfa",
     "allauth.usersessions",
     "allauth.socialaccount",
-    # 'allauth.socialaccount.providers.facebook',
-    # 'allauth.socialaccount.providers.google',
-    # 'allauth.socialaccount.providers.linkedin',
+    'allauth.socialaccount.providers.facebook',
+    'allauth.socialaccount.providers.google',
+    'allauth.socialaccount.providers.openid_connect',
 
     "oauth2_provider",
     "corsheaders",
@@ -178,7 +176,7 @@ INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
 
 if DEBUG:
     # http://whitenoise.evans.io/en/latest/django.html#using-whitenoise-in-development
-    INSTALLED_APPS = [*INSTALLED_APPS,"whitenoise.runserver_nostatic", 'debug_toolbar']
+    INSTALLED_APPS = [*INSTALLED_APPS, "whitenoise.runserver_nostatic", 'debug_toolbar']
 
 # MIGRATIONS
 
@@ -201,20 +199,27 @@ AUTH_USER_MODEL = "users.User"
 # LOGIN_REDIRECT_URL =  str(BASE_DIR/':redirect'),
 # https://docs.djangoproject.com/en/dev/ref/settings/#login-url
 LOGIN_URL = "account_login"
-# https://django-allauth.readthedocs.io/en/latest/configuration.html
+# https://django-allauth.readthedocs.io/en/latest/account/configuration.html
 ACCOUNT_EMAIL_REQUIRED = True
-# https://django-allauth.readthedocs.io/en/latest/configuration.html
-ACCOUNT_USERNAME_REQUIRED = False
-# https://django-allauth.readthedocs.io/en/latest/configuration.html
+ACCOUNT_EMAIL_UNKNOWN_ACCOUNTS = False
+ACCOUNT_CHANGE_EMAIL = False
+ACCOUNT_DEFAULT_HTTP_PROTOCOL = 'https'
 ACCOUNT_AUTHENTICATION_METHOD = 'email'
-# https://django-allauth.readthedocs.io/en/latest/configuration.html
 ACCOUNT_USER_MODEL_USERNAME_FIELD = None
-# https://django-allauth.readthedocs.io/en/latest/configuration.html
-ACCOUNT_EMAIL_VERIFICATION = "optional"
+ACCOUNT_USERNAME_REQUIRED = False
+ACCOUNT_EMAIL_VERIFICATION = "mandatory"
 ACCOUNT_ALLOW_REGISTRATION = to_bool(os.getenv('ACCOUNT_ALLOW_REGISTRATION', True))
 ACCOUNT_ADAPTER = "users.adapters.AccountAdapter"
 # https://docs.allauth.org/en/latest/account/forms.html
 
+# HEADLESS_ONLY = True
+# HEADLESS_FRONTEND_URLS = {
+#     "account_confirm_email": "/account/verify-email/{key}",
+#     "account_reset_password": "/account/password/reset",
+#     "account_reset_password_from_key": "/account/password/reset/key/{key}",
+#     "account_signup": "/account/signup",
+#     "socialaccount_login_error": "/account/provider/callback",
+# }
 ACCOUNT_FORMS = {
     'add_email': 'allauth.account.forms.AddEmailForm',
     'change_password': 'allauth.account.forms.ChangePasswordForm',
@@ -224,10 +229,10 @@ ACCOUNT_FORMS = {
     'reset_password': 'allauth.account.forms.ResetPasswordForm',
     'reset_password_from_key': 'allauth.account.forms.ResetPasswordKeyForm',
     'set_password': 'allauth.account.forms.SetPasswordForm',
-    'signup': 'allauth.account.forms.SignupForm',
+    'signup': 'users.forms.UserSignupForm',
     'user_token': 'allauth.account.forms.UserTokenForm',
 }
-
+# ACCOUNT_SIGNUP_FORM_CLASS = 'users.forms.UserSignupForm'
 
 # https://docs.allauth.org/en/latest/socialaccount/configuration.html
 SOCIALACCOUNT_ADAPTER = "users.adapters.SocialAccountAdapter"
@@ -255,9 +260,15 @@ SOCIALACCOUNT_PROVIDERS = {
             "access_type": "online",
         },
         'OAUTH_PKCE_ENABLED': True,
+        'EMAIL_AUTHENTICATION': True,
     },
     'facebook': {
-        'METHOD': 'oauth2',
+        "APP": {
+            "client_id": "123",
+            "secret": "456",
+            "key": ""
+        },
+        'METHOD': 'oauth2',  # Set to 'js_sdk' to use the Facebook connect SDK
         'SDK_URL': '//connect.facebook.net/{locale}/sdk.js',
         'SCOPE': ['email', 'public_profile'],
         'AUTH_PARAMS': {'auth_type': 'reauthenticate'},
@@ -273,10 +284,23 @@ SOCIALACCOUNT_PROVIDERS = {
             'short_name'
         ],
         'EXCHANGE_TOKEN': True,
-        'LOCALE_FUNC': 'path.to.callable',
+        'LOCALE_FUNC': lambda request: 'en_US',
         'VERIFIED_EMAIL': False,
         'VERSION': 'v13.0',
         'GRAPH_API_URL': 'https://graph.facebook.com/v13.0',
+    },
+    "openid_connect": {
+        "APPS": [
+            {
+                "provider_id": "linkedin",
+                "name": "LinkedIn",
+                "client_id": "123",
+                "secret": "456",
+                "settings": {
+                    "server_url": "https://www.linkedin.com/oauth",
+                },
+            }
+        ]
     },
 }
 
@@ -430,9 +454,6 @@ ADMIN_URL = "admin/"
 # ADMINS = [()]
 # https://docs.djangoproject.com/en/dev/ref/settings/#managers
 MANAGERS = ADMINS
-# https://cookiecutter-django.readthedocs.io/en/latest/settings.html#other-environment-settings
-# Force the `admin` sign in process to go through the `django-allauth` workflow
-DJANGO_ADMIN_FORCE_ALLAUTH = to_bool(os.getenv("DJANGO_ADMIN_FORCE_ALLAUTH", default=False))
 
 # LOGGING
 
@@ -463,7 +484,7 @@ LOGGING = {
     "root": {"level": "INFO", "handlers": ["console"]},
     "loggers": {
         "django.request": {
-            "handlers": ["console","mail_admins"],
+            "handlers": ["console", "mail_admins"],
             "level": "ERROR",
             "propagate": True,
         },
@@ -474,7 +495,6 @@ LOGGING = {
         },
     },
 }
-
 
 # DRF
 REST_FRAMEWORK = {
@@ -505,7 +525,7 @@ REST_FRAMEWORK = {
         'django_filters.rest_framework.DjangoFilterBackend',
     ],
     # Schema
-    #'DEFAULT_SCHEMA_CLASS': 'rest_framework.schemas.openapi.AutoSchema',
+    # 'DEFAULT_SCHEMA_CLASS': 'rest_framework.schemas.openapi.AutoSchema',
     'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
 
     # Throttling
@@ -551,7 +571,6 @@ REST_FRAMEWORK = {
     },
 }
 
-
 # OAUTH
 OAUTH2_PROVIDER = {
     # this is the list of available scopes
@@ -568,7 +587,7 @@ OAUTH2_PROVIDER = {
 # https://github.com/adamchainz/django-cors-headers#setup
 CORS_URLS_REGEX = r"^/api/.*$"
 CORS_ALLOWED_ORIGINS = os.getenv("CORS_ALLOWED_ORIGINS", default="http://127.0.0.1:8000").split(",")
-
+CORS_TRUSTED_ORIGINS = os.getenv("CORS_TRUSTED_ORIGINS", default="http://127.0.0.1:8000").split(",")
 
 # SCHEMA DOCS
 SPECTACULAR_SETTINGS = {
@@ -579,9 +598,8 @@ SPECTACULAR_SETTINGS = {
     'DESCRIPTION': '',
     'VERSION': os.getenv('APP_VERSION'),
     'SERVE_INCLUDE_SCHEMA': True,
-    "SERVE_PERMISSIONS": ["rest_framework.permissions.IsAuthenticated"], #TODO add permissions?
+    "SERVE_PERMISSIONS": ["rest_framework.permissions.IsAuthenticated"],  # TODO add permissions?
 }
-
 
 # CACHE
 # https://docs.djangoproject.com/en/stable/topics/cache/#redis
@@ -592,7 +610,7 @@ CACHES = {
         'LOCATION': os.getenv('REDIS_URL').split(','),
         'TIMEOUT': int(os.getenv('CACHE_TIMEOUT', default=60)),
         'OPTIONS': {
-            #WARNING: Shard client is still experimental, so be careful when using it in production environments.
+            # WARNING: Shard client is still experimental, so be careful when using it in production environments.
             "CLIENT_CLASS": "django_redis.client.ShardClient",
             'db': os.getenv('REDIS_DB'),
             'parser_class': 'redis.connection.PythonParser',
@@ -624,13 +642,12 @@ SESSION_CACHE_ALIAS = os.getenv('SESSION_CACHE_ALIAS', default='default')
 # https://docs.djangoproject.com/en/dev/ref/settings/#session-cookie-secure
 SESSION_COOKIE_SECURE = to_bool(os.getenv('SESSION_COOKIE_SECURE', default=False))
 
-
 if DEBUG:
     REST_FRAMEWORK['DEFAULT_RENDERER_CLASSES'] += [
         'rest_framework.renderers.BrowsableAPIRenderer',
     ]
     REST_FRAMEWORK['DEFAULT_AUTHENTICATION_CLASSES'] += [
-            'rest_framework.authentication.SessionAuthentication',
+        'rest_framework.authentication.SessionAuthentication',
     ]
     OAUTH2_PROVIDER['ALLOWED_REDIRECT_URI_SCHEMES'] += ['http']
 
