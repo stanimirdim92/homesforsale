@@ -2,36 +2,54 @@ Here’s your formatted content in Markdown:
 
 
 ### Tech
-- Python - Django with DRF - DONE
-- React
+- [x] Python - Django with DRF
 - Nginx - must research load balancers, ASGI connector, and static file serve.
-  - OAuth2 maybe with Keycloak
-  - PostgreSQL 15+
-  - Logbook for logs?
-  - Elasticsearch or GraphQL?
-  - Sass
-  - Typescript
-  - Leaflet for interactive maps or Maxar
-    django compressor
-### Infra
+- OAuth2 maybe with Keycloak
+- [x] PostgreSQL 16+
+- Logbook for logs
+- Elasticsearch
+- GraphQL
+- Sass
+- Typescript
+- React
+- Leaflet for interactive maps or Maxar
+- Kubernetes - Container orchestration platform for automating application deployment.
+- Django Channels - Real-time communication with Django, enabling WebSockets.
+- Celery - Task queue for handling asynchronous jobs.
+- PostGIS - Geographic object extensions for PostgreSQL.
+
+
+
+
+### Infrastructure
+- AWS - RDS
 - AWS - S3
 - AWS - EC2
 - Imgix - ?
 
-### Utils
-- GA4
-- FB Pixel
-
 ### DevOps
-- Git - DONE
-- IntelliJ - DONE
+- [x] Git
+- [x] IntelliJ
 - Github / Actions
 - Docker
 - Kafka and/or Apache Spark
-- Redis (Cluster for later?)
+- Hadoop - Framework for processing large datasets in distributed computing environments.
+- [x] Redis still needs configuration
+  - (Cluster for later?).
 - Kibana?
 - Onelogin?
 - Terraform
+- CircleCI - Continuous integration and delivery (CI/CD).
+- Jenkins - Open-source automation server for CI/CD pipelines.
+- ArgoCD - GitOps continuous delivery for Kubernetes.
+- Ansible - Automation platform for configuration management.
+- Puppet - IT automation software for managing configurations.
+- Chef - Configuration management tool for automation.
+- Consul - Service discovery, monitoring, and configuration.
+- Vault - Securely store and access secrets, tokens, API keys, and certificates.
+- Elastic Stack (ELK) - Elasticsearch, Logstash, and Kibana for log management.
+- Fluentd - Unified logging layer for cloud environments.
+- Azure DevOps - Microsoft’s DevOps platform for pipelines, repos, and testing.
 
 ### AI
 - Langchain
@@ -46,6 +64,15 @@ Here’s your formatted content in Markdown:
 - Airflow
 - Kibana
 - Grafana
+- Datadog - Full-stack monitoring and security.
+- New Relic - Application performance monitoring (APM) for cloud environments.
+- Elastic APM - Distributed tracing and performance monitoring for applications.
+- Honeycomb - Observability for understanding complex systems.
+- Zabbix - Open-source monitoring solution for networks and applications.
+- Nagios - Infrastructure monitoring for servers and networks.
+- Splunk - Log management and monitoring, with machine learning-driven insights.
+- AppDynamics - Performance monitoring for apps and business metrics.
+
 
 ### Payment Systems
 - Stripe
@@ -61,6 +88,19 @@ Here’s your formatted content in Markdown:
 - Confluence
 - Zendesk - for customer live support and internal communication.
 
+### Analytics
+- Mixpanel - Product and behavioral analytics.
+- Hotjar - Heatmaps and user session recordings for behavior analysis.
+- Heap - Automatically captures every event in a product for detailed analytics.
+- Amplitude - Product analytics to understand user behavior and engagement.
+- Segment - Customer data platform for collecting and routing analytics data.
+- Looker - Business intelligence and data exploration.
+- BigQuery - Google’s fully-managed, serverless data warehouse for analytics.
+- Tableau - Data visualization and business intelligence.
+- GA4
+- FB Pixel
+
+
 ---
 
 # Todo
@@ -74,54 +114,6 @@ Here’s your formatted content in Markdown:
 - Add Anymail
 
 
-Here's a list of additional tools, technologies, and services you can include for each section:
-
-### Monitoring
-1. **Datadog** - Full-stack monitoring and security.
-2. **New Relic** - Application performance monitoring (APM) for cloud environments.
-3. **Elastic APM** - Distributed tracing and performance monitoring for applications.
-4. **Honeycomb** - Observability for understanding complex systems.
-5. **Zabbix** - Open-source monitoring solution for networks and applications.
-6. **Nagios** - Infrastructure monitoring for servers and networks.
-7. **Splunk** - Log management and monitoring, with machine learning-driven insights.
-8. **AppDynamics** - Performance monitoring for apps and business metrics.
-
-### Analytics
-1. **Mixpanel** - Product and behavioral analytics.
-2. **Hotjar** - Heatmaps and user session recordings for behavior analysis.
-3. **Heap** - Automatically captures every event in a product for detailed analytics.
-4. **Amplitude** - Product analytics to understand user behavior and engagement.
-5. **Segment** - Customer data platform for collecting and routing analytics data.
-6. **Looker** - Business intelligence and data exploration.
-7. **BigQuery** - Google’s fully-managed, serverless data warehouse for analytics.
-8. **Tableau** - Data visualization and business intelligence.
-
-### DevOps
-1. **CircleCI** - Continuous integration and delivery (CI/CD).
-2. **Jenkins** - Open-source automation server for CI/CD pipelines.
-3. **ArgoCD** - GitOps continuous delivery for Kubernetes.
-4. **Ansible** - Automation platform for configuration management.
-5. **Puppet** - IT automation software for managing configurations.
-6. **Chef** - Configuration management tool for automation.
-7. **Consul** - Service discovery, monitoring, and configuration.
-8. **Vault** - Securely store and access secrets, tokens, API keys, and certificates.
-9. **Elastic Stack (ELK)** - Elasticsearch, Logstash, and Kibana for log management.
-10. **Fluentd** - Unified logging layer for cloud environments.
-11. **Azure DevOps** - Microsoft’s DevOps platform for pipelines, repos, and testing.
-
-### Tech
-1. **Kubernetes** - Container orchestration platform for automating application deployment.
-2. **FastAPI** - Python framework for building APIs with high performance and speed.
-3. **Django Channels** - Real-time communication with Django, enabling WebSockets.
-4. **RabbitMQ** - Message broker for communication between services.
-5. **Celery** - Task queue for handling asynchronous jobs.
-6. **WebSockets** - Real-time bi-directional communication protocol.
-7. **GraphQL** - Alternative to REST for APIs, allows clients to request exactly the data they need.
-8. **Tornado** - Python framework for handling asynchronous networking.
-9. **PostGIS** - Geographic object extensions for PostgreSQL.
-10. **RedisGraph** - Graph database built on Redis for high-performance graph querying.
-11. **D3.js** - JavaScript library for creating dynamic, interactive data visualizations.
-12. **Hadoop** - Framework for processing large datasets in distributed computing environments.
 
 
 ### Current used technologies
@@ -140,7 +132,7 @@ Here's a list of additional tools, technologies, and services you can include fo
 - asyncio - for asynchronous tasks
 - django-oauth-toolkit - for OAuth
 - rosseta for languages
-
+- django-storages for S3  - not installed yet
 ### Features
 - Login / Registration for user/ agent
 - Notifications

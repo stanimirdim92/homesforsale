@@ -6,14 +6,15 @@ find_dotenv()
 load_dotenv(join(BASE_DIR, '.env'))
 hostname, _, ips = socket.gethostbyname_ex(socket.gethostname())
 # https://django-debug-toolbar.readthedocs.io/en/latest/installation.html#internal-ips
-INTERNAL_IPS = ["127.0.0.1", "10.0.2.2", "::1"]
+INTERNAL_IPS = os.getenv("INTERNAL_IPS", default="127.0.0.1").split(",")
 INTERNAL_IPS += [".".join(ip.split(".")[:-1] + ["1"]) for ip in ips]
 
 # https://docs.djangoproject.com/en/dev/ref/settings/#allowed-hosts
-ALLOWED_HOSTS = ["localhost", "0.0.0.0", "127.0.0.1"]
+ALLOWED_HOSTS = os.getenv("ALLOWED_HOSTS", default="127.0.0.1").split(",")
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = os.getenv('APP_KEY')
+assert SECRET_KEY
 
 
 # SECURITY MIDDLEWARE
@@ -50,4 +51,4 @@ SECURE_CONTENT_TYPE_NOSNIFF = to_bool(os.getenv(
 SECURE_CROSS_ORIGIN_OPENER_POLICY = "same-origin"
 SECURE_REDIRECT_EXEMPT = []
 SECURE_REFERRER_POLICY = "same-origin"
-SECURE_SSL_HOST = None
+SECURE_SSL_HOST = os.getenv("SECURE_SSL_HOST", default=None)

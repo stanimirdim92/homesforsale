@@ -13,23 +13,9 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
-        migrations.AlterModelOptions(
-            name="address",
-            options={"ordering": ["-id"]},
-        ),
         migrations.RemoveField(
             model_name="user",
             name="company_vat_number",
-        ),
-        migrations.AlterField(
-            model_name="address",
-            name="user_id",
-            field=models.ForeignKey(
-                default=None,
-                on_delete=django.db.models.deletion.CASCADE,
-                related_name="addresses",
-                to=settings.AUTH_USER_MODEL,
-            ),
         ),
         migrations.AlterField(
             model_name="user",

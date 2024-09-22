@@ -30,20 +30,48 @@ BASE_DIR = Path(__file__).resolve(strict=True).parent.parent.parent
 find_dotenv()
 load_dotenv(join(BASE_DIR, '.env'))
 
+
 # GENERAL
-# ------------------------------------------------------------------------------
+
+# https://docs.djangoproject.com/en/dev/ref/settings/#site-id
+SITE_ID = int(os.getenv('SITE_ID'))
+
+# https://docs.djangoproject.com/en/stable/ref/settings/#std:setting-DEFAULT_AUTO_FIELD
+# This must stay ID so many other 3rd party packages can work without any problems
+DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
+# https://docs.djangoproject.com/en/dev/ref/settings/#root-urlconf
+ROOT_URLCONF = "config.urls"
+# https://docs.djangoproject.com/en/dev/ref/settings/#wsgi-application
+WSGI_APPLICATION = "config.wsgi.application"
+
+# DEBUG
+
 # https://docs.djangoproject.com/en/dev/ref/settings/#debug
 DEBUG = to_bool(os.getenv('APP_DEBUG', False))
+
+
+# TIMEZONE
 
 # Local time zone. Choices are
 # http://en.wikipedia.org/wiki/List_of_tz_zones_by_name
 # though not all of them may be available with every OS.
 # In Windows, this must be set to your system time zone.
+#https://docs.djangoproject.com/en/dev/ref/settings/#std-setting-TIME_ZONE
 TIME_ZONE = os.getenv('TIME_ZONE', 'UTC')
+TIME_ZONE_CHOICES = [(tz, tz) for tz in timezone.zoneinfo.available_timezones()]
+
+# https://docs.djangoproject.com/en/dev/ref/settings/#use-i18n
+USE_I18N = True
+
+# https://docs.djangoproject.com/en/dev/ref/settings/#use-tz
+USE_TZ = True
+
+# LANGUAGES
+
 # https://docs.djangoproject.com/en/dev/ref/settings/#language-code
 LANGUAGE_CODE = os.getenv("LANGUAGE_CODE", 'en-us')
 
-TIME_ZONE_CHOICES = [(tz, tz) for tz in timezone.zoneinfo.available_timezones()]
 # https://docs.djangoproject.com/en/dev/ref/settings/#languages
 LANGUAGES = [
     ("ast", _("Asturian")),
@@ -74,20 +102,11 @@ LANGUAGES = [
 ]
 
 
-# https://docs.djangoproject.com/en/dev/ref/settings/#site-id
-SITE_ID = int(os.getenv('SITE_ID'))
-
-# https://docs.djangoproject.com/en/dev/ref/settings/#use-i18n
-USE_I18N = True
-
-# https://docs.djangoproject.com/en/dev/ref/settings/#use-tz
-USE_TZ = True
-
 # https://docs.djangoproject.com/en/dev/ref/settings/#locale-paths
 LOCALE_PATHS = [str(BASE_DIR / "locale")]
 
 # DATABASES
-# ------------------------------------------------------------------------------
+
 # https://docs.djangoproject.com/en/dev/ref/settings/#databases
 DATABASES = {
     'default': {
@@ -106,26 +125,14 @@ DATABASES = {
             'client_encoding': 'UTF8',
             "server_side_binding": True,
             "isolation_level": IsolationLevel.SERIALIZABLE,
-            # "pool": True,
-            # 'options': '-c search_path='+os.getenv('DB_SCHEMA')
+            'options': '-c search_path='+os.getenv('DB_SCHEMA')
         },
     }
 }
-# https://docs.djangoproject.com/en/stable/ref/settings/#std:setting-DEFAULT_AUTO_FIELD
-# This must stay ID so many other 3rd party packages can work without any problems
-DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
-
-# URLS
-# ------------------------------------------------------------------------------
-# https://docs.djangoproject.com/en/dev/ref/settings/#root-urlconf
-ROOT_URLCONF = "config.urls"
-# https://docs.djangoproject.com/en/dev/ref/settings/#wsgi-application
-WSGI_APPLICATION = "config.wsgi.application"
 
 # APPS
-# ------------------------------------------------------------------------------
-DJANGO_APPS = [
 
+DJANGO_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -159,7 +166,6 @@ THIRD_PARTY_APPS = [
     "corsheaders",
     "rosetta",
 
-    "compressor",
     "phonenumber_field",
 ]
 
@@ -170,21 +176,17 @@ LOCAL_APPS = [
 # https://docs.djangoproject.com/en/dev/ref/settings/#installed-apps
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
 
-# WhiteNoise
-# ------------------------------------------------------------------------------
-# http://whitenoise.evans.io/en/latest/django.html#using-whitenoise-in-development
-# INSTALLED_APPS = ["whitenoise.runserver_nostatic", *INSTALLED_APPS]
-
 if DEBUG:
-    INSTALLED_APPS.append('debug_toolbar')
+    # http://whitenoise.evans.io/en/latest/django.html#using-whitenoise-in-development
+    INSTALLED_APPS = ["whitenoise.runserver_nostatic", *INSTALLED_APPS, 'debug_toolbar']
 
 # MIGRATIONS
-# ------------------------------------------------------------------------------
+
 # https://docs.djangoproject.com/en/dev/ref/settings/#migration-modules
 MIGRATION_MODULES = {"users": "users.migrations"}
 
 # AUTHENTICATION
-# ------------------------------------------------------------------------------
+
 # https://docs.djangoproject.com/en/dev/ref/settings/#authentication-backends
 AUTHENTICATION_BACKENDS = [
     # Needed to login by username in Django admin, regardless of `allauth`
@@ -279,15 +281,11 @@ SOCIALACCOUNT_PROVIDERS = {
 }
 
 # PASSWORDS
-# ------------------------------------------------------------------------------
+
 # https://docs.djangoproject.com/en/dev/ref/settings/#password-hashers
 PASSWORD_HASHERS = [
     # https://docs.djangoproject.com/en/dev/topics/auth/passwords/#using-argon2-with-django
     "django.contrib.auth.hashers.Argon2PasswordHasher",
-    "django.contrib.auth.hashers.BCryptSHA256PasswordHasher",
-    "django.contrib.auth.hashers.PBKDF2PasswordHasher",
-    "django.contrib.auth.hashers.PBKDF2SHA1PasswordHasher",
-    "django.contrib.auth.hashers.ScryptPasswordHasher",
 ]
 
 # https://docs.djangoproject.com/en/dev/ref/settings/#auth-password-validators
@@ -303,20 +301,21 @@ AUTH_PASSWORD_VALIDATORS = [
     {'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator', },
 ]
 
-# MIDDLEWARE
-# ----------------------------------------------------------------------------------------------
+#
+
 # https://docs.djangoproject.com/en/dev/ref/settings/#middleware
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
-    # 'django.middleware.cache.UpdateCacheMiddleware',  # redis
+    "whitenoise.middleware.WhiteNoiseMiddleware",
+    # 'django.middleware.cache.UpdateCacheMiddleware',  # redis https://docs.djangoproject.com/en/5.1/topics/cache/#order-of-middleware
     "corsheaders.middleware.CorsMiddleware",
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    # "whitenoise.middleware.WhiteNoiseMiddleware",
     'django.middleware.http.ConditionalGetMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',  # Manages sessions across requests
     'django.middleware.locale.LocaleMiddleware',
-    'django.middleware.csrf.CsrfViewMiddleware',
+    'django.middleware.gzip.GZipMiddleware',
     'django.middleware.common.CommonMiddleware',
+    'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',  # Associates users with requests using sessions.
     'django.contrib.messages.middleware.MessageMiddleware',
     'allauth.account.middleware.AccountMiddleware',
@@ -338,7 +337,8 @@ if DEBUG:
     }
 
 # STATIC
-# ------------------------------------------------------------------------------
+
+STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 # https://docs.djangoproject.com/en/dev/ref/settings/#static-root
 STATIC_ROOT = str(BASE_DIR / "staticfiles")
 # https://docs.djangoproject.com/en/dev/ref/settings/#static-url
@@ -351,17 +351,16 @@ STATICFILES_FINDERS = [
     "django.contrib.staticfiles.finders.FileSystemFinder",
     "django.contrib.staticfiles.finders.AppDirectoriesFinder",
     # https://django-compressor.readthedocs.io/en/stable/quickstart.html
-    "compressor.finders.CompressorFinder",
 ]
 # MEDIA
-# ------------------------------------------------------------------------------
+
 # https://docs.djangoproject.com/en/dev/ref/settings/#media-root
 MEDIA_ROOT = str(BASE_DIR / "media")
 # https://docs.djangoproject.com/en/dev/ref/settings/#media-url
 MEDIA_URL = "/media/"
 
 # TEMPLATES
-# ------------------------------------------------------------------------------
+
 # https://docs.djangoproject.com/en/dev/ref/settings/#templates
 TEMPLATES = [
     {
@@ -392,12 +391,12 @@ TEMPLATES = [
 FORM_RENDERER = "django.forms.renderers.TemplatesSetting"
 
 # FIXTURES
-# ------------------------------------------------------------------------------
+
 # https://docs.djangoproject.com/en/dev/ref/settings/#fixture-dirs
 FIXTURE_DIRS = (str(BASE_DIR / "fixtures"),)
 
 # SECURITY
-# ------------------------------------------------------------------------------
+
 # https://docs.djangoproject.com/en/dev/ref/settings/#session-cookie-httponly
 SESSION_COOKIE_HTTPONLY = True
 # https://docs.djangoproject.com/en/dev/ref/settings/#csrf-cookie-httponly
@@ -406,7 +405,7 @@ CSRF_COOKIE_HTTPONLY = True
 X_FRAME_OPTIONS = "DENY"
 
 # EMAIL
-# ------------------------------------------------------------------------------
+
 # https://docs.djangoproject.com/en/dev/ref/settings/#email-backend
 EMAIL_BACKEND = os.getenv(
     "DJANGO_EMAIL_BACKEND",
@@ -425,7 +424,7 @@ EMAIL_USE_TLS = to_bool(os.getenv("EMAIL_USE_TLS", default=False))
 EMAIL_USE_SSL = to_bool(os.getenv("EMAIL_USE_SSL", default=False))
 
 # ADMIN
-# ------------------------------------------------------------------------------
+
 # Django Admin URL.
 ADMIN_URL = "admin/"
 # https://docs.djangoproject.com/en/dev/ref/settings/#admins
@@ -437,7 +436,7 @@ MANAGERS = ADMINS
 DJANGO_ADMIN_FORCE_ALLAUTH = to_bool(os.getenv("DJANGO_ADMIN_FORCE_ALLAUTH", default=False))
 
 # LOGGING
-# ------------------------------------------------------------------------------
+
 # https://docs.djangoproject.com/en/dev/ref/settings/#logging
 # See https://docs.djangoproject.com/en/dev/topics/logging for
 # more details on how to customize your logging configuration.
@@ -565,24 +564,33 @@ OAUTH2_PROVIDER = {
     "ALLOWED_REDIRECT_URI_SCHEMES": ["https"],
 }
 
-# django-cors-headers - https://github.com/adamchainz/django-cors-headers#setup
+# CORS
+# https://github.com/adamchainz/django-cors-headers#setup
 CORS_URLS_REGEX = r"^/api/.*$"
+CORS_ALLOWED_ORIGINS = os.getenv("CORS_ALLOWED_ORIGINS", default="http://127.0.0.1:8000").split(",")
 
+
+# SCHEMA DOCS
 SPECTACULAR_SETTINGS = {
+    'SWAGGER_UI_DIST': 'SIDECAR',  # shorthand to use the sidecar instead
+    'SWAGGER_UI_FAVICON_HREF': 'SIDECAR',
+    'REDOC_DIST': 'SIDECAR',
     'TITLE': os.getenv('APP_NAME'),
     'DESCRIPTION': '',
     'VERSION': os.getenv('APP_VERSION'),
     'SERVE_INCLUDE_SCHEMA': False,
-    "SERVE_PERMISSIONS": ["rest_framework.permissions.AllowAny"],
+    "SERVE_PERMISSIONS": ["rest_framework.permissions.IsAuthenticated"], #TODO add permissions?
 }
 
-# Cache
-# https://docs.djangoproject.com/en/4.1/topics/cache/#redis
+
+# CACHE
+# https://docs.djangoproject.com/en/stable/topics/cache/#redis
 CACHES = {
     'default': {
-        "BACKEND": "django_redis.cache.RedisCache",
+        "BACKEND": os.getenv('REDIS_BACKEND', 'django.core.cache.backends.DummyCache'),
         'KEY_PREFIX': os.getenv('REDIS_PREFIX'),
-        'LOCATION': os.getenv('REDIS_URL'),
+        'LOCATION': os.getenv('REDIS_URL').split(','),
+        'TIMEOUT': int(os.getenv('CACHE_TIMEOUT', default=60)),
         'OPTIONS': {
             #WARNING: Shard client is still experimental, so be careful when using it in production environments.
             "CLIENT_CLASS": "django_redis.client.ShardClient",
@@ -592,6 +600,7 @@ CACHES = {
             "IGNORE_EXCEPTIONS": False,
             "COMPRESSOR": "django_redis.compressors.lz4.Lz4Compressor",
             "PARSER_CLASS": "redis.connection._HiredisParser",
+            "MAX_ENTRIES": int(os.getenv('CACHE_MAX_ENTRIES', default=300)),
         }
     }
 }
@@ -601,32 +610,18 @@ STORAGES = {
         "BACKEND": "django.core.files.storage.FileSystemStorage",
     },
     "staticfiles": {
-        #     "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
-        "BACKEND": "django.contrib.staticfiles.storage.ManifestStaticFilesStorage",
+        "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
+        # "BACKEND": "django.contrib.staticfiles.storage.ManifestStaticFilesStorage",
     },
 }
 
 # SESSION
-# ------------------------------------------------------------------------------
+
 # https://docs.djangoproject.com/en/dev/ref/settings/#session-engine
 SESSION_ENGINE = os.getenv('SESSION_ENGINE', default='django.contrib.sessions.backends.db')
 SESSION_CACHE_ALIAS = os.getenv('SESSION_CACHE_ALIAS', default='default')
 # https://docs.djangoproject.com/en/dev/ref/settings/#session-cookie-secure
 SESSION_COOKIE_SECURE = to_bool(os.getenv('SESSION_COOKIE_SECURE', default=False))
-
-
-COMPRESS_ENABLED = os.getenv("COMPRESS_ENABLED", default=True)
-COMPRESS_STORAGE = "compressor.storage.GzipCompressorFileStorage"
-# COMPRESS_STORAGE = STORAGES["staticfiles"]["BACKEND"]
-COMPRESS_URL = STATIC_URL
-COMPRESS_OFFLINE = True  # Offline compression is required when using Whitenoise
-COMPRESS_FILTERS = {
-    "css": [
-        "compressor.filters.css_default.CssAbsoluteFilter",
-        "compressor.filters.cssmin.rCSSMinFilter",
-    ],
-    "js": ["compressor.filters.jsmin.JSMinFilter"],
-}
 
 
 if DEBUG:
@@ -637,3 +632,5 @@ if DEBUG:
             'rest_framework.authentication.SessionAuthentication',
     ]
     OAUTH2_PROVIDER['ALLOWED_REDIRECT_URI_SCHEMES'] += ['http']
+
+    SPECTACULAR_SETTINGS['SERVE_PERMISSIONS'] = ["rest_framework.permissions.AllowAny"]

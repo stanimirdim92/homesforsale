@@ -617,23 +617,6 @@ files = [
 django = "*"
 
 [[package]]
-name = "django-compressor"
-version = "4.5.1"
-description = "('Compresses linked and inline JavaScript or CSS into single cached files.',)"
-optional = false
-python-versions = ">=3.8"
-files = [
-    {file = "django_compressor-4.5.1-py2.py3-none-any.whl", hash = "sha256:87741edee4e7f24f3e0b8072d94a990cfb010cb2ca7cc443944da8e193cdea65"},
-    {file = "django_compressor-4.5.1.tar.gz", hash = "sha256:c1d8a48a2ee4d8b7f23c411eb9c97e2d88db18a18ba1c9e8178d5f5b8366a822"},
-]
-
-[package.dependencies]
-Django = ">=4.2"
-django-appconf = ">=1.0.3"
-rcssmin = "1.1.2"
-rjsmin = "1.2.2"
-
-[[package]]
 name = "django-cors-headers"
 version = "4.4.0"
 description = "django-cors-headers is a Django application for handling the server headers required for Cross-Origin Resource Sharing (CORS)."
@@ -2493,6 +2476,20 @@ files = [
 ]
 
 [[package]]
+name = "whitenoise"
+version = "6.7.0"
+description = "Radically simplified static file serving for WSGI applications"
+optional = false
+python-versions = ">=3.8"
+files = [
+    {file = "whitenoise-6.7.0-py3-none-any.whl", hash = "sha256:a1ae85e01fdc9815d12fa33f17765bc132ed2c54fa76daf9e39e879dd93566f6"},
+    {file = "whitenoise-6.7.0.tar.gz", hash = "sha256:58c7a6cd811e275a6c91af22e96e87da0b1109e9a53bb7464116ef4c963bf636"},
+]
+
+[package.extras]
+brotli = ["brotli"]
+
+[[package]]
 name = "zipp"
 version = "3.20.2"
 description = "Backport of pathlib-compatible object wrapper for zip files"
@@ -2514,4 +2511,4 @@ type = ["pytest-mypy"]
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.12"
-content-hash = "207a5b7cc76ec1366caae1832ef39118bb7fba5ec29017c9fe13f4d4a33240aa"
+content-hash = "483901d9485f3a095de1dccd3a0940b69fae4e43d5f29456a273880a824b45d4"

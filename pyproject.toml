@@ -61,7 +61,6 @@ defusedxml = "^0.8.0rc2"
 django = "^5.1.1"
 django-allauth = "^64.2.1"
 django-appconf = "^1.0.6"
-django-compressor = "^4.5.1"
 django-cors-headers = "^4.4.0"
 django-extensions = "^3.2.3"
 django-filter = "^24.3"
@@ -119,6 +118,7 @@ wcwidth = "^0.2.13"
 zipp = "^3.20.1"
 djangorestframework-stubs = {extras = ["compatible-mypy"], version = "^3.15.1"}
 faker = "^28.4.1"
+whitenoise = "^6.7.0"
 
 [tool.poetry.group.dev.dependencies]
 black = "^24.8.0"

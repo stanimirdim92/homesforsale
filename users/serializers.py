@@ -1,7 +1,9 @@
+from django.contrib.admin.utils import lookup_field
 from django.contrib.auth import get_user_model
 from django.contrib.auth.models import Group
 from oauth2_provider.contrib.rest_framework import TokenHasReadWriteScope
 from rest_framework import permissions, serializers
+from rest_framework.exceptions import ValidationError
 from rest_framework.fields import SerializerMethodField
 from rest_framework.utils.serializer_helpers import ReturnDict
 
@@ -16,48 +18,49 @@ class AddressSerializer(serializers.ModelSerializer[Address]):
     class Meta:
         model = Address
         lookup_field = "id"
-        fields = '__all__'
+        fields = ['id', 'address_line_1', 'address_line_2', 'city', 'state', 'postal_code', 'country']
         extra_kwargs = {
             "url": {
                 "lookup_field": "id",
             },
-            'id': {'read_only': True}
+            'id': {'read_only': True},
         }
 
 
-class UserSerializer(serializers.HyperlinkedModelSerializer[User]):
+class UserSerializer(serializers.ModelSerializer[User]):
     permission_classes = [permissions.IsAuthenticated, TokenHasReadWriteScope]
-    addresses = serializers.SerializerMethodField(source="get_addresses")
 
-    def get_addresses(self, obj) -> ReturnDict | None:        # Check if the request has a query param `include_addresses=true`
+    def get_addresses(self, obj) -> ReturnDict | None:  # Check if the request has a query param `include_addresses=true`
         request = self.context.get('request', None)
-        if request and request.query_params.get('include'):
-            if 'address' in request.query_params['include'].split(','):
-                # Return serialized addresses if the query param is true
-                return AddressSerializer(Address.objects.filter(user_id=obj), many=True, read_only=True, required=False).data
+        if request is None:
+            raise ValidationError("Request context is missing.")
 
-        # Otherwise, return None or an empty list (depends on your preference)
+        include_addresses = request.query_params.get('include')
+        if include_addresses and 'address' in include_addresses.split(','):
+            return AddressSerializer(Address.objects.filter(user_id=obj), context={'request': request}, many=True).data
+
         return None
 
+    addresses = serializers.SerializerMethodField(source="get_addresses", read_only=True, required=False)
+    exclude = ['password', 'user_permissions', 'id']
     class Meta:
         model = User
-        fields = [
-            'addresses',
-            'uuid', 'is_active',
-            'title', 'name_first', 'name_middle', 'name_last', 'company_name',
-            'entity_type', 'phone_number', 'timezone',  'language', 'currency',
-            'time_created', 'time_modified', 'time_deleted',
-        ]
+        # fields = [
+        #     'addresses',
+        #     'uuid', 'is_active',
+        #     'title', 'name_first', 'name_middle', 'name_last', 'company_name',
+        #     'entity_type', 'phone_number', 'timezone',  'language', 'currency',
+        #     'time_created', 'time_modified', 'time_deleted',
+        # ]
         lookup_field = "uuid"
         extra_kwargs = {
-            "url": {
-                "lookup_field": "uuid",
-                'addresses': {'lookup_field': 'user'}
-            },
             'password': {'write_only': True},
-            'id': {'read_only': True}
+            'id': {'read_only': True},
+            'uuid': {'read_only': True},
+            'time_created': {'read_only': True},
+            'time_modified': {'read_only': True},
         }
-        # exclude = ['password', 'user_permissions']
+        exclude = ['password', 'user_permissions', 'id']
 
 
 class GroupSerializer(serializers.HyperlinkedModelSerializer[Group]):

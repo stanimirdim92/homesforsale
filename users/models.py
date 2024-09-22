@@ -87,6 +87,7 @@ class User(AbstractUser):
 class Address(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL,default=None,db_index=True, on_delete=models.CASCADE, related_name='addresses')
 
+    id = models.UUIDField(_("id"), primary_key=True,max_length=36, unique=True, default=uuid.uuid4, editable=False)
     address_line_1 = models.CharField(max_length=255)
     address_line_2 = models.CharField(max_length=255, blank=True, null=True)
     city = models.CharField(max_length=100)
@@ -94,14 +95,13 @@ class Address(models.Model):
     postal_code = models.CharField(max_length=20)
     country = models.CharField(max_length=100)
 
-    id = models.UUIDField(_("id"), primary_key=True, max_length=36, unique=True, default=uuid.uuid4, editable=False)
 
     time_created = models.DateTimeField(_("created at"), auto_now_add=True)
     time_modified = models.DateTimeField(_("modified at"), auto_now=True)
     time_deleted = models.DateTimeField(_("deleted at"), blank=True, null=True)
 
     def __str__(self):
-        return f"{self.address_line_1}, {self.city}, {self.country}"
+        return f"{self.address_line_1}, {self.city}, {self.postal_code}, {self.country}"
 
     def absolute_url(self) -> str:
         return reverse("address-detail", args=[str(self.id)])

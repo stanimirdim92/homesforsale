@@ -11,7 +11,6 @@ User = get_user_model()
 
 
 class UserViewSet(viewsets.ModelViewSet):
-
     queryset = User.objects.all()
     serializer_class = UserSerializer
     lookup_field = "uuid"
@@ -28,6 +27,5 @@ class AddressViewSet(viewsets.ModelViewSet):
     lookup_field = "id"
 
 class GroupViewSet(viewsets.ModelViewSet):
-
     queryset = Group.objects.all()
     serializer_class = GroupSerializer

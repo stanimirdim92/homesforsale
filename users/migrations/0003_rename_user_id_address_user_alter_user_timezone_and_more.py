@@ -11,11 +11,6 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
-        migrations.RenameField(
-            model_name="address",
-            old_name="user_id",
-            new_name="user",
-        ),
         migrations.AlterField(
             model_name="user",
             name="timezone",
