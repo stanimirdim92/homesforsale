@@ -156,7 +156,6 @@ THIRD_PARTY_APPS = [
     'allauth.socialaccount.providers.google',
     'allauth.socialaccount.providers.openid_connect',
 
-    "oauth2_provider",
     "corsheaders",
     "rest_framework",
     "rest_framework.authtoken",
@@ -196,7 +195,7 @@ USERSESSIONS_TRACK_ACTIVITY = True
 # https://docs.djangoproject.com/en/dev/ref/settings/#auth-user-model
 AUTH_USER_MODEL = "users.User"
 # # https://docs.djangoproject.com/en/dev/ref/settings/#login-redirect-url
-# LOGIN_REDIRECT_URL =  str(BASE_DIR/':redirect'),
+LOGIN_REDIRECT_URL =  "/"
 # https://docs.djangoproject.com/en/dev/ref/settings/#login-url
 LOGIN_URL = "account_login"
 # https://django-allauth.readthedocs.io/en/latest/account/configuration.html
@@ -212,26 +211,28 @@ ACCOUNT_ALLOW_REGISTRATION = to_bool(os.getenv('ACCOUNT_ALLOW_REGISTRATION', Tru
 ACCOUNT_ADAPTER = "users.adapters.AccountAdapter"
 # https://docs.allauth.org/en/latest/account/forms.html
 
-# HEADLESS_ONLY = True
-# HEADLESS_FRONTEND_URLS = {
-#     "account_confirm_email": "/account/verify-email/{key}",
-#     "account_reset_password": "/account/password/reset",
-#     "account_reset_password_from_key": "/account/password/reset/key/{key}",
-#     "account_signup": "/account/signup",
-#     "socialaccount_login_error": "/account/provider/callback",
-# }
-ACCOUNT_FORMS = {
-    'add_email': 'allauth.account.forms.AddEmailForm',
-    'change_password': 'allauth.account.forms.ChangePasswordForm',
-    'confirm_login_code': 'allauth.account.forms.ConfirmLoginCodeForm',
-    'login': 'allauth.account.forms.LoginForm',
-    'request_login_code': 'allauth.account.forms.RequestLoginCodeForm',
-    'reset_password': 'allauth.account.forms.ResetPasswordForm',
-    'reset_password_from_key': 'allauth.account.forms.ResetPasswordKeyForm',
-    'set_password': 'allauth.account.forms.SetPasswordForm',
-    'signup': 'users.forms.UserSignupForm',
-    'user_token': 'allauth.account.forms.UserTokenForm',
+HEADLESS_ONLY = True
+HEADLESS_FRONTEND_URLS = {
+    "account_confirm_email": "/account/verify-email/{key}",
+    "account_reset_password": "/account/password/reset",
+    "account_reset_password_from_key": "/account/password/reset/key/{key}",
+    "account_signup": "/account/signup",
+    "socialaccount_login_error": "/account/provider/callback",
 }
+
+
+# ACCOUNT_FORMS = {
+#     'add_email': 'allauth.account.forms.AddEmailForm',
+#     'change_password': 'allauth.account.forms.ChangePasswordForm',
+#     'confirm_login_code': 'allauth.account.forms.ConfirmLoginCodeForm',
+#     'login': 'allauth.account.forms.LoginForm',
+#     'request_login_code': 'allauth.account.forms.RequestLoginCodeForm',
+#     'reset_password': 'allauth.account.forms.ResetPasswordForm',
+#     'reset_password_from_key': 'allauth.account.forms.ResetPasswordKeyForm',
+#     'set_password': 'allauth.account.forms.SetPasswordForm',
+#     'signup': 'users.forms.UserSignupForm',
+#     'user_token': 'allauth.account.forms.UserTokenForm',
+# }
 # ACCOUNT_SIGNUP_FORM_CLASS = 'users.forms.UserSignupForm'
 
 # https://docs.allauth.org/en/latest/socialaccount/configuration.html
@@ -509,8 +510,8 @@ REST_FRAMEWORK = {
         'rest_framework.parsers.MultiPartParser'
     ],
     'DEFAULT_AUTHENTICATION_CLASSES': [
-        # 'rest_framework.authentication.TokenAuthentication',
-        'oauth2_provider.contrib.rest_framework.OAuth2Authentication',
+        'rest_framework.authentication.TokenAuthentication',
+        'rest_framework.authentication.SessionAuthentication',
     ],
     'DEFAULT_PERMISSION_CLASSES': [
         # 'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly',
@@ -569,18 +570,6 @@ REST_FRAMEWORK = {
         'retrieve': 'read',
         'destroy': 'delete'
     },
-}
-
-# OAUTH
-OAUTH2_PROVIDER = {
-    # this is the list of available scopes
-    'SCOPES': {
-        'read': _('Read scope'),
-        'write': _('Write scope'),
-        'groups': _('Access to your groups')
-    },
-    "CLEAR_EXPIRED_TOKENS_BATCH_INTERVAL": 5,
-    "ALLOWED_REDIRECT_URI_SCHEMES": ["https"],
 }
 
 # CORS
@@ -649,6 +638,5 @@ if DEBUG:
     REST_FRAMEWORK['DEFAULT_AUTHENTICATION_CLASSES'] += [
         'rest_framework.authentication.SessionAuthentication',
     ]
-    OAUTH2_PROVIDER['ALLOWED_REDIRECT_URI_SCHEMES'] += ['http']
 
     SPECTACULAR_SETTINGS['SERVE_PERMISSIONS'] = ["rest_framework.permissions.AllowAny"]

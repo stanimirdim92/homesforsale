@@ -1,7 +1,6 @@
 from django.contrib.admin.utils import lookup_field
 from django.contrib.auth import get_user_model
 from django.contrib.auth.models import Group
-from oauth2_provider.contrib.rest_framework import TokenHasReadWriteScope
 from rest_framework import permissions, serializers
 from rest_framework.exceptions import ValidationError
 from rest_framework.fields import SerializerMethodField
@@ -13,8 +12,6 @@ User = get_user_model()
 
 
 class AddressSerializer(serializers.ModelSerializer[Address]):
-    permission_classes = [permissions.IsAuthenticated, TokenHasReadWriteScope]
-
     class Meta:
         model = Address
         lookup_field = "id"
@@ -28,7 +25,6 @@ class AddressSerializer(serializers.ModelSerializer[Address]):
 
 
 class UserSerializer(serializers.ModelSerializer[User]):
-    permission_classes = [permissions.IsAuthenticated, TokenHasReadWriteScope]
 
     def get_addresses(self, obj) -> ReturnDict | None:  # Check if the request has a query param `include_addresses=true`
         request = self.context.get('request', None)

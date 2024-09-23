@@ -46,15 +46,12 @@ urlpatterns = [
     path(settings.ADMIN_URL, admin.site.urls),
     path('i18n/', include('django.conf.urls.i18n')),
 
-    # 3rd PARTY URLS
-    path('o/', include('oauth2_provider.urls')),
-
     # APP URLS
     path('', include('users.urls')),
 
     # 3rd PARTY URLS
-    path('accounts/', include('allauth.urls')),
-    path("_allauth/", include("allauth.headless.urls")),
+    path('account/', include('allauth.urls')),
+    path("api/account/", include("allauth.headless.urls")),
 
     # Media files
     *static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT),
@@ -66,29 +63,5 @@ urlpatterns = [
 if settings.DEBUG:
     # Static file serving when using Gunicorn + Uvicorn for local web socket development
     urlpatterns += staticfiles_urlpatterns()
-
-    # This allows the error pages to be debugged during development, just visit
-    # these url in browser to see how these error pages look like.
-    urlpatterns += [
-        path(
-            "400/",
-            default_views.bad_request,
-            kwargs={"exception": Exception("Bad Request!")},
-        ),
-        path(
-            "403/",
-            default_views.permission_denied,
-            kwargs={"exception": Exception("Permission Denied")},
-        ),
-        path(
-            "404/",
-            default_views.page_not_found,
-            kwargs={"exception": Exception("Page not Found")},
-        ),
-        path("500/", default_views.server_error),
-    ]
     if "debug_toolbar" in settings.INSTALLED_APPS:
-        urlpatterns += i18n_patterns(
-            path('debug/', include('debug_toolbar.urls')),
-            prefix_default_language=True
-        )
+        urlpatterns += [path('debug/', include('debug_toolbar.urls'))]
