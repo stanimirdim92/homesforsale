@@ -59,7 +59,6 @@ click-repl = "^0.3.0"
 cryptography = "^43.0.1"
 defusedxml = "^0.8.0rc2"
 django = "^5.1.1"
-django-allauth = "^64.2.1"
 django-appconf = "^1.0.6"
 django-cors-headers = "^4.4.0"
 django-extensions = "^3.2.3"
@@ -119,6 +118,7 @@ djangorestframework-stubs = {extras = ["compatible-mypy"], version = "^3.15.1"}
 faker = "^28.4.1"
 whitenoise = "^6.7.0"
 werkzeug = "^3.0.4"
+dj-rest-auth = {extras = ["with-social"], version = "^6.0.0"}
 
 [tool.poetry.group.dev.dependencies]
 black = "^24.8.0"

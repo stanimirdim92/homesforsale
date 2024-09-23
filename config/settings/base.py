@@ -143,27 +143,25 @@ DJANGO_APPS = [
 THIRD_PARTY_APPS = [
     "django_extensions",
     "django_filters",
-    # "django_celery_beat",
+    "drf_spectacular",
+    "drf_spectacular_sidecar",
+    "rosetta",
+    "phonenumber_field",
 
+    # "django_celery_beat",
     # "crispy_forms",
+
+    "corsheaders",
+    "rest_framework",
+    "rest_framework.authtoken",
     "allauth",
     "allauth.account",
-    "allauth.headless",
-    "allauth.mfa",
     "allauth.usersessions",
     "allauth.socialaccount",
     'allauth.socialaccount.providers.facebook',
     'allauth.socialaccount.providers.google',
     'allauth.socialaccount.providers.openid_connect',
-
-    "corsheaders",
-    "rest_framework",
-    "rest_framework.authtoken",
-    "drf_spectacular",
-    "drf_spectacular_sidecar",
-    "rosetta",
-
-    "phonenumber_field",
+    'dj_rest_auth.registration',
 ]
 
 LOCAL_APPS = [
@@ -635,8 +633,4 @@ if DEBUG:
     REST_FRAMEWORK['DEFAULT_RENDERER_CLASSES'] += [
         'rest_framework.renderers.BrowsableAPIRenderer',
     ]
-    REST_FRAMEWORK['DEFAULT_AUTHENTICATION_CLASSES'] += [
-        'rest_framework.authentication.SessionAuthentication',
-    ]
-
     SPECTACULAR_SETTINGS['SERVE_PERMISSIONS'] = ["rest_framework.permissions.AllowAny"]

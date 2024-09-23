@@ -4,31 +4,17 @@
 
 The `urlpatterns` list routes URLs to views. For more information please see:
     https://docs.djangoproject.com/en/5.1/topics/http/urls/
-Examples:
-Function views
-    1. Add an import:  from my_app import views
-    2. Add a URL to urlpatterns:  path('', views.home, name='home')
-Class-based views
-    1. Add an import:  from other_app.views import Home
-    2. Add a URL to urlpatterns:  path('', Home.as_view(), name='home')
-Including another URLconf
-    1. Import the include() function: from django.urls import include, path
-    2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 import os
 
 from django.conf import settings
-from django.conf.urls.i18n import i18n_patterns
 from django.conf.urls.static import static
 from django.contrib import admin
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 from django.urls import include, path, re_path
-from django.views import defaults as default_views
 from drf_spectacular.views import SpectacularAPIView, SpectacularSwaggerSplitView
-from allauth.account.decorators import secure_admin_login
 
-admin.autodiscover()
-admin.site.login = secure_admin_login(admin.site.login)
+from users.views import FacebookLogin, GoogleLogin
 
 version = os.getenv('APP_VERSION', '1.0.0')
 
@@ -49,9 +35,10 @@ urlpatterns = [
     # APP URLS
     path('', include('users.urls')),
 
-    # 3rd PARTY URLS
-    path('account/', include('allauth.urls')),
-    path("api/account/", include("allauth.headless.urls")),
+    path('api/auth/', include('dj_rest_auth.urls')),
+    path('api/auth/registration/', include('dj_rest_auth.registration.urls')),
+    path('api/auth/facebook/', FacebookLogin.as_view(), name='login_facebook'),
+    path('api/auth/google/', GoogleLogin.as_view(), name='login_google'),
 
     # Media files
     *static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT),
