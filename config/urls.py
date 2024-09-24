@@ -39,7 +39,7 @@ urlpatterns = [
 
     # 3rd PARTY URLS
     path('accounts/', include('allauth.urls')),
-    path("_allauth/", include("allauth.headless.urls")),
+    path("accounts/", include("allauth.headless.urls")),
 
     # Media files
     *static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT),
