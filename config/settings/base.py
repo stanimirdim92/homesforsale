@@ -156,12 +156,13 @@ THIRD_PARTY_APPS = [
     "rest_framework.authtoken",
     "allauth",
     "allauth.account",
+    "allauth.headless",
+    "allauth.mfa",
     "allauth.usersessions",
     "allauth.socialaccount",
     'allauth.socialaccount.providers.facebook',
     'allauth.socialaccount.providers.google',
     'allauth.socialaccount.providers.openid_connect',
-    'dj_rest_auth.registration',
 ]
 
 LOCAL_APPS = [
@@ -173,7 +174,7 @@ INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
 
 if DEBUG:
     # http://whitenoise.evans.io/en/latest/django.html#using-whitenoise-in-development
-    INSTALLED_APPS = [*INSTALLED_APPS, "whitenoise.runserver_nostatic", 'debug_toolbar']
+    INSTALLED_APPS = [*INSTALLED_APPS, 'sslserver', "whitenoise.runserver_nostatic", 'debug_toolbar']
 
 # MIGRATIONS
 
@@ -195,7 +196,7 @@ AUTH_USER_MODEL = "users.User"
 # # https://docs.djangoproject.com/en/dev/ref/settings/#login-redirect-url
 LOGIN_REDIRECT_URL =  "/"
 # https://docs.djangoproject.com/en/dev/ref/settings/#login-url
-LOGIN_URL = "account_login"
+# LOGIN_URL = "account_login"
 # https://django-allauth.readthedocs.io/en/latest/account/configuration.html
 ACCOUNT_EMAIL_REQUIRED = True
 ACCOUNT_EMAIL_UNKNOWN_ACCOUNTS = False
@@ -336,7 +337,7 @@ MIDDLEWARE = [
     'django.middleware.http.ConditionalGetMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',  # Manages sessions across requests
     'django.middleware.locale.LocaleMiddleware',
-    # 'django.middleware.gzip.GZipMiddleware',
+    'django.middleware.gzip.GZipMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',  # Associates users with requests using sessions.
@@ -420,9 +421,12 @@ FIXTURE_DIRS = (str(BASE_DIR / "fixtures"),)
 # SECURITY
 
 # https://docs.djangoproject.com/en/dev/ref/settings/#session-cookie-httponly
-SESSION_COOKIE_HTTPONLY = True
+SESSION_COOKIE_HTTPONLY = to_bool(os.getenv('SESSION_COOKIE_HTTPONLY', default=False))
 # https://docs.djangoproject.com/en/dev/ref/settings/#csrf-cookie-httponly
-CSRF_COOKIE_HTTPONLY = True
+CSRF_COOKIE_HTTPONLY = to_bool(os.getenv('CSRF_COOKIE_HTTPONLY', default=False))
+# https://docs.djangoproject.com/en/dev/ref/settings/#csrf-cookie-secure
+CSRF_COOKIE_SECURE = to_bool(os.getenv('CSRF_COOKIE_SECURE', default=False))
+print(f"CSRF_COOKIE_SECURE: {CSRF_COOKIE_SECURE}", CSRF_COOKIE_HTTPONLY)
 # https://docs.djangoproject.com/en/dev/ref/settings/#x-frame-options
 X_FRAME_OPTIONS = "DENY"
 
@@ -524,7 +528,6 @@ REST_FRAMEWORK = {
         'django_filters.rest_framework.DjangoFilterBackend',
     ],
     # Schema
-    # 'DEFAULT_SCHEMA_CLASS': 'rest_framework.schemas.openapi.AutoSchema',
     'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
 
     # Throttling
@@ -633,4 +636,8 @@ if DEBUG:
     REST_FRAMEWORK['DEFAULT_RENDERER_CLASSES'] += [
         'rest_framework.renderers.BrowsableAPIRenderer',
     ]
+    # REST_FRAMEWORK['DEFAULT_AUTHENTICATION_CLASSES'] += [
+    #     'rest_framework.authentication.SessionAuthentication',
+    # ]
+
     SPECTACULAR_SETTINGS['SERVE_PERMISSIONS'] = ["rest_framework.permissions.AllowAny"]

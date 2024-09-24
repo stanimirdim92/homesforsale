@@ -13,8 +13,10 @@ from django.contrib import admin
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 from django.urls import include, path, re_path
 from drf_spectacular.views import SpectacularAPIView, SpectacularSwaggerSplitView
+from allauth.account.decorators import secure_admin_login
 
-from users.views import FacebookLogin, GoogleLogin
+admin.autodiscover()
+admin.site.login = secure_admin_login(admin.site.login)
 
 version = os.getenv('APP_VERSION', '1.0.0')
 
@@ -35,10 +37,9 @@ urlpatterns = [
     # APP URLS
     path('', include('users.urls')),
 
-    path('api/auth/', include('dj_rest_auth.urls')),
-    path('api/auth/registration/', include('dj_rest_auth.registration.urls')),
-    path('api/auth/facebook/', FacebookLogin.as_view(), name='login_facebook'),
-    path('api/auth/google/', GoogleLogin.as_view(), name='login_google'),
+    # 3rd PARTY URLS
+    path('accounts/', include('allauth.urls')),
+    path("_allauth/", include("allauth.headless.urls")),
 
     # Media files
     *static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT),
