@@ -15,18 +15,18 @@ Designing a user account system involves creating a structure that handles user 
    - **Custom User Model**: In Django, create a custom `User` model extending `AbstractUser` to manage users' unique needs for the platform (property buyers, sellers, real estate agents).
    - **Fields**:
      - [x] Email 
-     - Password (with hashing via Django's built-in utilities)
+     - [x] Password (with hashing via Django's built-in utilities)
      - **Password Recovery**: Implement a "Forgot Password" feature that allows users to reset their password through a password reset link sent to their email.
      - **Password Change**: Allow users to change their password within the account settings after logging in.
-     - Phone Number (optional but useful for real estate inquiries)
-     - Address: Useful for agents or property owners.
-     - Currency Preferences: EUR, GBP, etc. - Default English or based on country
+     - [x] Phone Number (optional but useful for real estate inquiries)
+     - [x] Address: Useful for agents or property owners.
+     - [x] Currency Preferences: EUR, GBP, etc. - Default English or based on country
        - Currency Settings: Add support for currency conversion to display prices in users' local currencies using an API (e.g., fixer.io for real-time conversion rates).
-     - Preferred Language: French, German, Spanish, etc. - Default English or based on country
+     - [x] Preferred Language: French, German, Spanish, etc. - Default English or based on country
      - **GDPR Consent**: Boolean field to track if users have consented to the platform’s data policies.
      - Profile picture and bio
      - [x] Full name, short name
-     - **Validation**: Validate email format, password strength, and unique email. Phone must be unique?
+     - [x] **Validation**: Validate email format, password strength, and unique email. Phone must be unique?
      - **Email Verification**: Send a verification email with a unique link/token to confirm the user's email address.
 
 #### 2. **User Types & Roles**
@@ -47,8 +47,8 @@ Designing a user account system involves creating a structure that handles user 
    - **Email Verification**: After registration, send a verification link to the user's email, with expiration functionality to comply with security best practices.
    - **Profile Completion**: Guide users through a profile completion process, ensuring they fill in all relevant fields for the real estate market (especially sellers and agents).
    - **Login**: 
-     - Username/Email and password.
-     - Use hashed and salted passwords to ensure security.
+     - [x] Username/Email and password.
+     - [x] Use hashed and salted passwords to ensure security.
      - Captcha (if enabled).
    - **Multi-Factor Authentication (MFA)**: 
      - Optionally, require users to provide a secondary authentication factor, such as SMS or an authentication app code.
@@ -62,8 +62,8 @@ Designing a user account system involves creating a structure that handles user 
 
 
 #### 4. **Localization & Multi-Language Support**
-   - **Internationalization (i18n)**: Use Django’s `gettext` functions to support translation. You’ll need to ensure that forms, error messages, and any communication are available in the user's preferred language.
-   - **Date/Time Preferences**: Store users’ preferred timezones so that property viewing times, scheduled meetings, or email alerts are localized to their timezone.
+   - [x] **Internationalization (i18n)**: Use Django’s `gettext` functions to support translation. You’ll need to ensure that forms, error messages, and any communication are available in the user's preferred language.
+   - [x] **Date/Time Preferences**: Store users’ preferred timezones so that property viewing times, scheduled meetings, or email alerts are localized to their timezone.
 
 #### 5. **Enhanced Security Features**
    - **Two-Factor Authentication (2FA)**: Allow users to add an extra layer of security through 2FA, using SMS, email, or authentication apps like Google Authenticator.
@@ -88,73 +88,5 @@ Designing a user account system involves creating a structure that handles user 
    - **Favorites**: Allow buyers to favorite properties they are interested in, storing them in their profile for later viewing.
    - **Inquiries**: Buyers can send inquiries to sellers or agents directly through the platform. These interactions should be saved in the user's account for future reference.
    - **Property Alerts**: Allow buyers to set alerts for new properties matching their criteria (price range, location, property type).
-
-#### 9. **API Design (DRF Integration)**
-   - **Endpoints**: 
-     - `/register/`: For user registration.
-     - `/login/`: JWT-based login endpoint.
-     - `/profile/`: To get or update the user’s profile (based on their role).
-     - `/listings/`: CRUD operations for managing property listings (only accessible by sellers/agents).
-     - `/inquiries/`: To send or view property inquiries (available to buyers and sellers).
-   - **Pagination & Filtering**: Implement pagination and filtering for properties. For example, filter properties by price, location, property type, etc.
-   - **Throttling**: Use DRF’s throttling to protect API endpoints from abuse (e.g., too many login attempts).
-
-#### 10. **Property Reviews and Ratings**
-   - **User Reviews for Agents and Sellers**: Allow buyers to leave reviews and ratings for agents or sellers they’ve worked with, contributing to the platform’s credibility.
-   - **Property Reviews**: Enable reviews or feedback for specific properties, which other potential buyers can see before making inquiries.
-
-#### 11. **Scalability & Performance Optimizations**
-   - **Caching**: Use Django’s caching framework (e.g., Redis) to cache frequently accessed data, like property listings, to reduce database load.
-   - **Task Queue**: Use Celery for background tasks like sending emails (e.g., confirmation emails, alerts for new property listings).
-   - **Load Balancing**: For high-traffic real estate platforms, set up load balancing across multiple servers to distribute the traffic evenly.
-   - **Asynchronous Requests**: Use Django Channels for real-time updates like chat systems between buyers and agents or live property notifications.
-   - **Caching**: Use caching for commonly accessed data like user sessions to improve performance.
-   - **API Rate Limiting**: Protect the system from abuse by rate-limiting API calls, especially during authentication processes.
-
-#### 12. **Search Engine Optimization (SEO)**
-   - **SEO-Friendly URLs**: Ensure that property URLs are user-friendly and descriptive (e.g., `/properties/amsterdam-beautiful-apartment-for-sale/`).
-   - **Sitemap and Metadata**: Generate a dynamic sitemap and metadata for property pages to make them discoverable by search engines.
-   - **Structured Data**: Use JSON-LD to provide structured data about the properties to search engines, improving visibility.
-
-#### 13. **Admin Panel for Platform Management**
-   - **User Management**: Admins can view all users, reset passwords, deactivate users, and more.
-   - **Property Moderation**: Admins can approve, edit, or remove property listings to maintain the quality and legality of listings.
-   - **Analytics Dashboard**: Provide admins with detailed reports on platform usage, new registrations, active listings, and user engagement.
-
-   - **Verification Emails**: Sent after registration for email verification.
-   - **Security Alerts**: Notify users of login attempts, password changes, or suspicious activity.
-   - **Promotional/Informational**: Depending on user preferences, allow users to subscribe to updates or newsletters.
-
-
-### Django and DRF Code Example for a Custom User Model:
-
-```python
-from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin
-from django.utils.translation import gettext_lazy as _
-from django.db import models
-
-class CustomUserManager(BaseUserManager):
-    def create_user(self, email, password=None, **extra_fields):
-        if not email:
-            raise ValueError(_('The Email field must be set'))
-        email = self.normalize_email(email)
-        user = self.model(email=email, **extra_fields)
-        user.set_password(password)
-        user.save(using=self._db)
-        return user
-
-    def create_superuser(self, email, password=None, **extra_fields):
-        extra_fields.setdefault('is_staff', True)
-        extra_fields.setdefault('is_superuser', True)
-
-        return self.create_user(email, password, **extra_fields)
-
-class CustomUser(AbstractBaseUser, PermissionsMixin):
-    email = models.EmailField(unique=True)
-    full_name = models.CharField(max_length=255)
-    phone_number = models.CharField(max_length=15, blank=True)
-    language_preference = models.CharField(max_length=10, default='en')
-    currency_preference = models.CharField(max_length=3, default='EUR')
-    gdpr_consent = models.BooleanField
-
-
+- **User Reviews for Agents and Sellers**: Allow buyers to leave reviews and ratings for agents or sellers they’ve worked with, contributing to the platform’s credibility.
+   

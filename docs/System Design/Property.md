@@ -8,6 +8,8 @@
 - share
 - favorite
 - view on map
+- reviews and ratings
+- **Property Comparisons**: Enable users to compare properties side by side on key features and pricing.
 
 
 ### amenities
