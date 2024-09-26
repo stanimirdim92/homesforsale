@@ -121,6 +121,8 @@ werkzeug = "^3.0.4"
 django-allauth = "^65.0.1"
 pycountries = "^1.2.1"
 tox = "^4.20.0"
+django-stubs-ext = "^5.1.0"
+django-robots = "^6.1"
 
 [tool.poetry.group.dev.dependencies]
 black = "^24.8.0"

@@ -17,7 +17,7 @@ class UserViewSet(viewsets.ModelViewSet):
     serializer_class = UserSerializer
     lookup_field = "uuid"
 
-    @action(detail=True)
+    @action(detail=False)
     def me(self, request):
         serializer = UserSerializer(request.user,context={"request": request})
         return Response(status=status.HTTP_200_OK, data=serializer.data)

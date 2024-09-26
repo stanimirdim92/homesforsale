@@ -67,17 +67,17 @@ class User(AbstractUser):
     class Meta(AbstractUser.Meta):
         ordering = ['-id']
 
-    def absolute_url(self) -> str:
+    def get_absolute_url(self) -> str:
         return reverse("user-detail", args=[str(self.uuid)])
 
-    def full_name(self):
+    def get_full_name(self):
         """
         Return the first_name plus the last_name, with a space in between.
         """
         full_name = "%s %s" % (self.name_first, self.name_last)
         return full_name.strip()
 
-    def short_name(self):
+    def get_short_name(self):
         """Return the short name for the user."""
         return self.name_first
 

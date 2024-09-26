@@ -12,10 +12,12 @@ https://docs.djangoproject.com/en/5.1/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.1/ref/settings/
 """
+import logging
 import os
 from os.path import join
 from pathlib import Path
 
+import django_stubs_ext
 from attr.converters import to_bool
 from django.conf.global_settings import ADMINS
 from django.db.backends.postgresql.psycopg_any import IsolationLevel
@@ -24,6 +26,14 @@ from django.utils.translation import gettext_lazy as _
 from dotenv import load_dotenv, find_dotenv
 from rest_framework import ISO_8601
 
+# Monkeypatching Django, so stubs will work for all generics,
+# see: https://github.com/typeddjango/django-stubs
+django_stubs_ext.monkeypatch()
+
+def get_list(text):
+    return [item.strip() for item in text.split(",")]
+
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve(strict=True).parent.parent.parent
 
@@ -31,6 +41,9 @@ find_dotenv()
 load_dotenv(join(BASE_DIR, '.env'))
 
 # GENERAL
+
+# Whether to append trailing slashes to URLs.
+APPEND_SLASH = False
 
 # https://docs.djangoproject.com/en/dev/ref/settings/#site-id
 SITE_ID = int(os.getenv('SITE_ID'))
@@ -135,6 +148,7 @@ DJANGO_APPS = [
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     "django.contrib.sites",
+    "django.contrib.sitemaps",
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "django.contrib.humanize",
@@ -147,6 +161,7 @@ THIRD_PARTY_APPS = [
     "drf_spectacular_sidecar",
     "rosetta",
     "phonenumber_field",
+    "robots",
 
     # "django_celery_beat",
     # "crispy_forms",
@@ -154,6 +169,7 @@ THIRD_PARTY_APPS = [
     "corsheaders",
     "rest_framework",
     "rest_framework.authtoken",
+
     "allauth",
     "allauth.account",
     "allauth.headless",
@@ -402,14 +418,15 @@ TEMPLATES = [
             "context_processors": [
                 "django.template.context_processors.debug",
                 "django.template.context_processors.request",
-                "django.contrib.auth.context_processors.auth",
-                "django.contrib.messages.context_processors.messages",
                 "django.template.context_processors.i18n",
                 "django.template.context_processors.media",
                 "django.template.context_processors.static",
                 "django.template.context_processors.tz",
+                "django.contrib.auth.context_processors.auth",
+                "django.contrib.messages.context_processors.messages",
                 "users.context_processors.allauth_settings",
             ],
+            "string_if_invalid": '!! variable "%s" is missing !!' if DEBUG else "",
         },
     },
 ]
@@ -467,37 +484,53 @@ MANAGERS = ADMINS
 # https://docs.djangoproject.com/en/dev/ref/settings/#logging
 # See https://docs.djangoproject.com/en/dev/topics/logging for
 # more details on how to customize your logging configuration.
+
+# Make the `logging` Python module capture `warnings.warn()` calls
+# This is needed in order to log them as JSON when DEBUG=False
+logging.captureWarnings(True)
 LOGGING = {
     "version": 1,
     "disable_existing_loggers": False,
     "filters": {"require_debug_false": {"()": "django.utils.log.RequireDebugFalse"}},
     "formatters": {
         "verbose": {
-            "format": "%(levelname)s %(asctime)s %(module)s %(process)d %(thread)d %(message)s",
+            "format": (
+                "%(asctime)s %(levelname)s %(name)s %(message)s "
+                "[MODULE: %(module)s |PID:%(process)d:%(threadName)s]"
+            )
         },
     },
     "handlers": {
+        "default": {
+            "level": "DEBUG",
+            "class": "logging.StreamHandler",
+            "formatter": "verbose",
+        },
         "mail_admins": {
             "level": "ERROR",
             "filters": ["require_debug_false"],
             "class": "django.utils.log.AdminEmailHandler",
         },
-        "console": {
-            "level": "DEBUG",
-            "class": "logging.StreamHandler",
-            "formatter": "verbose",
+        "null": {
+            "class": "logging.NullHandler",
         },
     },
-    "root": {"level": "INFO", "handlers": ["console"]},
+    "root": {"level": "INFO", "handlers": ["default"]},
     "loggers": {
+        "django": {"level": "ERROR", "propagate": True},
         "django.request": {
-            "handlers": ["console", "mail_admins"],
+            "handlers": ["default", "mail_admins"],
+            "level": "ERROR",
+            "propagate": True,
+        },
+        "django.server": {
+            "handlers": ["default", "mail_admins"],
             "level": "ERROR",
             "propagate": True,
         },
         "django.security.DisallowedHost": {
             "level": "ERROR",
-            "handlers": ["console", "mail_admins"],
+            "handlers": ["default", "mail_admins"],
             "propagate": True,
         },
     },
@@ -580,8 +613,8 @@ REST_FRAMEWORK = {
 # CORS
 # https://github.com/adamchainz/django-cors-headers#setup
 CORS_URLS_REGEX = r"^/api/.*$"
-CORS_ALLOWED_ORIGINS = os.getenv("CORS_ALLOWED_ORIGINS", default="http://127.0.0.1:8000").split(",")
-CORS_TRUSTED_ORIGINS = os.getenv("CORS_TRUSTED_ORIGINS", default="http://127.0.0.1:8000").split(",")
+CORS_ALLOWED_ORIGINS = get_list(os.getenv("CORS_ALLOWED_ORIGINS", default="http://127.0.0.1:8000"))
+CORS_TRUSTED_ORIGINS = get_list(os.getenv("CORS_TRUSTED_ORIGINS", default="http://127.0.0.1:8000"))
 
 # SCHEMA DOCS
 SPECTACULAR_SETTINGS = {
@@ -601,7 +634,7 @@ CACHES = {
     'default': {
         "BACKEND": os.getenv('REDIS_BACKEND', 'django.core.cache.backends.DummyCache'),
         'KEY_PREFIX': os.getenv('REDIS_PREFIX'),
-        'LOCATION': os.getenv('REDIS_URL').split(','),
+        'LOCATION': get_list(os.getenv('REDIS_URL')),
         'TIMEOUT': int(os.getenv('CACHE_TIMEOUT', default=60)),
         'OPTIONS': {
             # WARNING: Shard client is still experimental, so be careful when using it in production environments.
@@ -633,9 +666,6 @@ SESSION_ENGINE = os.getenv('SESSION_ENGINE', default='django.contrib.sessions.ba
 SESSION_CACHE_ALIAS = os.getenv('SESSION_CACHE_ALIAS', default='default')
 # https://docs.djangoproject.com/en/dev/ref/settings/#session-cookie-secure
 SESSION_COOKIE_SECURE = to_bool(os.getenv('SESSION_COOKIE_SECURE', default=False))
-
-# Whether to append trailing slashes to URLs.
-APPEND_SLASH = False
 
 if DEBUG:
     REST_FRAMEWORK['DEFAULT_RENDERER_CLASSES'] += [

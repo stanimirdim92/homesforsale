@@ -14,7 +14,7 @@ class UserAdmin(auth_admin.UserAdmin):
     form = UserAdminChangeForm
     model = User
 
-    list_display = ("id", "email", "title","full_name", "entity_type", "company_name", "is_staff", "is_active", "is_superuser")
+    list_display = ("id", "email", "title","get_full_name", "entity_type", "company_name", "is_staff", "is_active", "is_superuser")
     list_filter = ("is_staff", "is_active", "is_superuser", "groups", "entity_type")
     readonly_fields = ("time_created", 'time_modified', 'uuid', "id")
     search_fields = ["email", "name_first", "name_last", "uuid", "id", "entity_type", "company_name"]

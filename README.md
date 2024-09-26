@@ -148,6 +148,15 @@ Here’s your formatted content in Markdown:
 - [x] redis[hiredis] - caching is important
 - [x] psycopg3[pool, binary] - for PostgreSQL v16
 - [ ] pytest - for testing - no test yet
+- [ ] sitemaps - https://docs.djangoproject.com/en/dev/ref/contrib/sitemaps/
+- [ ] django-robots -https://pypi.org/project/django-robots/
+- 
+https://github.com/wemake-services/wemake-django-template/blob/5bf1569e2710e11befc6991893f94419136d74bd/%7B%7Bcookiecutter.project_name%7D%7D/server/settings/__init__.py
+https://github.com/saleor/saleor/blob/main/saleor/settings.py#L111
+https://github.com/awesto/django-shop/tree/master/shop
+https://pypi.org/project/django-robots/
+- https://pypi.org/project/django-countries-states-cities/
+- https://pypi.org/project/django-countries-plus/
 
  
 ### Features
@@ -193,3 +202,4 @@ Here’s your formatted content in Markdown:
 Structured Data: Use JSON-LD to provide structured data about the properties to search engines, improving visibility.
 ### **Do you need a license to operate a real estate website?**
    Generally, the website operator doesn't need a real estate license, but real estate agents and agencies listing properties on the platform will likely need proper licensing, depending on the country. Licensing laws vary within Europe, so it’s essential to verify the specific requirements for each country you plan to operate in. For example, in countries like France, Germany, and Spain, real estate agents need a professional license to operate, but as a platform owner, you are likely exempt from those regulations unless you directly engage in real estate transactions.
+

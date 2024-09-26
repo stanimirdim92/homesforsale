@@ -6,11 +6,11 @@ find_dotenv()
 load_dotenv(join(BASE_DIR, '.env'))
 hostname, _, ips = socket.gethostbyname_ex(socket.gethostname())
 # https://django-debug-toolbar.readthedocs.io/en/latest/installation.html#internal-ips
-INTERNAL_IPS = os.getenv("INTERNAL_IPS", default="127.0.0.1").split(",")
+INTERNAL_IPS = get_list(os.getenv("INTERNAL_IPS", default="127.0.0.1,::1"))
 INTERNAL_IPS += [".".join(ip.split(".")[:-1] + ["1"]) for ip in ips]
 
 # https://docs.djangoproject.com/en/dev/ref/settings/#allowed-hosts
-ALLOWED_HOSTS = os.getenv("ALLOWED_HOSTS", default="127.0.0.1").split(",")
+ALLOWED_HOSTS = get_list(os.getenv("ALLOWED_HOSTS", default="127.0.0.1"))
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = os.getenv('APP_KEY')
@@ -20,14 +20,14 @@ assert SECRET_KEY and len(SECRET_KEY) >= 32
 # SECURITY MIDDLEWARE
 # ------------------------------------------------------------------------------
 # https://docs.djangoproject.com/en/dev/ref/settings/#secure-proxy-ssl-header
-# SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
+SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
 
 # https://docs.djangoproject.com/en/dev/ref/settings/#secure-ssl-redirect
 SECURE_SSL_REDIRECT = to_bool(os.getenv("SECURE_SSL_REDIRECT", default=False))
 
 # # https://docs.djangoproject.com/en/dev/ref/settings/#session-cookie-name
-# SESSION_COOKIE_NAME = os.getenv("SESSION_COOKIE_NAME")
-#
+SESSION_COOKIE_NAME = os.getenv("SESSION_COOKIE_NAME", default="sessionid")
+
 # # https://docs.djangoproject.com/en/dev/topics/security/#ssl-https
 # # https://docs.djangoproject.com/en/dev/ref/settings/#secure-hsts-seconds
 SECURE_HSTS_SECONDS = int(os.getenv('SECURE_HSTS_SECONDS', default=60))
