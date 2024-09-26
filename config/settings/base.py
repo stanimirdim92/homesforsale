@@ -426,7 +426,7 @@ SESSION_COOKIE_HTTPONLY = to_bool(os.getenv('SESSION_COOKIE_HTTPONLY', default=F
 CSRF_COOKIE_HTTPONLY = to_bool(os.getenv('CSRF_COOKIE_HTTPONLY', default=False))
 # https://docs.djangoproject.com/en/dev/ref/settings/#csrf-cookie-secure
 CSRF_COOKIE_SECURE = to_bool(os.getenv('CSRF_COOKIE_SECURE', default=False))
-print(f"CSRF_COOKIE_SECURE: {CSRF_COOKIE_SECURE}", CSRF_COOKIE_HTTPONLY)
+
 # https://docs.djangoproject.com/en/dev/ref/settings/#x-frame-options
 X_FRAME_OPTIONS = "DENY"
 

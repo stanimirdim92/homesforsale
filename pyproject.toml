@@ -119,6 +119,8 @@ faker = "^28.4.1"
 whitenoise = "^6.7.0"
 werkzeug = "^3.0.4"
 django-allauth = "^65.0.1"
+pycountries = "^1.2.1"
+tox = "^4.20.0"
 
 [tool.poetry.group.dev.dependencies]
 black = "^24.8.0"

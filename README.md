@@ -112,7 +112,8 @@ Here’s your formatted content in Markdown:
 
 ---
 
-# Todo
+
+### Current used technologies
 - [ ] [Werkzeug Documentation](https://werkzeug.palletsprojects.com/en/2.3.x/)
 - [ ] [Django ASGI Deployment with Uvicorn](https://docs.djangoproject.com/en/dev/howto/deployment/asgi/uvicorn/)
 - [ ] [Django ASGI Deployment with Hypercorn](https://docs.djangoproject.com/en/dev/howto/deployment/asgi/hypercorn/)
@@ -124,29 +125,31 @@ Here’s your formatted content in Markdown:
 - [ ] setup mypy
 - [ ] black
 - [ ] flake
+- [ ] tox
 - [ ] isort
 - [ ] Content Delivery Network (CDN): Utilize CDNs like Cloudflare or Akamai to improve content load times globally.
 - [ ] Third-Party Integrations: Incorporate services like Twilio for SMS notifications or SendGrid for email communications.
+- [ ] "django-extra-views>=0.13,<0.15",
+- [ ] "django-haystack>=3.0b1",
+- [ ] "django-treebeard>=4.3.0",
+- [ ] click
+- [ ] httpx
+- [ ] celery
+- [ ] asyncio
+- [x] rosseta
+- [ ] django-storages for S3  - not installed yet
+- [x] Python 3.12+
+- [x] Django 5.1+
+- [x] djangorestframework 3.15+
+- [x] django-phonenumber-field
+- [x] phonenumbers
+- [x] django-debug-toolbar 5.0+ - for debug test
+- [x] django-allauth - Login, 2FA etc.
+- [x] redis[hiredis] - caching is important
+- [x] psycopg3[pool, binary] - for PostgreSQL v16
+- [ ] pytest - for testing - no test yet
 
-
-### Current used technologies
-- Python 3.12+
-- Django 5.1+
-- djangorestframework 3.15+
-- django-debug-toolbar 5.0+ - for debug test
-- django-allauth - Login, 2FA etc.
-- redis[hiredis] - caching is important
-- psycopg3[pool, binary] - for PostgreSQL v16
-- Click - for command line tools - no commands yet, but planned
-- lxml - for XML parsing and security
-- requests - for HTTP requests # change to httpx
-- pytest - for testing - no test yet
-- celery - for asynchronous tasks - not installed yet
-- asyncio - for asynchronous tasks
-- django-oauth-toolkit - for OAuth
-- rosseta for languages
-- django-storages for S3  - not installed yet
-- 
+ 
 ### Features
 - Login / Registration for user/ agent
 - Notifications
