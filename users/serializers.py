@@ -26,28 +26,29 @@ class AddressSerializer(serializers.ModelSerializer[Address]):
 
 class UserSerializer(serializers.ModelSerializer[User]):
 
-    def get_addresses(self, obj) -> ReturnDict | None:  # Check if the request has a query param `include_addresses=true`
-        request = self.context.get('request', None)
-        if request is None:
-            raise ValidationError("Request context is missing.")
+    # def get_addresses(self, obj) -> ReturnDict | None:  # Check if the request has a query param `include_addresses=true`
+    #     request = self.context.get('request', None)
+    #     if request is None:
+    #         raise ValidationError("Request context is missing.")
+    #
+    #     include_addresses = request.query_params.get('include', '')
+    #     if include_addresses and 'address' in include_addresses.split(','):
+    #         return AddressSerializer(Address.objects.filter(user_id=obj.id), context={'request': request}, many=True).data
+    #
+    #     return None
 
-        include_addresses = request.query_params.get('include')
-        if include_addresses and 'address' in include_addresses.split(','):
-            return AddressSerializer(Address.objects.filter(user_id=obj), context={'request': request}, many=True).data
-
-        return None
-
-    addresses = serializers.SerializerMethodField(source="get_addresses", read_only=True, required=False)
+    # addresses = serializers.SerializerMethodField(source="get_addresses", read_only=True, required=False)
+    addresses = AddressSerializer(many=True, read_only=True, required=False)
     exclude = ['password', 'user_permissions', 'id']
     class Meta:
         model = User
-        # fields = [
-        #     'addresses',
-        #     'uuid', 'is_active',
-        #     'title', 'name_first', 'name_middle', 'name_last', 'company_name',
-        #     'entity_type', 'phone_number', 'timezone',  'language', 'currency',
-        #     'time_created', 'time_modified', 'time_deleted',
-        # ]
+        fields = [
+            'addresses', 'groups',
+            'uuid', 'is_active', 'email',
+            'title', 'name_first', 'name_middle', 'name_last', 'company_name',
+            'entity_type', 'phone_number', 'timezone',  'language', 'currency',
+            'time_created', 'time_modified', 'time_deleted',
+        ]
         lookup_field = "uuid"
         extra_kwargs = {
             'password': {'write_only': True},
@@ -56,7 +57,7 @@ class UserSerializer(serializers.ModelSerializer[User]):
             'time_created': {'read_only': True},
             'time_modified': {'read_only': True},
         }
-        exclude = ['password', 'user_permissions', 'id']
+        # exclude = ['password', 'user_permissions', 'id']
 
 
 class GroupSerializer(serializers.HyperlinkedModelSerializer[Group]):

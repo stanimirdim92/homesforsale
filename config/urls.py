@@ -35,11 +35,11 @@ urlpatterns = [
     path('i18n/', include('django.conf.urls.i18n')),
 
     # APP URLS
-    path('', include('users.urls')),
+    re_path(r'', include('users.urls')),
 
     # 3rd PARTY URLS
-    path('accounts/', include('allauth.urls')),
-    path("accounts/", include("allauth.headless.urls")),
+    re_path(r'^accounts/', include('allauth.urls')),
+    re_path(r"^accounts/", include("allauth.headless.urls")),
 
     # Media files
     *static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT),

@@ -82,8 +82,7 @@ class User(AbstractUser):
         return self.name_first
 
 
-#
-#
+
 class Address(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL,default=None,db_index=True, on_delete=models.CASCADE, related_name='addresses')
 

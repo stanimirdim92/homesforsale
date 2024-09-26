@@ -330,21 +330,25 @@ AUTH_PASSWORD_VALIDATORS = [
 # https://docs.djangoproject.com/en/dev/ref/settings/#middleware
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
-    "whitenoise.middleware.WhiteNoiseMiddleware",
+
     # 'django.middleware.cache.UpdateCacheMiddleware',  # redis https://docs.djangoproject.com/en/5.1/topics/cache/#order-of-middleware
     "corsheaders.middleware.CorsMiddleware",
-    'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'django.middleware.http.ConditionalGetMiddleware',
-    'django.contrib.sessions.middleware.SessionMiddleware',  # Manages sessions across requests
-    'django.middleware.locale.LocaleMiddleware',
-    'django.middleware.gzip.GZipMiddleware',
+    "whitenoise.middleware.WhiteNoiseMiddleware",
+
+    'django.contrib.sessions.middleware.SessionMiddleware',  # Modify Vary header
+    'django.middleware.locale.LocaleMiddleware', # Modify Vary header
+    # 'django.middleware.gzip.GZipMiddleware', # Modify Vary header BREACH?
+
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',  # Associates users with requests using sessions.
     'django.contrib.messages.middleware.MessageMiddleware',
+    'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'django.middleware.http.ConditionalGetMiddleware',
+    # 'django.middleware.cache.FetchFromCacheMiddleware', # redis https://docs.djangoproject.com/en/5.1/topics/cache/#order-of-middleware
+
     'allauth.account.middleware.AccountMiddleware',
     'allauth.usersessions.middleware.UserSessionsMiddleware',
-    # 'django.middleware.cache.FetchFromCacheMiddleware',  # redis
 ]
 
 if DEBUG:
@@ -618,9 +622,7 @@ STORAGES = {
         "BACKEND": "django.core.files.storage.FileSystemStorage",
     },
     "staticfiles": {
-        # "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
-        "BACKEND": "whitenoise.storage.CompressedStaticFilesStorage",
-        # "BACKEND": "django.contrib.staticfiles.storage.ManifestStaticFilesStorage",
+        "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
     },
 }
 
@@ -632,12 +634,12 @@ SESSION_CACHE_ALIAS = os.getenv('SESSION_CACHE_ALIAS', default='default')
 # https://docs.djangoproject.com/en/dev/ref/settings/#session-cookie-secure
 SESSION_COOKIE_SECURE = to_bool(os.getenv('SESSION_COOKIE_SECURE', default=False))
 
+# Whether to append trailing slashes to URLs.
+APPEND_SLASH = False
+
 if DEBUG:
     REST_FRAMEWORK['DEFAULT_RENDERER_CLASSES'] += [
         'rest_framework.renderers.BrowsableAPIRenderer',
     ]
-    # REST_FRAMEWORK['DEFAULT_AUTHENTICATION_CLASSES'] += [
-    #     'rest_framework.authentication.SessionAuthentication',
-    # ]
 
     SPECTACULAR_SETTINGS['SERVE_PERMISSIONS'] = ["rest_framework.permissions.AllowAny"]

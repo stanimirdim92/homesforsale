@@ -173,7 +173,7 @@ Here’s your formatted content in Markdown:
 
 - **Comprehensive Property Filters:**
   - Enable advanced search filters, like neighborhood safety score, school ratings, proximity to transport, etc.
-
+- **Neighborhood Statistics**: Include information on local schools, crime rates, public transportation, and amenities.
 - **Analytics Dashboard for Agencies:**
   - Offer agencies insights into property views, click-through rates, and engagement analytics, giving them a clear understanding of the performance of their listings.
    

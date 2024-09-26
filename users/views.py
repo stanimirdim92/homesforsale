@@ -13,13 +13,13 @@ User = get_user_model()
 
 @extend_schema(tags=['Users'])
 class UserViewSet(viewsets.ModelViewSet):
-    queryset = User.objects.all()
+    queryset = User.objects.prefetch_related('addresses')
     serializer_class = UserSerializer
     lookup_field = "uuid"
 
-    @action(detail=False)
+    @action(detail=True)
     def me(self, request):
-        serializer = UserSerializer(request.user,context={"request": request}, many=True)
+        serializer = UserSerializer(request.user,context={"request": request})
         return Response(status=status.HTTP_200_OK, data=serializer.data)
 
 
@@ -28,6 +28,7 @@ class AddressViewSet(viewsets.ModelViewSet):
     queryset = Address.objects.all()
     serializer_class = AddressSerializer
     lookup_field = "id"
+
 
 
 @extend_schema(tags=['Groups'])
