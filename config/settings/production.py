@@ -15,6 +15,7 @@ from dotenv import load_dotenv, find_dotenv
 # see: https://github.com/typeddjango/django-stubs
 django_stubs_ext.monkeypatch()
 
+
 def get_list(text):
     return [item.strip() for item in text.split(",")]
 
