@@ -1,7 +1,7 @@
 from django.urls import include, path
 from rest_framework_extensions import routers
 
-from .views import UserViewSet, GroupViewSet, AddressViewSet
+from .views import AddressViewSet, GroupViewSet, UserViewSet
 
 router = routers.ExtendedDefaultRouter()
 router.register(r'api/v1/addresses', AddressViewSet)

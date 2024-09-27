@@ -8,7 +8,7 @@ from django.utils.translation import gettext_lazy as _
 from phonenumber_field.modelfields import PhoneNumberField
 from rest_framework.reverse import reverse
 
-from users.enums import Titles, UserTypes, Language, Currency
+from users.enums import Currency, Language, Titles, UserTypes
 from users.managers import UserManager
 
 
@@ -71,11 +71,8 @@ class User(AbstractUser):
         return reverse("user-detail", args=[str(self.uuid)])
 
     def get_full_name(self):
-        """
-        Return the first_name plus the last_name, with a space in between.
-        """
-        full_name = "%s %s" % (self.name_first, self.name_last)
-        return full_name.strip()
+        """Return the first_name plus the last_name, with a space in between."""
+        return f"{self.name_first} {self.name_last}".strip()
 
     def get_short_name(self):
         """Return the short name for the user."""

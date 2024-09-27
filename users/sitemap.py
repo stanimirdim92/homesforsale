@@ -1,6 +1,5 @@
 from django.contrib.auth import get_user_model
 from django.contrib.sitemaps import Sitemap
-User = get_user_model()
 
 
 class UserSitemap(Sitemap):
@@ -8,7 +7,7 @@ class UserSitemap(Sitemap):
     priority = 0.5
 
     def items(self):
-        return User.objects.all()
+        return get_user_model().objects.all()
 
     def lastmod(self, obj):
         return obj.time_modified

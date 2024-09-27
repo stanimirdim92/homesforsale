@@ -1,15 +1,16 @@
-"""
-For more information on this file, see
+"""For more information on this file, see.
 https://docs.djangoproject.com/en/5.1/topics/settings/
 
-For the full list of settings and their values, see
+For the full list of settings and their values, see.
 https://docs.djangoproject.com/en/5.1/ref/settings/
 """
+
 from os.path import join
 from pathlib import Path
 
 import django_stubs_ext
-from dotenv import load_dotenv, find_dotenv
+from dotenv import find_dotenv, load_dotenv
+from split_settings.tools import include
 
 # Monkeypatching Django, so stubs will work for all generics,
 # see: https://github.com/typeddjango/django-stubs
@@ -25,8 +26,6 @@ BASE_DIR = Path(__file__).resolve(strict=True).parent.parent.parent
 
 find_dotenv()
 load_dotenv(join(BASE_DIR, '.env'))
-
-from split_settings.tools import include
 
 include(
     'components/admin.py',

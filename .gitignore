@@ -7,6 +7,12 @@ __pycache__/
 # C extensions
 *.so
 
+# data
+/media/
+/node_modules/
+/static/
+/digital_contents/
+
 # Distribution / packaging
 .Python
 build/

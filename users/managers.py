@@ -3,15 +3,12 @@ from django.utils.translation import gettext_lazy as _
 
 
 class UserManager(DjangoUserManager):
-    """
-    Custom user model manager where email is the unique identifiers
+    """Custom user model manager where email is the unique identifiers
     for authentication instead of usernames.
     """
 
     def _create_user(self, email: str, password: str | None, **extra_fields):
-        """
-        Create and save a user with the given email and password.
-        """
+        """Create and save a user with the given email and password."""
         if not email:
             raise ValueError(_("The given email must be set"))
 
@@ -29,9 +26,7 @@ class UserManager(DjangoUserManager):
         return self._create_user(email, password, **extra_fields)
 
     def create_superuser(self, email: str, password: str | None = None, **extra_fields):
-        """
-        Create and save a SuperUser with the given email and password.
-        """
+        """Create and save a SuperUser with the given email and password."""
         extra_fields.setdefault("is_staff", True)
         extra_fields.setdefault("is_superuser", True)
 

@@ -1,9 +1,11 @@
 from django.contrib import admin
-from django.contrib.auth import admin as auth_admin, get_user_model
+from django.contrib.auth import admin as auth_admin
+from django.contrib.auth import get_user_model
 from django.utils.translation import gettext_lazy as _
 
-from .forms import UserAdminCreationForm, UserAdminChangeForm
-from .models import Address, User as UserCustom
+from .forms import UserAdminChangeForm, UserAdminCreationForm
+from .models import Address
+from .models import User as UserCustom
 
 User: UserCustom = get_user_model()
 

@@ -1,6 +1,7 @@
 import os
 
 from django.db.backends.postgresql.psycopg_any import IsolationLevel
+
 # https://docs.djangoproject.com/en/dev/ref/settings/#databases
 DATABASES = {
     'default': {

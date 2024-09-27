@@ -1,12 +1,12 @@
 from django.contrib.auth import get_user_model
 from django.contrib.auth.models import Group
 from drf_spectacular.utils import extend_schema
-from rest_framework import viewsets, status
+from rest_framework import status, viewsets
 from rest_framework.decorators import action
 from rest_framework.response import Response
 
 from users.models import Address
-from users.serializers import UserSerializer, GroupSerializer, AddressSerializer
+from users.serializers import AddressSerializer, GroupSerializer, UserSerializer
 
 User = get_user_model()
 

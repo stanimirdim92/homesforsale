@@ -1,4 +1,7 @@
 # https://docs.djangoproject.com/en/dev/ref/settings/#templates
+from config.settings.components.common import DEBUG
+from config.settings.production import BASE_DIR
+
 TEMPLATES = [
     {
         # https://docs.djangoproject.com/en/dev/ref/settings/#std:setting-TEMPLATES-BACKEND

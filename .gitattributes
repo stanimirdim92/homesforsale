@@ -1,1 +1,11 @@
 * text=auto
+
+# Automatically resolve changelog conflicts
+CHANGELOG.md merge=union
+
+# Package manager lock files
+*.lock linguist-generated -diff -merge
+package-lock.json linguist-generated -diff -merge
+
+# Generated django migration files
+*_auto_*.py linguist-generated
