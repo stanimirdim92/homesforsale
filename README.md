@@ -110,15 +110,12 @@ Here’s your formatted content in Markdown:
 - [ ] Reddit
 
 
----
-
 
 ### Current used technologies
 - [ ] [Werkzeug Documentation](https://werkzeug.palletsprojects.com/en/2.3.x/)
 - [ ] [Django ASGI Deployment with Uvicorn](https://docs.djangoproject.com/en/dev/howto/deployment/asgi/uvicorn/)
 - [ ] [Django ASGI Deployment with Hypercorn](https://docs.djangoproject.com/en/dev/howto/deployment/asgi/hypercorn/)
 - [ ] Finish Docker
-- [ ] Finish Black and Flake8
 - [ ] Add Anymail
 - [ ] mypy
 - [ ] tox
@@ -146,19 +143,23 @@ Here’s your formatted content in Markdown:
 - [ ] pytest - for testing - no test yet
 - [x] sitemaps - https://docs.djangoproject.com/en/dev/ref/contrib/sitemaps/
 - [x] django-robots -https://pypi.org/project/django-robots/
-- https://github.com/apache/airflow
-https://github.com/wemake-services/wemake-django-template/blob/5bf1569e2710e11befc6991893f94419136d74bd/%7B%7Bcookiecutter.project_name%7D%7D/server/settings/__init__.py
-https://github.com/saleor/saleor/blob/main/saleor/settings.py#L111
-https://github.com/awesto/django-shop/tree/master/shop
+- [ ] django-tinymce - https://pypi.org/project/django-tinymce/
+- [ ] https://pypi.org/project/django-extra-checks/
+- [ ] https://github.com/django-guardian/django-guardian
+- [ ] https://pypi.org/project/django-countries-states-cities/
+- [ ] https://pypi.org/project/django-countries-plus/
 
-- https://pypi.org/project/django-countries-states-cities/
-- https://pypi.org/project/django-countries-plus/
-https://github.com/feincms/feincms3
+### check for ideas
+- https://github.com/apache/airflow
+- [x] https://github.com/wemake-services/wemake-django-template/blob/5bf1569e2710e11befc6991893f94419136d74bd/%7B%7Bcookiecutter.project_name%7D%7D/server/settings/__init__.py
+- https://github.com/saleor/saleor/blob/main/saleor/settings.py#L111
+- https://github.com/awesto/django-shop/tree/master/shop
+
+- https://github.com/feincms/feincms3
 - https://github.com/stephenmcd/mezzanine
 - https://github.com/django-cms/django-cms
 - https://github.com/wagtail/wagtail
-- https://github.com/django-guardian/django-guardian
- 
+
 ### Features
 - Login / Registration for user/ agent
 - Notifications
