@@ -1,51 +1,46 @@
-import socket
+"""
+For more information on this file, see
+https://docs.djangoproject.com/en/5.1/topics/settings/
 
-from .base import *  # noqa
+For the full list of settings and their values, see
+https://docs.djangoproject.com/en/5.1/ref/settings/
+"""
+from os.path import join
+from pathlib import Path
+
+import django_stubs_ext
+from dotenv import load_dotenv, find_dotenv
+
+# Monkeypatching Django, so stubs will work for all generics,
+# see: https://github.com/typeddjango/django-stubs
+django_stubs_ext.monkeypatch()
+
+def get_list(text):
+    return [item.strip() for item in text.split(",")]
+
+
+# Build paths inside the project like this: BASE_DIR / 'subdir'.
+BASE_DIR = Path(__file__).resolve(strict=True).parent.parent.parent
 
 find_dotenv()
 load_dotenv(join(BASE_DIR, '.env'))
-hostname, _, ips = socket.gethostbyname_ex(socket.gethostname())
-# https://django-debug-toolbar.readthedocs.io/en/latest/installation.html#internal-ips
-INTERNAL_IPS = get_list(os.getenv("INTERNAL_IPS", default="127.0.0.1,::1"))
-INTERNAL_IPS += [".".join(ip.split(".")[:-1] + ["1"]) for ip in ips]
 
-# https://docs.djangoproject.com/en/dev/ref/settings/#allowed-hosts
-ALLOWED_HOSTS = get_list(os.getenv("ALLOWED_HOSTS", default="127.0.0.1"))
+from split_settings.tools import include
 
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.getenv('APP_KEY')
-assert SECRET_KEY and len(SECRET_KEY) >= 32
-
-
-# SECURITY MIDDLEWARE
-# ------------------------------------------------------------------------------
-# https://docs.djangoproject.com/en/dev/ref/settings/#secure-proxy-ssl-header
-SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
-
-# https://docs.djangoproject.com/en/dev/ref/settings/#secure-ssl-redirect
-SECURE_SSL_REDIRECT = to_bool(os.getenv("SECURE_SSL_REDIRECT", default=False))
-
-# # https://docs.djangoproject.com/en/dev/ref/settings/#session-cookie-name
-SESSION_COOKIE_NAME = os.getenv("SESSION_COOKIE_NAME", default="sessionid")
-
-# # https://docs.djangoproject.com/en/dev/topics/security/#ssl-https
-# # https://docs.djangoproject.com/en/dev/ref/settings/#secure-hsts-seconds
-SECURE_HSTS_SECONDS = int(os.getenv('SECURE_HSTS_SECONDS', default=60))
-#
-# # # https://docs.djangoproject.com/en/dev/ref/settings/#secure-hsts-include-subdomains
-SECURE_HSTS_INCLUDE_SUBDOMAINS = to_bool(os.getenv(
-    "SECURE_HSTS_INCLUDE_SUBDOMAINS", default=False
-))
-
-# https://docs.djangoproject.com/en/dev/ref/settings/#secure-hsts-preload
-SECURE_HSTS_PRELOAD = to_bool(os.getenv("SECURE_HSTS_PRELOAD", default=False))
-
-# https://docs.djangoproject.com/en/dev/ref/middleware/#x-content-type-options-nosniff
-SECURE_CONTENT_TYPE_NOSNIFF = to_bool(os.getenv(
-    "SECURE_CONTENT_TYPE_NOSNIFF", default=True
-))
-
-SECURE_CROSS_ORIGIN_OPENER_POLICY = "same-origin"
-SECURE_REDIRECT_EXEMPT = []
-SECURE_REFERRER_POLICY = "same-origin"
-SECURE_SSL_HOST = os.getenv("SECURE_SSL_HOST", default=None)
+include(
+    'components/admin.py',
+    'components/apps.py',
+    'components/auth.py',
+    'components/cache.py',
+    'components/common.py',
+    'components/cors.py',
+    'components/database.py',
+    'components/drf.py',
+    'components/language.py',
+    'components/logging.py',
+    'components/mail.py',
+    'components/security.py',
+    'components/static.py',
+    'components/templates.py',
+    'components/time.py',
+)
