@@ -141,9 +141,9 @@ Here’s your formatted content in Markdown:
 - [x] redis[hiredis] - caching is important
 - [x] psycopg3[pool, binary] - for PostgreSQL v16
 - [ ] pytest - for testing - no test yet
-- [x] sitemaps - https://docs.djangoproject.com/en/dev/ref/contrib/sitemaps/
-- [x] django-robots -https://pypi.org/project/django-robots/
-- [ ] django-tinymce - https://pypi.org/project/django-tinymce/
+- [x] https://docs.djangoproject.com/en/dev/ref/contrib/sitemaps/
+- [x] https://pypi.org/project/django-robots/
+- [ ] https://pypi.org/project/django-tinymce/
 - [ ] https://pypi.org/project/django-extra-checks/
 - [ ] https://github.com/django-guardian/django-guardian
 - [ ] https://pypi.org/project/django-countries-states-cities/
@@ -154,8 +154,7 @@ Here’s your formatted content in Markdown:
 - [x] https://github.com/wemake-services/wemake-django-template/blob/5bf1569e2710e11befc6991893f94419136d74bd/%7B%7Bcookiecutter.project_name%7D%7D/server/settings/__init__.py
 - https://github.com/saleor/saleor/blob/main/saleor/settings.py#L111
 - https://github.com/awesto/django-shop/tree/master/shop
-
-- https://github.com/feincms/feincms3
+- 	❌ https://github.com/feincms/feincms3
 - https://github.com/stephenmcd/mezzanine
 - https://github.com/django-cms/django-cms
 - https://github.com/wagtail/wagtail
