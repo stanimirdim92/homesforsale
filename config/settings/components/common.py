@@ -29,24 +29,25 @@ DEBUG = to_bool(os.getenv('APP_DEBUG', False))
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
 
-    # 'django.middleware.cache.UpdateCacheMiddleware',  # redis https://docs.djangoproject.com/en/5.1/topics/cache/#order-of-middleware
+    'django.middleware.cache.UpdateCacheMiddleware',  # redis https://docs.djangoproject.com/en/5.1/topics/cache/#order-of-middleware
+    'django.middleware.http.ConditionalGetMiddleware',
     "corsheaders.middleware.CorsMiddleware",
     "whitenoise.middleware.WhiteNoiseMiddleware",
 
     'django.contrib.sessions.middleware.SessionMiddleware',  # Modify Vary header
     'django.middleware.locale.LocaleMiddleware', # Modify Vary header
-    # 'django.middleware.gzip.GZipMiddleware', # Modify Vary header BREACH?
+    # 'django.middleware.gzip.GZipMiddleware', # Modify Vary header. BREACH?
 
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',  # Associates users with requests using sessions.
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'django.middleware.http.ConditionalGetMiddleware',
-    # 'django.middleware.cache.FetchFromCacheMiddleware', # redis https://docs.djangoproject.com/en/5.1/topics/cache/#order-of-middleware
 
     'allauth.account.middleware.AccountMiddleware',
     'allauth.usersessions.middleware.UserSessionsMiddleware',
+
+    'django.middleware.cache.FetchFromCacheMiddleware',  # redis https://docs.djangoproject.com/en/5.1/topics/cache/#order-of-middleware
 ]
 
 if DEBUG:

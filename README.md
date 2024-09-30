@@ -128,6 +128,7 @@ Here’s your formatted content in Markdown:
 - [ ] click
 - [x] httpx
 - [ ] celery
+- [ ] Pillow
 - [x] asyncio
 - [x] rosseta
 - [ ] django-storages for S3  - not installed yet
@@ -148,6 +149,7 @@ Here’s your formatted content in Markdown:
 - [ ] https://github.com/django-guardian/django-guardian
 - [ ] https://pypi.org/project/django-countries-states-cities/
 - [ ] https://pypi.org/project/django-countries-plus/
+- [ ] https://pre-commit.com/
 
 ### check for ideas
 - https://github.com/apache/airflow
@@ -158,6 +160,8 @@ Here’s your formatted content in Markdown:
 - https://github.com/stephenmcd/mezzanine
 - https://github.com/django-cms/django-cms
 - https://github.com/wagtail/wagtail
+- https://realtor-europe.com/en/home/
+
 
 ### Features
 - Login / Registration for user/ agent
