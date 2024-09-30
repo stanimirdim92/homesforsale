@@ -5,7 +5,7 @@ import Cookies from "universal-cookie";
 const cookies = new Cookies();
 
 interface LoginProps {
-    username: string;
+    email: string;
     password: string;
     error: string;
     isAuthenticated: boolean;
@@ -19,7 +19,7 @@ class App extends React.Component<any,LoginProps> {
     super(props);
 
     this.state = {
-      username: this.props.username,
+      email: this.props.email,
       password: this.props.password,
       error: this.props.error,
       isAuthenticated: this.props.isAuthenticated,
@@ -34,7 +34,7 @@ class App extends React.Component<any,LoginProps> {
   };
 
   handleUserNameChange = (event:any) => {
-    this.setState({username: event.target.value});
+    this.setState({email: event.target.value});
   };
 
   isResponseOk(response: Response) {
@@ -71,16 +71,16 @@ class App extends React.Component<any,LoginProps> {
         "X-CSRFToken": cookies.get("csrftoken"),
       },
       credentials: "same-origin",
-      body: JSON.stringify({username: this.state.username, password: this.state.password}),
+      body: JSON.stringify({email: this.state.email, password: this.state.password}),
     })
     .then(this.isResponseOk)
     .then((data) => {
       console.log(data);
-      this.setState({isAuthenticated: true, username: "", password: "", error: ""});
+      this.setState({isAuthenticated: true, email: "", password: "", error: ""});
     })
     .catch((err) => {
       console.log(err);
-      this.setState({error: "Wrong username or password."});
+      this.setState({error: "Wrong email or password."});
     });
   };
 
@@ -109,11 +109,11 @@ class App extends React.Component<any,LoginProps> {
           <h2>Login</h2>
           <form onSubmit={this.login}>
             <div className="form-group">
-              <label htmlFor="username">Username</label>
-              <input type="text" className="form-control" id="username" name="username" value={this.state.username} onChange={this.handleUserNameChange} />
+              <label htmlFor="email">Username</label>
+              <input type="text" className="form-control" id="email" name="email" value={this.state.email} onChange={this.handleUserNameChange} />
             </div>
             <div className="form-group">
-              <label htmlFor="username">Password</label>
+              <label htmlFor="email">Password</label>
               <input type="password" className="form-control" id="password" name="password" value={this.state.password} onChange={this.handlePasswordChange} />
               <div>
                 {this.state.error &&
