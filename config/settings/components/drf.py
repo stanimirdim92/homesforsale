@@ -90,9 +90,9 @@ SPECTACULAR_SETTINGS = {
 }
 
 if DEBUG:
-    REST_FRAMEWORK['DEFAULT_RENDERER_CLASSES'] += [
-        'rest_framework.renderers.BrowsableAPIRenderer',
-    ]
+    # REST_FRAMEWORK['DEFAULT_RENDERER_CLASSES'] += [
+        # 'rest_framework.renderers.BrowsableAPIRenderer',
+    # ]
 
     SPECTACULAR_SETTINGS['SERVE_PERMISSIONS'] = ["rest_framework.permissions.AllowAny"]
 

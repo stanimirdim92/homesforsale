@@ -13,6 +13,7 @@ from django.conf.urls.static import static
 from django.contrib import admin, sitemaps
 from django.contrib.sitemaps.views import sitemap
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
+from django.shortcuts import render
 from django.urls import include, path, re_path
 from django.views.generic.base import TemplateView
 from drf_spectacular.views import SpectacularAPIView, SpectacularSwaggerSplitView
@@ -25,7 +26,13 @@ admin.autodiscover()
 
 version = os.getenv('APP_VERSION', '1.0.0')
 
+# new
+def index_view(request):
+    return render(request, 'dist/index.html')
+
 urlpatterns = [
+    path('', index_view, name='index'),  # new
+    
     # DRF URLS
     # path('api/auth/', include('rest_framework.urls', namespace='rest_framework')),
     # path("api/auth/token/", obtain_auth_token),

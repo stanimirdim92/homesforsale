@@ -7,9 +7,9 @@ TEMPLATES = [
         # https://docs.djangoproject.com/en/dev/ref/settings/#std:setting-TEMPLATES-BACKEND
         "BACKEND": "django.template.backends.django.DjangoTemplates",
         # https://docs.djangoproject.com/en/dev/ref/settings/#dirs
-        "DIRS": [str(BASE_DIR / "templates")],
+        "DIRS": [BASE_DIR.joinpath("frontend")],
         # https://docs.djangoproject.com/en/dev/ref/settings/#app-dirs
-        # "APP_DIRS": True,
+        "APP_DIRS": True,
         'OPTIONS': {
             # https://docs.djangoproject.com/en/dev/ref/settings/#template-context-processors
             "context_processors": [
@@ -24,11 +24,6 @@ TEMPLATES = [
                 "django.contrib.messages.context_processors.messages",
                 "users.context_processors.allauth_settings",
             ],
-            'loaders': (
-                'django.template.loaders.filesystem.Loader',
-                'django.template.loaders.app_directories.Loader',
-                # "django.template.loaders.cached.Loader",
-            ),
             "string_if_invalid": '!! variable "%s" is missing !!' if DEBUG else "",
         },
     },

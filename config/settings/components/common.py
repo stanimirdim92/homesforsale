@@ -3,7 +3,7 @@ import os
 
 from attr.converters import to_bool
 
-APPEND_SLASH = False
+# APPEND_SLASH = False
 
 # https://docs.djangoproject.com/en/dev/ref/settings/#site-id
 SITE_ID = int(os.getenv('SITE_ID'))
@@ -29,7 +29,7 @@ DEBUG = to_bool(os.getenv('APP_DEBUG', False))
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
 
-    'django.middleware.cache.UpdateCacheMiddleware',  # redis https://docs.djangoproject.com/en/5.1/topics/cache/#order-of-middleware
+    # 'django.middleware.cache.UpdateCacheMiddleware',  # redis https://docs.djangoproject.com/en/5.1/topics/cache/#order-of-middleware
     'django.middleware.http.ConditionalGetMiddleware',
     "corsheaders.middleware.CorsMiddleware",
     "whitenoise.middleware.WhiteNoiseMiddleware",
@@ -47,7 +47,7 @@ MIDDLEWARE = [
     'allauth.account.middleware.AccountMiddleware',
     'allauth.usersessions.middleware.UserSessionsMiddleware',
 
-    'django.middleware.cache.FetchFromCacheMiddleware',  # redis https://docs.djangoproject.com/en/5.1/topics/cache/#order-of-middleware
+    # 'django.middleware.cache.FetchFromCacheMiddleware',  # redis https://docs.djangoproject.com/en/5.1/topics/cache/#order-of-middleware
 ]
 
 if DEBUG:
