@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-09-13 00:33+0300\n"
+"POT-Creation-Date: 2024-10-02 15:09+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,206 +17,263 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-#: config/settings/base.py:46
+
+#: config/settings/components/language.py:12
 msgid "Asturian"
 msgstr ""
 
-#: config/settings/base.py:47
+#: config/settings/components/language.py:13
 msgid "Bulgarian"
 msgstr ""
 
-#: config/settings/base.py:48
+#: config/settings/components/language.py:14
 msgid "Czech"
 msgstr ""
 
-#: config/settings/base.py:49
+#: config/settings/components/language.py:15
 msgid "Danish"
 msgstr ""
 
-#: config/settings/base.py:50
+#: config/settings/components/language.py:16
 msgid "Dutch"
 msgstr ""
 
-#: config/settings/base.py:51
+#: config/settings/components/language.py:17
 msgid "German"
 msgstr ""
 
-#: config/settings/base.py:52
+#: config/settings/components/language.py:18
 msgid "Greek"
 msgstr ""
 
-#: config/settings/base.py:53
+#: config/settings/components/language.py:19
 msgid "English"
 msgstr ""
 
-#: config/settings/base.py:54
+#: config/settings/components/language.py:20
 msgid "Spanish"
 msgstr ""
 
-#: config/settings/base.py:55
+#: config/settings/components/language.py:21
 msgid "Estonian"
 msgstr ""
 
-#: config/settings/base.py:56
+#: config/settings/components/language.py:22
 msgid "Finnish"
 msgstr ""
 
-#: config/settings/base.py:57
+#: config/settings/components/language.py:23
 msgid "French"
 msgstr ""
 
-#: config/settings/base.py:58
+#: config/settings/components/language.py:24
 msgid "Irish"
 msgstr ""
 
-#: config/settings/base.py:59
+#: config/settings/components/language.py:25
 msgid "Croatian"
 msgstr ""
 
-#: config/settings/base.py:60
+#: config/settings/components/language.py:26
 msgid "Hungarian"
 msgstr ""
 
-#: config/settings/base.py:61
+#: config/settings/components/language.py:27
 msgid "Italian"
 msgstr ""
 
-#: config/settings/base.py:62
+#: config/settings/components/language.py:28
 msgid "Lithuanian"
 msgstr ""
 
-#: config/settings/base.py:63
+#: config/settings/components/language.py:29
 msgid "Latvian"
 msgstr ""
 
-#: config/settings/base.py:64
+#: config/settings/components/language.py:30
 msgid "Polish"
 msgstr ""
 
-#: config/settings/base.py:65
+#: config/settings/components/language.py:31
 msgid "Portuguese"
 msgstr ""
 
-#: config/settings/base.py:66
+#: config/settings/components/language.py:32
 msgid "Romanian"
 msgstr ""
 
-#: config/settings/base.py:67
+#: config/settings/components/language.py:33
 msgid "Russian"
 msgstr ""
 
-#: config/settings/base.py:68
+#: config/settings/components/language.py:34
 msgid "Slovak"
 msgstr ""
 
-#: config/settings/base.py:69
+#: config/settings/components/language.py:35
 msgid "Slovenian"
 msgstr ""
 
-#: config/settings/base.py:70
+#: config/settings/components/language.py:36
 msgid "Swedish"
 msgstr ""
 
-#: users/admin.py:21
+#: users/admin.py:26
 msgid "Personal info"
 msgstr ""
 
-#: users/admin.py:24
+#: users/admin.py:35
+msgid "Details"
+msgstr ""
+
+#: users/admin.py:47
 msgid "Permissions"
 msgstr ""
 
-#: users/admin.py:34
-msgid "Important dates"
+#: users/admin.py:58
+msgid "Dates"
 msgstr ""
 
 #: users/apps.py:9
 msgid "Users"
 msgstr ""
 
+#: users/enums.py:46
+msgid "Euro"
+msgstr ""
+
+#: users/enums.py:47
+msgid "Pound Sterling"
+msgstr ""
+
+#: users/enums.py:48
+msgid "Bulgarian Lev"
+msgstr ""
+
+#: users/enums.py:49
+msgid "Swiss Franc"
+msgstr ""
+
+#: users/enums.py:65
+msgid "Client"
+msgstr ""
+
+#: users/enums.py:66
+msgid "Realtor/Agency"
+msgstr ""
+
+#: users/enums.py:67
+msgid "Real Estate Agent"
+msgstr ""
+
+#: users/enums.py:87
+msgid "Mr"
+msgstr ""
+
+#: users/enums.py:88
+msgid "Mrs"
+msgstr ""
+
+#: users/enums.py:89
+msgid "Miss"
+msgstr ""
+
+#: users/enums.py:90
+msgid "Ms"
+msgstr ""
+
+#: users/enums.py:91
+msgid "Dr"
+msgstr ""
+
+#: users/enums.py:92
+msgid "Prof"
+msgstr ""
+
+#: users/enums.py:93
+msgid "Sir"
+msgstr ""
+
 #: users/forms.py:22 users/forms.py:31
 msgid "This email has already been taken."
 msgstr ""
 
-#: users/managers.py:16
+#: users/managers.py:13
 msgid "The given email must be set"
 msgstr ""
 
-#: users/managers.py:42
+#: users/managers.py:34
 msgid "Superuser must have is_staff=True."
 msgstr ""
 
-#: users/managers.py:44
+#: users/managers.py:36
 msgid "Superuser must have is_superuser=True."
 msgstr ""
 
-#: users/models.py:24
+#: users/models.py:23
 msgid "email"
 msgstr ""
 
-#: users/models.py:29
+#: users/models.py:28
 msgid "Required. 150 characters or fewer. Letters, digits and @/./+/-/_ only."
 msgstr ""
 
-#: users/models.py:33
+#: users/models.py:32
 msgid "A user with that email already exists."
 msgstr ""
 
 #: users/models.py:37
-msgid "title"
-msgstr ""
-
-#: users/models.py:38
-msgid "first name"
-msgstr ""
-
-#: users/models.py:39
-msgid "middle name"
-msgstr ""
-
-#: users/models.py:40
-msgid "last name"
-msgstr ""
-
-#: users/models.py:42
-msgid "company name"
-msgstr ""
-
-#: users/models.py:43
-msgid "vat number"
-msgstr ""
-
-#: users/models.py:46
 msgid "uuid"
 msgstr ""
 
-#: users/models.py:48 users/models.py:106
-msgid "created at"
+#: users/models.py:39
+msgid "title"
 msgstr ""
 
-#: users/models.py:49 users/models.py:107
-msgid "modified at"
+#: users/models.py:40
+msgid "first name"
 msgstr ""
 
-#: users/models.py:50 users/models.py:108
-msgid "deleted at"
+#: users/models.py:41
+msgid "middle name"
 msgstr ""
 
-#: users/models.py:54
+#: users/models.py:42
+msgid "last name"
+msgstr ""
+
+#: users/models.py:43
+msgid "company name"
+msgstr ""
+
+#: users/models.py:45
 msgid "type"
 msgstr ""
 
-#: users/models.py:56
-msgid "language"
-msgstr ""
-
-#: users/models.py:57
-msgid "currency"
-msgstr ""
-
-#: users/models.py:59
+#: users/models.py:47
 msgid "timezone"
 msgstr ""
 
-#: users/models.py:104
+#: users/models.py:48
+msgid "language"
+msgstr ""
+
+#: users/models.py:49
+msgid "currency"
+msgstr ""
+
+#: users/models.py:51 users/models.py:95
+msgid "created at"
+msgstr ""
+
+#: users/models.py:52 users/models.py:96
+msgid "modified at"
+msgstr ""
+
+#: users/models.py:53 users/models.py:97
+msgid "deleted at"
+msgstr ""
+
+#: users/models.py:86
 msgid "id"
 msgstr ""

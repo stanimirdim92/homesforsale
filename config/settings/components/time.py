@@ -1,6 +1,6 @@
 import os
+
 from django.utils import timezone
-# TIMEZONE
 
 # Local time zone. Choices are
 # http://en.wikipedia.org/wiki/List_of_tz_zones_by_name

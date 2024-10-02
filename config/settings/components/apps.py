@@ -24,6 +24,7 @@ THIRD_PARTY_APPS = [
 
     # "django_celery_beat",
     # "crispy_forms",
+    "django_redis",
 
     "corsheaders",
     "rest_framework",
