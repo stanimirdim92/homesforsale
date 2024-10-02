@@ -1,0 +1,50 @@
+services:
+  app:
+    env_file: "./.env"
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: hfs_app
+    restart: unless-stopped
+    volumes:
+      - .:/usr/local/www/hfs_app
+    ports:
+      - "${PORT}:${PORT}"
+    networks:
+      - app-network
+#    command: gunicorn config.wsgi --bind 0.0.0.0:${PORT} --workers 2 --worker-class uvicorn.workers.UvicornWorker -t 300
+    command: python3 manage.py runserver 0.0.0.0:${PORT}
+
+#  nginx:
+#    build:
+#      context: ./nginx
+#      dockerfile: ./Dockerfile
+#    container_name: hfs_nginx
+#    ports:
+#      - "80:80"
+#      - "443:443"
+#    depends_on:
+#      - app
+#    volumes:
+##      - ./static:/usr/local/www/langchain/images
+#      - ./nginx/certs/:/etc/letsencrypt:ro
+#      - ./nginx/www/:/var/www/certbot:ro
+#    networks:
+#      - app-network
+
+#  certbot:
+#    image: certbot/certbot
+#    container_name: smads_certbot
+#    volumes:
+#      - ./nginx/certs/:/etc/letsencrypt/:rw
+#      - ./nginx/www/:/var/www/certbot/:rw
+##    entrypoint: /bin/sh -c "trap exit TERM; while :; do certbot renew; sleep 12h & wait $${!}; done"
+#    networks:
+#      - app-network
+
+networks:
+    app-network:
+      driver: bridge
+
+# docker compose up --build
+# docker compose run --rm  certbot certonly --webroot --webroot-path /var/www/certbot/ -d api.ai.smartico.one
