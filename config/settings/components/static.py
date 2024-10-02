@@ -1,7 +1,7 @@
 from config.settings.production import BASE_DIR
 
 # https://docs.djangoproject.com/en/dev/ref/settings/#static-root
-STATIC_ROOT = str(BASE_DIR / "staticfiles")
+STATIC_ROOT = str(BASE_DIR / "static")
 
 # https://docs.djangoproject.com/en/dev/ref/settings/#static-url
 STATIC_URL = "/static/"
@@ -15,7 +15,6 @@ STATICFILES_DIRS = [
 STATICFILES_FINDERS = [
     "django.contrib.staticfiles.finders.FileSystemFinder",
     "django.contrib.staticfiles.finders.AppDirectoriesFinder",
-    # https://django-compressor.readthedocs.io/en/stable/quickstart.html
 ]
 
 # https://docs.djangoproject.com/en/dev/ref/settings/#media-root

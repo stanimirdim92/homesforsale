@@ -1,0 +1,6 @@
+.*
+**/*.pyc
+*.sqlite
+media
+frontend/node_modules
+static

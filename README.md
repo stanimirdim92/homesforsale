@@ -207,3 +207,53 @@ Structured Data: Use JSON-LD to provide structured data about the properties to 
 ### **Do you need a license to operate a real estate website?**
    Generally, the website operator doesn't need a real estate license, but real estate agents and agencies listing properties on the platform will likely need proper licensing, depending on the country. Licensing laws vary within Europe, so it’s essential to verify the specific requirements for each country you plan to operate in. For example, in countries like France, Germany, and Spain, real estate agents need a professional license to operate, but as a platform owner, you are likely exempt from those regulations unless you directly engage in real estate transactions.
 
+
+пропертъ импорт
+
+Избор на тип обява и срок на публикуване
+ Нормална обява за 28 дни (безплатно)
+Обновената обява ще се публикува с нова дата и ще се показва преди останалите при сортиране по дата.
+ Комбинирана обява за 28 дни (12 лв. с ДДС) ?
+Комбинираните обяви имат средно 8 пъти повече преглеждания и обаждания в сравнение с нормалните обяви.
+ ТОП оферта за 7 дни (18 лв. с ДДС) ?
+ТОП офертите имат средно 25 пъти повече преглеждания и обаждания в сравнение с нормалните обяви.
+ Комбинирана обява за 7 дни, с SMS (6 лв. с ДДС) ?
+
+Валидност на обявата до
+
+
+може да добавите
+още 14 снимки
+Добави снимки
+Кликни или провлачи тук
+
+НОВО!
+Може да качите 1 видео към всяка обява
+Добави видео
+Видео до 30 секунди
+
+Добавете YouTube видео към обявата си
+YouTube видео
+
+посочете коя част от снимката да се добави в обявата
+Изрежи снимка
+Кликни за избор на файл
+
+No file chosenпосочете коя част от снимката да бъде закрита
+Закрий снимка
+Кликни за избор на файл
+
+No file chosenвиж как се прави 360° фотосфера с мобилен телефон
+Добави фотосфера
+Кликни или провлачи тук
+
+редактор за вътрешно разпределение на имота
+Вътрешно
+разпределение
+ 
+
+Добавете снимки с висока резолюция
+4K снимки
+платена опция
+
+
