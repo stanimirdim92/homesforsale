@@ -12,8 +12,16 @@ services:
       - "${PORT}:${PORT}"
     networks:
       - app-network
-#    command: gunicorn config.wsgi --bind 0.0.0.0:${PORT} --workers 2 --worker-class uvicorn.workers.UvicornWorker -t 300
-    command: python3 manage.py runserver 0.0.0.0:${PORT}
+    command: sh -c "
+          rm -rf /usr/local/www/hfs_app/static/* &&
+          python3 manage.py migrate &&
+          python3 manage.py makemessages -all &&
+          python3 manage.py compilemessages &&
+          python3 manage.py collectstatic &&
+          gunicorn config.wsgi:application --bind 0.0.0.0:${PORT} --workers 2 -t 300
+      "
+    depends_on:
+      - db
 
 
   db:
@@ -30,6 +38,14 @@ services:
       - "${DB_PORT}:${DB_PORT}"
     networks:
       - app-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USERNAME}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+
+
 #  nginx:
 #    build:
 #      context: ./nginx

@@ -1,10 +1,11 @@
+import os
 
 from django.utils.translation import gettext_lazy as _
 
 from config.settings.production import BASE_DIR
 
 # https://docs.djangoproject.com/en/dev/ref/settings/#language-code
-# LANGUAGE_CODE = os.getenv("LANGUAGE_CODE", 'en')
+LANGUAGE_CODE = os.getenv("LANGUAGE_CODE", 'en-us')
 #
 # # https://docs.djangoproject.com/en/dev/ref/settings/#languages
 LANGUAGES = [
