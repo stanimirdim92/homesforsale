@@ -1,6 +1,6 @@
 services:
   app:
-    env_file: "./.env"
+    env_file: ".env"
     build:
       context: .
       dockerfile: Dockerfile
@@ -15,6 +15,21 @@ services:
 #    command: gunicorn config.wsgi --bind 0.0.0.0:${PORT} --workers 2 --worker-class uvicorn.workers.UvicornWorker -t 300
     command: python3 manage.py runserver 0.0.0.0:${PORT}
 
+
+  db:
+    image: postgres
+    container_name: hfs_db
+    restart: unless-stopped
+    volumes:
+      - ./data/db:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_USER=${DB_USERNAME}
+      - POSTGRES_PASSWORD=${DB_PASSWORD}
+      - POSTGRES_DB=${DB_DATABASE}
+    ports:
+      - "${DB_PORT}:${DB_PORT}"
+    networks:
+      - app-network
 #  nginx:
 #    build:
 #      context: ./nginx

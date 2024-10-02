@@ -18,7 +18,7 @@ django_stubs_ext.monkeypatch()
 
 
 def get_list(text):
-    return [item.strip() for item in text.split(",")]
+    return str(text).strip('"').split(",")
 
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
