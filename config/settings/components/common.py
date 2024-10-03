@@ -1,8 +1,6 @@
 # Whether to append trailing slashes to URLs.
 import os
 
-from attr.converters import to_bool
-
 # APPEND_SLASH = False
 
 # https://docs.djangoproject.com/en/dev/ref/settings/#site-id
@@ -21,8 +19,7 @@ WSGI_APPLICATION = "config.wsgi.application"
 # DEBUG
 
 # https://docs.djangoproject.com/en/dev/ref/settings/#debug
-DEBUG = to_bool(os.getenv('APP_DEBUG', False))
-
+DEBUG = os.getenv('APP_ENV') == 'production'
 
 
 # https://docs.djangoproject.com/en/dev/ref/settings/#middleware

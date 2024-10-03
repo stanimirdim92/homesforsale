@@ -339,7 +339,7 @@ MailHog
 
 .ipython/
 .idea/
-
+.env
 
 project.css
 project.min.css

@@ -60,11 +60,11 @@ WORKDIR /usr/local/www/hfs_app
 # This here as we don't want to rebuild everything when we only change the code
 ENV PYTHONUNBUFFERED=1
 
-CMD ["python3", "manage.py", "makemigrations"]
-CMD ["python3", "manage.py", "migrate"]
-CMD ["python3", "manage.py", "makemessages", "--all"]
-CMD ["python3", "manage.py", "compilemessages"]
-CMD ["python3", "manage.py", "collectstatic"]
+#CMD ["python3", "manage.py", "makemigrations"]
+#CMD ["python3", "manage.py", "migrate"]
+#CMD ["python3", "manage.py", "makemessages", "--all"]
+#CMD ["python3", "manage.py", "compilemessages"]
+#CMD ["python3", "manage.py", "collectstatic"]
 
 # Change to a non-root user
 USER ${APP_USER}:${APP_USER}

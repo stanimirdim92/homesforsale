@@ -7,14 +7,18 @@ Here’s your formatted content in Markdown:
   - [ ] Load balancers, 
   - [ ] ASGI connector, 
   - [ ] static file serve.
+  - [ ] setup config
 - [ ] OAuth2 maybe with Keycloak
 - [x] PostgreSQL 16+
+  - [ ] setup config
 - [ ] Logbook for logs
 - [ ] Elasticsearch
 - [ ] GraphQL
 - [ ] Sass
-- [ ] Typescript
-- [ ] React
+- [x] Typescript
+  - [ ] setup config
+- [x] React
+  - [ ] setup config
 - [ ] Leaflet for interactive maps or Maxar
 - [ ] Django Channels - Real-time communication with Django, enabling WebSockets.
 - [ ] Celery - Task queue for handling asynchronous jobs.
@@ -37,11 +41,13 @@ Here’s your formatted content in Markdown:
 - [ ] Github / Actions
 - [ ] Kubernetes - Container orchestration platform for automating application deployment.
 - [ ] Docker
-- [ ] Kafka and/or Apache Spark
+- [ ] Kafka 
+- [ ] Apache Spark
 - [ ] Hadoop - Framework for processing large datasets in distributed computing environments.
-- [x] Redis still needs configuration
+- [x] Redis
+  - [ ] setup config, pw? 
   - [ ] (Cluster for later?).
-- [ ] Kibana?
+- [ ] Kibana - Open-source visualization and analytics tool.
 - [ ] Onelogin?
 - [ ] Terraform
 - [ ] CircleCI - Continuous integration and delivery (CI/CD).
@@ -66,7 +72,6 @@ Here’s your formatted content in Markdown:
 - [ ] Sentry
 - [ ] Prometheus
 - [ ] Airflow
-- [ ] Kibana
 - [ ] Grafana
 - [ ] Datadog - Full-stack monitoring and security.
 - [ ] New Relic - Application performance monitoring (APM) for cloud environments.
@@ -115,7 +120,6 @@ Here’s your formatted content in Markdown:
 - [ ] [Werkzeug Documentation](https://werkzeug.palletsprojects.com/en/2.3.x/)
 - [ ] [Django ASGI Deployment with Uvicorn](https://docs.djangoproject.com/en/dev/howto/deployment/asgi/uvicorn/)
 - [ ] [Django ASGI Deployment with Hypercorn](https://docs.djangoproject.com/en/dev/howto/deployment/asgi/hypercorn/)
-- [ ] Finish Docker
 - [ ] Add Anymail
 - [ ] mypy
 - [ ] tox
