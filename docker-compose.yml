@@ -1,81 +1,100 @@
 services:
-  app:
-    env_file: ".env"
-    build:
-      context: .
-      dockerfile: Dockerfile
-    container_name: hfs_app
-    restart: unless-stopped
-    volumes:
-      - .:/usr/local/www/hfs_app
-    ports:
-      - "${PORT}:${PORT}"
-    networks:
-      - app-network
-    command: sh -c "
-          rm -rf /usr/local/www/hfs_app/static/* &&
-          python3 manage.py migrate &&
-          python3 manage.py makemessages -all &&
-          python3 manage.py compilemessages &&
-          python3 manage.py collectstatic &&
-          gunicorn config.wsgi:application --bind 0.0.0.0:${PORT} --workers 2 -t 300
-      "
-    depends_on:
-      - db
+    app:
+        env_file: "./.env"
+        build:
+            context: .
+            dockerfile: Dockerfile
+        container_name: hfs_app
+        restart: unless-stopped
+        volumes:
+            - .:/usr/local/www/hfs_app
+        ports:
+            - "${PORT}:${PORT}"
+        networks:
+            - app-network
+        command: gunicorn config.wsgi:application --bind 0.0.0.0:${PORT} --workers 2 -t 300
+
+        depends_on:
+            - db
+            - redis
+
+    db:
+        image: postgres:17
+        container_name: hfs_db
+        restart: unless-stopped
+        volumes:
+            - ./data/db:/var/lib/postgresql/data
+        environment:
+            - POSTGRES_USER=${DB_USERNAME}
+            - POSTGRES_PASSWORD=${DB_PASSWORD}
+            - POSTGRES_DB=${DB_DATABASE}
+        ports:
+            - "${DB_PORT}:5432"
+        networks:
+            - app-network
+        healthcheck:
+            test: [ "CMD-SHELL", "pg_isready -U ${DB_USERNAME}" ]
+            interval: 10s
+            timeout: 5s
+            retries: 5
+
+    redis:
+        image: redis
+        container_name: hfs_redis
+        restart: unless-stopped
+        volumes:
+            - ./data/redis:/data
+        ports:
+            - "${REDIS_PORT}:${REDIS_PORT}"
+        networks:
+            - app-network
+        healthcheck:
+            test: [ "CMD", "redis-cli", "ping" ]
+            interval: 30s
+            timeout: 10s
+            retries: 5
 
 
-  db:
-    image: postgres
-    container_name: hfs_db
-    restart: unless-stopped
-    volumes:
-      - ./data/db:/var/lib/postgresql/data
-    environment:
-      - POSTGRES_USER=${DB_USERNAME}
-      - POSTGRES_PASSWORD=${DB_PASSWORD}
-      - POSTGRES_DB=${DB_DATABASE}
-    ports:
-      - "${DB_PORT}:${DB_PORT}"
-    networks:
-      - app-network
-    healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U ${DB_USERNAME}"]
-      interval: 10s
-      timeout: 5s
-      retries: 5
-
-
-
-#  nginx:
-#    build:
-#      context: ./nginx
-#      dockerfile: ./Dockerfile
-#    container_name: hfs_nginx
-#    ports:
-#      - "80:80"
-#      - "443:443"
-#    depends_on:
-#      - app
-#    volumes:
-##      - ./static:/usr/local/www/langchain/images
-#      - ./nginx/certs/:/etc/letsencrypt:ro
-#      - ./nginx/www/:/var/www/certbot:ro
-#    networks:
-#      - app-network
-
-#  certbot:
-#    image: certbot/certbot
-#    container_name: smads_certbot
-#    volumes:
-#      - ./nginx/certs/:/etc/letsencrypt/:rw
-#      - ./nginx/www/:/var/www/certbot/:rw
-##    entrypoint: /bin/sh -c "trap exit TERM; while :; do certbot renew; sleep 12h & wait $${!}; done"
-#    networks:
-#      - app-network
+    nginx:
+        build:
+            context: ./nginx
+            dockerfile: ./Dockerfile
+        container_name: hfs_nginx
+        restart: unless-stopped
+        ports:
+            - "80:80"
+            - "443:443"
+        depends_on:
+            - app
+        volumes:
+            - ./nginx/certs/:/etc/letsencrypt:ro
+            - ./nginx/www/:/var/www/certbot:ro
+            - ./static/:/usr/local/www/hfs_app/static
+            - ./media/:/usr/local/www/hfs_app/media
+        networks:
+            - app-network
+#
+#    certbot:
+#        image: certbot/certbot
+#        container_name: hfs_certbot
+#        volumes:
+#            - ./nginx/certs/:/etc/letsencrypt/:rw
+#            - ./nginx/www/:/var/www/certbot/:rw
+#        #    entrypoint: /bin/sh -c "trap exit TERM; while :; do certbot renew; sleep 12h & wait $${!}; done"
+#        networks:
+#            - app-network
+#        depends_on:
+#            -   nginx
 
 networks:
     app-network:
-      driver: bridge
+        driver: bridge
+
+#volumes:
+#    data_db:
+#        driver: local
+#    data_redis:
+#        driver: local
 
 # docker compose up --build
 # docker compose run --rm  certbot certonly --webroot --webroot-path /var/www/certbot/ -d api.ai.smartico.one
