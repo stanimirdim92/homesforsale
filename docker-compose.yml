@@ -68,8 +68,8 @@ services:
         depends_on:
             - app
         volumes:
-            - ./nginx/certs/:/etc/letsencrypt:ro
-            - ./nginx/www/:/var/www/certbot:ro
+            - ./docker/nginx/certs/:/etc/letsencrypt:ro
+            - ./docker/nginx/www/:/var/www/certbot:ro
             - ./static/:/usr/local/www/hfs_app/static
             - ./media/:/usr/local/www/hfs_app/media
         networks:
