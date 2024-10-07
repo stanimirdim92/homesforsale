@@ -1,11 +1,11 @@
 ### Build and install packages
 FROM python:3.12 AS build-python
 
-RUN apt-get -y update \
+RUN apt-get update && apt-get upgrade -y \
   && apt-get install -y gettext \
   && apt-get autoremove \
-  && apt-get clean \
-  && rm -rf /var/lib/apt/lists/*
+  && apt-get purge -y --auto-remove -o APT::AutoRemove::RecommendsImportant=false \
+  && apt-get clean -y && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /usr/local/www/hfs_app
 
@@ -18,18 +18,20 @@ RUN --mount=type=cache,mode=0755,target=/root/.cache/pypoetry poetry install --n
 ### Final image
 FROM python:3.12-slim
 
+SHELL ["/bin/bash", "-eo", "pipefail", "-c"]
+
 ARG APP_USER=${APP_USER:-hfs}
 # Create a group and user to run our app
 RUN groupadd -r ${APP_USER} && useradd -r -g ${APP_USER} ${APP_USER}
 
 # dependencies
 RUN apt-get update &&  \
-    apt-get install -y \
+    apt-get upgrade -y && \
+    apt-get install --no-install-recommends -y \
     ca-certificates \
     gettext \
-    redis \
-    redis-server \
     curl \
+    git \
     build-essential \
     libffi8 \
     tzdata \
@@ -43,8 +45,9 @@ RUN apt-get update &&  \
     shared-mime-info \
     mime-support && \
     dpkg-reconfigure -f noninteractive tzdata && \
-    apt-get clean  &&  \
-    rm -rf /var/lib/apt/lists/*
+  # Cleaning cache:
+    apt-get purge -y --auto-remove -o APT::AutoRemove::RecommendsImportant=false && \
+    apt-get clean -y && rm -rf /var/lib/apt/lists/*
 
 
 # make sure directories exist
@@ -59,12 +62,6 @@ WORKDIR /usr/local/www/hfs_app
 
 # This here as we don't want to rebuild everything when we only change the code
 ENV PYTHONUNBUFFERED=1
-
-#CMD ["python3", "manage.py", "makemigrations"]
-#CMD ["python3", "manage.py", "migrate"]
-#CMD ["python3", "manage.py", "makemessages", "--all"]
-#CMD ["python3", "manage.py", "compilemessages"]
-#CMD ["python3", "manage.py", "collectstatic"]
 
 # Change to a non-root user
 USER ${APP_USER}:${APP_USER}
