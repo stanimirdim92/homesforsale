@@ -68,24 +68,37 @@ services:
         depends_on:
             - app
         volumes:
-            - ./docker/nginx/certs/:/etc/letsencrypt:ro
-            - ./docker/nginx/www/:/var/www/certbot:ro
+            - ./docker/certbot/certs/:/etc/letsencrypt:ro
+            - ./docker/certbot/www/:/var/www/certbot:ro
             - ./static/:/usr/local/www/hfs_app/static
             - ./media/:/usr/local/www/hfs_app/media
         networks:
             - app-network
 
-#    certbot:
-#        image: certbot/certbot
-#        container_name: hfs_certbot
-#        volumes:
-#            - ./nginx/certs/:/etc/letsencrypt/:rw
-#            - ./nginx/www/:/var/www/certbot/:rw
-#        #    entrypoint: /bin/sh -c "trap exit TERM; while :; do certbot renew; sleep 12h & wait $${!}; done"
-#        networks:
-#            - app-network
-#        depends_on:
-#            -   nginx
+    certbot:
+        image: certbot/certbot:latest
+        container_name: hfs_certbot
+        volumes:
+            - ./docker/certbot/certs/:/etc/letsencrypt/:rw
+            - ./docker/certbot/www/:/var/www/certbot/:rw
+        #    entrypoint: /bin/sh -c "trap exit TERM; while :; do certbot renew; sleep 12h & wait $${!}; done"
+        command:
+          - certonly certonly
+          - -v
+          - --agree-tos
+          - --no-eff-email
+          - --renew-by-default
+          - --webroot
+          - -w /var/www/certbot/
+          - --email ${EMAIL_FROM_ADDRESS:-stanimirdim92@gmail.com}
+          - --text
+          - --preferred-challenges http-01
+          - --server https://acme-v02.api.letsencrypt.org/directory
+          - -d ${APP_DOMAIN}
+        networks:
+            - app-network
+        depends_on:
+            -   nginx
 
 networks:
     app-network:

@@ -2,15 +2,14 @@ FROM nginx:latest
 
 RUN apt-get update &&  \
     apt-get upgrade -y && \
-    logrotate \
-    openssl \
-    bash
+    apt-get install -y \
+    logrotate
 
 COPY nginx.conf /etc/nginx/nginx.conf
 COPY conf.d/default.conf /etc/nginx/conf.d/default.conf
 
+# Cache dir
 RUN mkdir -p /nginx-cache/hfs
-
 
 # Create 'messages' file used from 'logrotate'
 RUN touch /var/log/messages

@@ -6,11 +6,15 @@ Here’s your formatted content in Markdown:
 - [ ] Nginx - 
   - [ ] Load balancers, 
   - [ ] ASGI connector, 
-  - [ ] static file serve.
-  - [ ] setup config
+  - [x] static file serve.
+  - [x] setup config
 - [ ] OAuth2 maybe with Keycloak
 - [x] PostgreSQL 16+
   - [ ] setup config
+- [x] Redis
+  - [x] setup config
+  - [ ] pw
+  - [ ] Cluster for later?
 - [ ] Logbook for logs
 - [ ] Elasticsearch
 - [ ] GraphQL
@@ -19,13 +23,10 @@ Here’s your formatted content in Markdown:
   - [ ] setup config
 - [x] React
   - [ ] setup config
-- [ ] Leaflet for interactive maps or Maxar
+- [ ] Leaflet for interactive maps
 - [ ] Django Channels - Real-time communication with Django, enabling WebSockets.
 - [ ] Celery - Task queue for handling asynchronous jobs.
 - [ ] PostGIS - Geographic object extensions for PostgreSQL.
-- [ ] Zoopla
-- [ ] Rightmove APIs: If you want to pull in real estate data from these sources (depending on their availability for your region).
-
 
 
 
@@ -44,9 +45,6 @@ Here’s your formatted content in Markdown:
 - [ ] Kafka 
 - [ ] Apache Spark
 - [ ] Hadoop - Framework for processing large datasets in distributed computing environments.
-- [x] Redis
-  - [ ] setup config, pw? 
-  - [ ] (Cluster for later?).
 - [ ] Kibana - Open-source visualization and analytics tool.
 - [ ] Onelogin?
 - [ ] Terraform
@@ -60,6 +58,7 @@ Here’s your formatted content in Markdown:
 - [ ] Vault - Securely store and access secrets, tokens, API keys, and certificates.
 - [ ] Elastic Stack (ELK) - Elasticsearch, Logstash, and Kibana for log management.
 - [ ] Fluentd - Unified logging layer for cloud environments.
+- [ ] CDN: Utilize CDNs like Cloudflare or Akamai to improve content load times globally.
 
 ### AI
 - [ ] Langchain
@@ -116,19 +115,17 @@ Here’s your formatted content in Markdown:
 
 
 
-### Current used technologies
-- [ ] [Werkzeug Documentation](https://werkzeug.palletsprojects.com/en/2.3.x/)
-- [ ] [Django ASGI Deployment with Uvicorn](https://docs.djangoproject.com/en/dev/howto/deployment/asgi/uvicorn/)
-- [ ] [Django ASGI Deployment with Hypercorn](https://docs.djangoproject.com/en/dev/howto/deployment/asgi/hypercorn/)
+### packages
+for a full list see pyproject.toml
+- [ ] [Django Deployment](https://docs.djangoproject.com/en/dev/howto/deployment/)
 - [ ] Add Anymail
-- [ ] mypy
+- [ ] SMS via Twilio or any other service
 - [ ] tox
 - [x] ruff [https://github.com/charlietuttle/ruff]
-- [ ] Content Delivery Network (CDN): Utilize CDNs like Cloudflare or Akamai to improve content load times globally.
-- [ ] Third-Party Integrations: Incorporate services like Twilio for SMS notifications or SendGrid for email communications.
 - [ ] "django-extra-views>=0.13,<0.15",
 - [ ] "django-haystack>=3.0b1",
 - [ ] "django-treebeard>=4.3.0",
+- [x] django-redis[hiredis]
 - [ ] click
 - [x] httpx
 - [ ] celery
@@ -143,7 +140,6 @@ Here’s your formatted content in Markdown:
 - [x] phonenumbers
 - [x] django-debug-toolbar 5.0+ - for debug test
 - [x] django-allauth - Login, 2FA etc.
-- [x] redis[hiredis] - caching is important
 - [x] psycopg3[pool, binary] - for PostgreSQL v16
 - [ ] pytest - for testing - no test yet
 - [x] https://docs.djangoproject.com/en/dev/ref/contrib/sitemaps/
@@ -165,6 +161,9 @@ Here’s your formatted content in Markdown:
 - https://github.com/django-cms/django-cms
 - https://github.com/wagtail/wagtail
 - https://realtor-europe.com/en/home/
+- [ ] Zoopla
+- [ ] Rightmove APIs: If you want to pull in real estate data from these sources (depending on their availability for your region).
+
 
 
 ### Features
