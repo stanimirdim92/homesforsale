@@ -55,8 +55,6 @@ services:
             timeout: 10s
             retries: 5
 
-
-  ### NGINX Server ###
     nginx:
         build:
             context: ./docker/nginx
@@ -81,7 +79,6 @@ services:
         volumes:
             - ./docker/certbot/certs/:/etc/letsencrypt/:rw
             - ./docker/certbot/www/:/var/www/certbot/:rw
-        #    entrypoint: /bin/sh -c "trap exit TERM; while :; do certbot renew; sleep 12h & wait $${!}; done"
         command:
           - certonly certonly
           - -v
@@ -110,5 +107,11 @@ networks:
 #    data_redis:
 #        driver: local
 
-# docker compose up --build
-# docker compose run --rm  certbot certonly --webroot --webroot-path /var/www/certbot/ -d api.ai.smartico.one
+
+# The renew command might now work. If so do this:
+# 1. Edit nginx config and disabled the redirect from 80 to 443
+# 2. docker compose down && docker compose up --build -d
+# 3. docker compose run --rm  certbot certonly --webroot --webroot-path /var/www/certbot/ -d api.ai.smartico.one
+# 4. docker compose restart nginx
+# 5. Enable redirect to 443
+# 6. docker compose down && docker compose up --build -d
