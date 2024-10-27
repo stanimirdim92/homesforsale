@@ -36,7 +36,7 @@ include(
     'components/database.py',
     'components/drf.py',
     'components/language.py',
-    'components/logging.py',
+    'components/log.py',
     'components/mail.py',
     'components/security.py',
     'components/static.py',

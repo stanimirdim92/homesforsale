@@ -7,12 +7,14 @@ RUN apt-get update && apt-get upgrade -y \
   && apt-get purge -y --auto-remove -o APT::AutoRemove::RecommendsImportant=false \
   && apt-get clean -y && rm -rf /var/lib/apt/lists/*
 
-WORKDIR /usr/local/www/hfs_app
+ARG LOCAL_PATH=${LOCAL_PATH:-/usr/local/www/hfs_app}
+
+WORKDIR ${LOCAL_PATH}
 
 # Install Python dependencies
 RUN --mount=type=cache,mode=0755,target=/root/.cache/pip pip install poetry
 RUN poetry config virtualenvs.create false
-COPY poetry.lock pyproject.toml /usr/local/www/hfs_app/
+COPY poetry.lock pyproject.toml ${LOCAL_PATH}
 RUN --mount=type=cache,mode=0755,target=/root/.cache/pypoetry poetry install --no-root
 
 ### Final image
@@ -21,6 +23,8 @@ FROM python:3.12-slim
 SHELL ["/bin/bash", "-eo", "pipefail", "-c"]
 
 ARG APP_USER=${APP_USER:-hfs}
+ARG LOCAL_PATH=${LOCAL_PATH:-/usr/local/www/hfs_app}
+
 # Create a group and user to run our app
 RUN groupadd -r ${APP_USER} && useradd -r -g ${APP_USER} ${APP_USER}
 
@@ -51,14 +55,14 @@ RUN apt-get update &&  \
 
 
 # make sure directories exist
-RUN mkdir -p /usr/local/www/hfs_app/media /usr/local/www/hfs_app/static && \
-    chown -R ${APP_USER}:${APP_USER} /usr/local/www/hfs_app/
+RUN mkdir -p ${LOCAL_PATH}/media ${LOCAL_PATH}/static && \
+    chown -R ${APP_USER}:${APP_USER} ${LOCAL_PATH}/
 
 # copy project files from build
 COPY --from=build-python /usr/local/lib/python3.12/site-packages/ /usr/local/lib/python3.12/site-packages/
 COPY --from=build-python /usr/local/bin/ /usr/local/bin/
-COPY .  /usr/local/www/hfs_app/
-WORKDIR /usr/local/www/hfs_app
+COPY .  ${LOCAL_PATH}/
+WORKDIR ${LOCAL_PATH}
 
 # This here as we don't want to rebuild everything when we only change the code
 ENV PYTHONUNBUFFERED=1

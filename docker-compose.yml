@@ -7,7 +7,7 @@ services:
         container_name: hfs_app
         restart: unless-stopped
         volumes:
-            - .:/usr/local/www/hfs_app
+            - .:${LOCAL_PATH}
         ports:
             - "${PORT}:${PORT}"
         networks:
@@ -68,8 +68,8 @@ services:
         volumes:
             - ./docker/certbot/certs/:/etc/letsencrypt:ro
             - ./docker/certbot/www/:/var/www/certbot:ro
-            - ./static/:/usr/local/www/hfs_app/static
-            - ./media/:/usr/local/www/hfs_app/media
+            - ./static/:${LOCAL_PATH}/static
+            - ./media/:${LOCAL_PATH}/media
         networks:
             - app-network
 
@@ -87,7 +87,7 @@ services:
           - --renew-by-default
           - --webroot
           - -w /var/www/certbot/
-          - --email ${EMAIL_FROM_ADDRESS:-stanimirdim92@gmail.com}
+          - --email ${EMAIL_FROM_ADDRESS:-noreply@gmail.com}
           - --text
           - --preferred-challenges http-01
           - --server https://acme-v02.api.letsencrypt.org/directory

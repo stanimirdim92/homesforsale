@@ -1,13 +1,13 @@
 Designing a user account system involves creating a structure that handles user authentication, authorization, data management, and security. Below is an outline of the key components and features for a user account system design:
 
 ### Core Considerations for European Real Estate Platforms
-1. **GDPR Compliance**: Since you're targeting a European audience, strict GDPR (General Data Protection Regulation) compliance is essential. This means implementing privacy features like data protection, consent management, right to erasure, and data access.
+1. [ ] **GDPR Compliance**: Since you're targeting a European audience, strict GDPR (General Data Protection Regulation) compliance is essential. This means implementing privacy features like data protection, consent management, right to erasure, and data access.
    
-2. **Multi-Language Support**: Many European countries use different languages, so the platform should support multiple languages to cater to a diverse user base.
+2. [ ] **Multi-Language Support**: Many European countries use different languages, so the platform should support multiple languages to cater to a diverse user base.
 
-3. **Localization (Currency, Timezones)**: European real estate platforms must handle different currencies (EUR, GBP, etc.) and timezones depending on the region. User profiles should reflect this.
+3. [ ] **Localization (Currency, Timezones)**: European real estate platforms must handle different currencies (EUR, GBP, etc.) and timezones depending on the region. User profiles should reflect this.
 
-4. **User Roles and Types**: Real estate platforms typically serve multiple types of users (property buyers, sellers, agents, etc.). Therefore, different user roles and access levels should be implemented.
+4. [ ] **User Roles and Types**: Real estate platforms typically serve multiple types of users (property buyers, sellers, agents, etc.). Therefore, different user roles and access levels should be implemented.
 
 ### Extended Design for Real Estate User Accounts in Django with DRF
 

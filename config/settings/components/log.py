@@ -14,7 +14,7 @@ LOGGING = {
     "formatters": {
         "verbose": {
             "format": (
-                "%(asctime)s %(levelname)s %(name)s %(message)s "
+                "[%(asctime)s] %(levelname)s %(name)s %(message)s "
                 "[MODULE: %(module)s |PID:%(process)d:%(threadName)s]"
             )
         },
