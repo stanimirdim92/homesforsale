@@ -38,6 +38,7 @@ class App extends React.Component<any,LoginProps> {
   };
 
   isResponseOk(response: Response) {
+      console.log('response',response);
     if (response.status >= 200 && response.status <= 299) {
       return response.json();
     } else {
